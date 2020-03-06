@@ -26,6 +26,6 @@ def games(request):
 		else:
 			g['fav'] = game.fav.full_name.lower()
 			g['udog'] = game.udog.full_name.upper()
-		g['time'] = game.game_date.time
+		g['time'] = game.game_date.strftime('%-I:%M%p').lower().replace('pm','p')
 		games[dt].append(g)
 	return render(request, 'pool/games.html', {'games': games} )
