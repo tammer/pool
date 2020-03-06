@@ -27,5 +27,9 @@ def games(request):
 			g['fav'] = game.fav.full_name.lower()
 			g['udog'] = game.udog.full_name.upper()
 		g['time'] = game.game_date.strftime('%-I:%M%p').lower().replace('pm','p')
+		if game.spread is None:
+			g['spread'] = 'NA'
+		else:
+			g['spread'] = game.spread
 		games[dt].append(g)
 	return render(request, 'pool/games.html', {'games': games} )
