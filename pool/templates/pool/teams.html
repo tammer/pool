@@ -1,0 +1,19 @@
+<html>
+<head>
+	<title>Teams</title>
+</head>
+<body>
+	<h1>Teams</h1>
+	<table border=1>
+		<th>Full Name</th><th>Short Name</th><th>Nick Name</th><th>City Name</th>
+		{% for team in teams%}
+		<tr>
+			<td>{{ team.full_name }}</td>
+			<td>{{ team.short_name }}</td>
+			<td>{{ team.nick_name }}</td>
+			<td>{{ team.city_name }}</td>
+		</tr>
+		{% endfor%}
+	</table>
+</body>
+</html>

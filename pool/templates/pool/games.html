@@ -1,0 +1,24 @@
+<html>
+<head>
+	<title>Games</title>
+</head>
+<body>
+	<h1>Games</h1>
+	<table border=1>
+		<th>Favorite</th><th>Spread</th><th>Underdog</th><th>Time</th>
+		{% for dt, gms in games.items %}
+		<tr>
+			<td colspan="4">{{dt}}</td>
+		</tr>
+			{% for game in gms %}
+			<tr>
+				<td>{{ game.fav }}</td>
+				<td>n.a.</td>
+				<td>{{ game.udog }}</td>
+				<td>{{ game.time }}</td>
+			</tr>
+			{% endfor %}
+		{% endfor %}
+	</table>
+</body>
+</html>
