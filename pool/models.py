@@ -57,6 +57,9 @@ class Pick(models.Model):
 	game_number = models.IntegerField()
 	picked_fav = models.BooleanField()
 
+	def game(self):
+		return Game.objects.get(week_number=self.week_number, game_number=self.game_number)
+
 	def isCorrect(self):
 		game = Game.objects.get(week_number=self.week_number, game_number=self.game_number)
 		# throw something if game.final() == False
