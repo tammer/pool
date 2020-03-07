@@ -8,6 +8,13 @@ class Command(BaseCommand):
 	help = 'Load the standard teams'
 
 	def handle(self, *args, **options):
+
+		x = input("This will cascade to games, picks, etc.  You sure? [Y/n]")
+
+		if x != 'Y':
+			print("Aborting")
+			exit()
+
 		try:
 			user = User.objects.get(username='John')
 		except User.DoesNotExist:
