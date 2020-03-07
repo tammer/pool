@@ -1,8 +1,5 @@
-<html>
-<head>
-	<title>Games</title>
-</head>
-<body>
+{% extends "pool/base.html" %}
+{% block content %}
 	<h1>Games</h1>
 	<table border=1>
 		<th>Favorite</th><th>Spread</th><th>Underdog</th><th>Time</th>
@@ -20,5 +17,4 @@
 			{% endfor %}
 		{% endfor %}
 	</table>
-</body>
-</html>
+{% endblock content %}
