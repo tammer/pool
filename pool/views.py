@@ -1,6 +1,43 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from pool.models import Team,Game
+from pool.models import Team,Game,Pick
+from django.contrib.auth.models import User
+
+
+def results(request):
+	week_number = request.GET['w']
+	games = []
+	if not(request.user.is_authenticated):
+		return HttpResponse("<h1>Ya gotta be logged in</h1>")
+	user = request.user
+	right = 0
+	total = 0
+	for game in Game.objects.filter(week_number=week_number).order_by('game_number'):
+		g = {}
+		if game.fav_is_home:
+			g['fav'] = game.fav.full_name.upper()
+			g['udog'] = game.udog.full_name.lower()
+		else:
+			g['fav'] = game.fav.full_name.lower()
+			g['udog'] = game.udog.full_name.upper()
+		g['fav_score'] = game.fav_score
+		g['udog_score'] = game.udog_score
+		if game.spread is None:
+			g['spread'] = 'NA'
+		else:
+			g['spread'] = game.spread
+		pick = Pick.objects.get(player=user, week_number=week_number, game_number = game.game_number)
+		if pick.isCorrect():
+			g['right'] = "Yes"
+			right += 1
+		else:
+			g['right'] = "No"
+		total+=1
+		g['picked_fav'] = pick.picked_fav
+		games.append(g)
+	return render(request, 'pool/results.html', {'games': games, 'player': user.username, 'right': right, 'total': total} )
+
+
 
 
 def home(request):

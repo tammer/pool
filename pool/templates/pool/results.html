@@ -1,0 +1,23 @@
+{% extends "pool/base.html" %}
+{% block content %}
+	<h1>{{player}} ({{right}}/{{total}})</h1>
+	<table border=1>
+		<th>Favorite</th><th>Spread</th><th>Underdog</th><th>Right?</th>
+		{% for game in games %}
+		<tr>
+			{% if game.picked_fav %}
+				<td><b>{{ game.fav }} {{game.fav_score}}</b></td>
+			{% else %}
+				<td>{{ game.fav }} {{game.fav_score}}</td>
+			{%  endif %}
+			<td>{{ game.spread }}</td>
+			{% if game.picked_fav %}
+				<td>{{game.udog_score}} {{ game.udog }}</td>
+			{% else %}
+				<td><b>{{game.udog_score}} {{ game.udog }}</b></td>
+			{%  endif %}
+			<td>{{ game.right }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+{% endblock content %}
