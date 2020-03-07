@@ -33,7 +33,7 @@ class GameTestCase(TestCase):
 
 		# Create a game
 
-		game_date = datetime.datetime(2020,12,31,tzinfo=timezone('US/Eastern'))
+		game_date = datetime.datetime(2020,12,31)
 		Game.objects.create(week_number=1, game_number=1, fav = Team.objects.get(short_name='NYG'),
 				udog = Team.objects.get(short_name='DAL'), spread = 11.5,
 				game_date = game_date, fav_is_home = True,
@@ -57,41 +57,41 @@ class GameTestCase(TestCase):
 		self.assertEqual(x.favWins(), False)
 
 		# Sunday game at 4pm should be open if time before 1 else closed
-		x.game_date = datetime.datetime(2020,3,1,16,0,0,tzinfo=timezone('US/Eastern'))
-		current_time = datetime.datetime(2020,3,1,11,0,0,tzinfo=timezone('US/Eastern'))
+		x.game_date = datetime.datetime(2020,3,1,16,0,0)
+		current_time = datetime.datetime(2020,3,1,11,0,0)
 		self.assertEqual(x.isClosed(current_time=current_time), False)
-		current_time = datetime.datetime(2020,3,1,14,0,0,tzinfo=timezone('US/Eastern'))
+		current_time = datetime.datetime(2020,3,1,14,0,0)
 		self.assertEqual(x.isClosed(current_time=current_time), True)
 
 		# Saturday game.  Should be closed only if after kick off
-		x.game_date = datetime.datetime(2020,2,29,16,0,0,tzinfo=timezone('US/Eastern'))
-		current_time = datetime.datetime(2020,2,29,15,59,59,tzinfo=timezone('US/Eastern'))
+		x.game_date = datetime.datetime(2020,2,29,16,0,0)
+		current_time = datetime.datetime(2020,2,29,15,59,59)
 		self.assertEqual(x.isClosed(current_time=current_time), False)
-		current_time = datetime.datetime(2020,2,29,16,0,1,tzinfo=timezone('US/Eastern'))
+		current_time = datetime.datetime(2020,2,29,16,0,1)
 		self.assertEqual(x.isClosed(current_time=current_time), True)
 
 		# Monday game, should be closed as long as it's after 1pm sunday
-		x.game_date = datetime.datetime(2020,3,2,21,0,0,tzinfo=timezone('US/Eastern'))
-		current_time = datetime.datetime(2020,3,1,15,59,59,tzinfo=timezone('US/Eastern'))
+		x.game_date = datetime.datetime(2020,3,2,21,0,0)
+		current_time = datetime.datetime(2020,3,1,15,59,59)
 		self.assertEqual(x.isClosed(current_time=current_time), True)
-		current_time = datetime.datetime(2020,3,1,11,59,59,tzinfo=timezone('US/Eastern'))
+		current_time = datetime.datetime(2020,3,1,11,59,59)
 		self.assertEqual(x.isClosed(current_time=current_time), False)
 		self.assertEqual(x.isOpen(current_time=current_time), True)
-		current_time = datetime.datetime(2020,3,2,11,59,59,tzinfo=timezone('US/Eastern'))
+		current_time = datetime.datetime(2020,3,2,11,59,59)
 		self.assertEqual(x.isClosed(current_time=current_time), True)
-		current_time = datetime.datetime(2020,3,3,11,59,59,tzinfo=timezone('US/Eastern'))
+		current_time = datetime.datetime(2020,3,3,11,59,59)
 		self.assertEqual(x.isClosed(current_time=current_time), True)
 
 		# Sunday 9a game should be open until kick off
-		x.game_date = datetime.datetime(2020,3,1,9,0,0,tzinfo=timezone('US/Eastern'))
-		current_time = datetime.datetime(2020,3,1,8,0,0,tzinfo=timezone('US/Eastern'))
+		x.game_date = datetime.datetime(2020,3,1,9,0,0)
+		current_time = datetime.datetime(2020,3,1,8,0,0)
 		self.assertEqual(x.isClosed(current_time=current_time), False)
-		current_time = datetime.datetime(2020,3,1,10,0,0,tzinfo=timezone('US/Eastern'))
+		current_time = datetime.datetime(2020,3,1,10,0,0)
 		self.assertEqual(x.isClosed(current_time=current_time), True)
 		self.assertEqual(x.isOpen(current_time=current_time), False)
 
 		# Now one check with not setting current_time
-		x.game_date = datetime.datetime(1971,3,1,9,0,0,tzinfo=timezone('US/Eastern'))
+		x.game_date = datetime.datetime(1971,3,1,9,0,0)
 		self.assertEqual(x.isClosed(), True)
 
 
