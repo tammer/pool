@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # 'users.apps.Users.Config',
     'pool.apps.PoolConfig',
     'django.contrib.admin',
     'django.contrib.auth',

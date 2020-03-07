@@ -1,8 +1,5 @@
-<html>
-<head>
-	<title>Teams</title>
-</head>
-<body>
+{% extends "pool/base.html" %}
+{% block content %}
 	<h1>Teams</h1>
 	<table border=1>
 		<th>Full Name</th><th>Short Name</th><th>Nick Name</th><th>City Name</th>
@@ -15,5 +12,4 @@
 		</tr>
 		{% endfor%}
 	</table>
-</body>
-</html>
+{% endblock content %}
