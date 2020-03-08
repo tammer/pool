@@ -15,7 +15,11 @@ def standings_(week_number):
 	return standings
 
 def standings(request):
-	return render(request,'pool/standings.html',{'standings':standings_(request.GET['w'])})
+	if request.GET.get('p'):
+		player = request.GET['p']
+	else:
+		player = ''
+	return render(request,'pool/standings.html',{'player':player,'week_number':request.GET['w'],'standings':standings_(request.GET['w'])})
 
 def allpicks(request):
 	week_number = request.GET['w']
@@ -31,9 +35,9 @@ def allpicks(request):
 
 def results(request):
 	week_number = request.GET['w']
-	player_name = request.GET['p']
+	player = request.GET['p']
 	games = []
-	user = User.objects.get(username=player_name)
+	user = User.objects.get(username=player)
 	right = 0
 	total = 0
 	for game in Game.objects.filter(week_number=week_number).order_by('game_number'):
@@ -60,7 +64,7 @@ def results(request):
 		total+=1
 		g['picked_fav'] = pick.picked_fav
 		games.append(g)
-	return render(request, 'pool/results.html',{'standings':standings_(week_number=week_number), 'games': games, 'player': player_name, 'right': right, 'total': total} )
+	return render(request, 'pool/results.html',{'week_number': week_number, 'standings':standings_(week_number=week_number), 'games': games, 'player': player, 'right': right, 'total': total} )
 
 def home(request):
 	return HttpResponse("<h1>Hello World</h1>")

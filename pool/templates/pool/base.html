@@ -24,13 +24,13 @@
 	      </button>
 	      <div class="collapse navbar-collapse" id="navbarToggle">
 	        <div class="navbar-nav mr-auto">
-	          <a class="nav-item nav-link" href="{% url 'pool-results' %}">Home</a>
-	          <a class="nav-item nav-link" href="{% url 'pool-results' %}">My Picks</a>
-	          <a class="nav-item nav-link" href="{% url 'pool-allpicks' %}?w=1">All Picks</a>
-	          <a class="nav-item nav-link" href="{% url 'pool-results' %}">Standings</a>
-	          <a class="nav-item nav-link" href="{% url 'pool-results' %}">Overall Standings</a>
-	          <a class="nav-item nav-link" href="{% url 'pool-results' %}">Money</a>
-	          <a class="nav-item nav-link" href="{% url 'pool-results' %}">Help</a>
+	          <a class="nav-item nav-link" href="{% url 'pool-results' %}?w={{week_number}}&p={{player}}">Home</a>
+	          <a class="nav-item nav-link" href="{% url 'pool-results' %}?w={{week_number}}&p={{player}}">My Picks</a>
+	          <a class="nav-item nav-link" href="{% url 'pool-allpicks' %}?w={{week_number}}&p={{player}}">All Picks</a>
+	          <a class="nav-item nav-link" href="{% url 'pool-standings' %}?w={{week_number}}&p={{player}}">Standings</a>
+	          <a class="nav-item nav-link" href="{% url 'pool-results' %}?w={{week_number}}&p={{player}}">Overall Standings</a>
+	          <a class="nav-item nav-link" href="{% url 'pool-results' %}?w={{week_number}}&p={{player}}">Money</a>
+	          <a class="nav-item nav-link" href="{% url 'pool-results' %}?w={{week_number}}&p={{player}}">Help</a>
 	        </div>
 	        <!-- Navbar Right Side -->
 	        <div class="navbar-nav">
