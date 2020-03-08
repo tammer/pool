@@ -3,9 +3,7 @@ from django.http import HttpResponse
 from pool.models import Team,Game,Pick
 from django.contrib.auth.models import User
 
-
-def standings(request):
-	week_number = request.GET['w']
+def standings_(week_number):
 	matrix = {}
 	for user in User.objects.all():
 		count = 0;
@@ -14,9 +12,10 @@ def standings(request):
 				count +=1
 		matrix[user.username] = count
 		standings = sorted(matrix.items(), key=lambda kv: kv[1], reverse=True)
-	return render(request, 'pool/standings.html', {'week_number': week_number, 'standings': standings})
+	return standings
 
-
+def standings(request):
+	return render(request,'pool/standings.html',{'standings':standings_(request.GET['w'])})
 
 def allpicks(request):
 	week_number = request.GET['w']
@@ -29,7 +28,6 @@ def allpicks(request):
 		for pick in Pick.objects.filter(player=user,week_number=week_number).order_by('game_number'):
 			matrix[user.username].append(pick.whoShortName())
 	return render(request, 'pool/allpicks.html', {'week_number': week_number, 'header': header, 'matrix': matrix})
-
 
 def results(request):
 	week_number = request.GET['w']
@@ -62,10 +60,7 @@ def results(request):
 		total+=1
 		g['picked_fav'] = pick.picked_fav
 		games.append(g)
-	return render(request, 'pool/results.html', {'games': games, 'player': player_name, 'right': right, 'total': total} )
-
-
-
+	return render(request, 'pool/results.html',{'standings':standings_(week_number=week_number), 'games': games, 'player': player_name, 'right': right, 'total': total} )
 
 def home(request):
 	return HttpResponse("<h1>Hello World</h1>")
