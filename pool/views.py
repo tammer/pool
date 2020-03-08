@@ -6,10 +6,9 @@ from django.contrib.auth.models import User
 
 def results(request):
 	week_number = request.GET['w']
+	player_name = request.GET['p']
 	games = []
-	if not(request.user.is_authenticated):
-		return HttpResponse("<h1>Ya gotta be logged in</h1>")
-	user = request.user
+	user = User.objects.get(username=player_name)
 	right = 0
 	total = 0
 	for game in Game.objects.filter(week_number=week_number).order_by('game_number'):
@@ -35,7 +34,7 @@ def results(request):
 		total+=1
 		g['picked_fav'] = pick.picked_fav
 		games.append(g)
-	return render(request, 'pool/results.html', {'games': games, 'player': user.username, 'right': right, 'total': total} )
+	return render(request, 'pool/results.html', {'games': games, 'player': player_name, 'right': right, 'total': total} )
 
 
 
