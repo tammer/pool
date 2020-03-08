@@ -8,7 +8,7 @@ def allpicks(request):
 	week_number = request.GET['w']
 	header = []
 	for game in Game.objects.filter(week_number=week_number).order_by('game_number'):
-		header.append([game.favShortName(), str(game.spread), game.udogShortName()])
+		header.append([game.favShortName(), str(game.spread), game.udogShortName(), game.game_date.strftime('%a')])
 	matrix = {}
 	for user in User.objects.all().order_by('username'):
 		matrix[user.username] = [];

@@ -1,9 +1,9 @@
 {% extends "pool/base.html" %}
 {% block content %}
 	<h1>Week {{week_number}}</h1>
-	<table border=1>
+	<table class="table table-hover">
 		<tr>
-			<th>Monkey</th>
+			<th></th>
 			{% for th in header %}
 				<th>
 					{% for i in th %}
