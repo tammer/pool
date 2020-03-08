@@ -4,6 +4,20 @@ from pool.models import Team,Game,Pick
 from django.contrib.auth.models import User
 
 
+def standings(request):
+	week_number = request.GET['w']
+	matrix = {}
+	for user in User.objects.all():
+		count = 0;
+		for pick in Pick.objects.filter(player=user,week_number=week_number):
+			if pick.isCorrect():
+				count +=1
+		matrix[user.username] = count
+		standings = sorted(matrix.items(), key=lambda kv: kv[1], reverse=True)
+	return render(request, 'pool/standings.html', {'week_number': week_number, 'standings': standings})
+
+
+
 def allpicks(request):
 	week_number = request.GET['w']
 	header = []
