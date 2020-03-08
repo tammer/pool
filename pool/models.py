@@ -63,7 +63,7 @@ class Pick(models.Model):
 	def isCorrect(self):
 		game = Game.objects.get(week_number=self.week_number, game_number=self.game_number)
 		# throw something if game.final() == False
-		return self.picked_fav and game.favWins()
+		return self.picked_fav and game.favWins() or not(self.picked_fav) and not(game.favWins())
 
 class Monday(models.Model):
 	player = models.ForeignKey(User,on_delete=models.CASCADE)
