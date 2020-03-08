@@ -15,15 +15,16 @@ class Command(BaseCommand):
 			print("Aborting")
 			exit()
 
-		try:
-			user = User.objects.get(username='John')
-		except User.DoesNotExist:
-			user = User(username='John')
-			user.save()
-		Pick.objects.filter(player = user).delete()
-		for g in Game.objects.all():
-			Pick.objects.create(player=user, week_number = g.week_number,
-				game_number = g.game_number, picked_fav = choice([True,False]))
+		for username in ['John','Adel','Andy']:
+			try:
+				user = User.objects.get(username=username)
+			except User.DoesNotExist:
+				user = User(username=username)
+				user.save()
+			Pick.objects.filter(player = user).delete()
+			for g in Game.objects.all():
+				Pick.objects.create(player=user, week_number = g.week_number,
+					game_number = g.game_number, picked_fav = choice([True,False]))
 
 
 		
