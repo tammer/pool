@@ -4,6 +4,19 @@ from pool.models import Team,Game,Pick
 from django.contrib.auth.models import User
 
 
+def allpicks(request):
+	week_number = request.GET['w']
+	header = []
+	for game in Game.objects.filter(week_number=week_number).order_by('game_number'):
+		header.append([game.favShortName(), str(game.spread), game.udogShortName()])
+	matrix = {}
+	for user in User.objects.all().order_by('username'):
+		matrix[user.username] = [];
+		for pick in Pick.objects.filter(player=user,week_number=week_number).order_by('game_number'):
+			matrix[user.username].append(pick.whoShortName())
+	return render(request, 'pool/allpicks.html', {'week_number': week_number, 'header': header, 'matrix': matrix})
+
+
 def results(request):
 	week_number = request.GET['w']
 	player_name = request.GET['p']
@@ -13,6 +26,7 @@ def results(request):
 	total = 0
 	for game in Game.objects.filter(week_number=week_number).order_by('game_number'):
 		g = {}
+		# !!! change to function shortName()
 		if game.fav_is_home:
 			g['fav'] = game.fav.full_name.upper()
 			g['udog'] = game.udog.full_name.lower()

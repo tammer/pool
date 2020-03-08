@@ -2,7 +2,7 @@
 {% block content %}
 	<h1>{{player}} ({{right}}/{{total}})</h1>
 	<table border=1>
-		<th>Favorite</th><th>Spread</th><th>Underdog</th><th>Right?</th>
+		<tr><th>Favorite</th><th>Spread</th><th>Underdog</th><th>Right?</th></tr>
 		{% for game in games %}
 		<tr>
 			{% if game.picked_fav %}

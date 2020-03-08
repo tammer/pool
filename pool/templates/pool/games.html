@@ -2,7 +2,7 @@
 {% block content %}
 	<h1>Games</h1>
 	<table border=1>
-		<th>Favorite</th><th>Spread</th><th>Underdog</th><th>Time</th>
+		<tr><th>Favorite</th><th>Spread</th><th>Underdog</th><th>Time</th></tr>
 		{% for dt, gms in games.items %}
 		<tr>
 			<td colspan="4">{{dt}}</td>

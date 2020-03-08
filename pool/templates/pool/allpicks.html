@@ -1,0 +1,24 @@
+{% extends "pool/base.html" %}
+{% block content %}
+	<h1>Week {{week_number}}</h1>
+	<table border=1>
+		<tr>
+			<th>Monkey</th>
+			{% for th in header %}
+				<th>
+					{% for i in th %}
+						{{i}}<br>
+					{% endfor %}
+				</th>
+			{% endfor %}
+		</tr>
+		{% for k,v in matrix.items %}
+		<tr>
+			<td>{{k}}</td>
+			{% for td in v %}
+				<td>{{td}}</td>
+			{% endfor %}
+		</tr>
+		{% endfor %}
+	</table>
+{% endblock content %}

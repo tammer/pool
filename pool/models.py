@@ -26,6 +26,19 @@ class Game(models.Model):
 			#spread >=0
 		]
 	
+	def favShortName(self):
+		if self.fav_is_home:
+			return self.fav.short_name.upper()
+		else:
+			return self.fav.short_name.lower()
+
+	def udogShortName(self):
+		if not(self.fav_is_home):
+			return self.udog.short_name.upper()
+		else:
+			return self.udog.short_name.lower()
+
+
 	def isClosed(self, current_time = None):
 		if current_time is None:
 			current_time = datetime.datetime.now(self.game_date.tzinfo)
@@ -59,6 +72,12 @@ class Pick(models.Model):
 
 	def game(self):
 		return Game.objects.get(week_number=self.week_number, game_number=self.game_number)
+
+	def whoShortName(self):
+		if self.picked_fav:
+			return self.game().favShortName()
+		else:
+			return self.game().udogShortName()
 
 	def isCorrect(self):
 		game = Game.objects.get(week_number=self.week_number, game_number=self.game_number)
