@@ -3,43 +3,48 @@
 		<th class='text-left'>Favorite</th><th colspan=3>Score<sub>spread<sub></th><th class='text-right'>Underdog</th><th></th>
 	</tr>	
 	{% for game in games %}
-	<tr>
-		<td class='text-left'>
-		{% if game.picked_fav %}
-			<b>{{ game.fav }}</b>
-		{% else %}
-			{{ game.fav }}
-		{%  endif %}
-	</td>
 		{% if game.isOver %}
-			<td class='text-left'>{{game.fav_score}}</td>
-			<td class='text-center'>-</td>
-			<td class='text-left'>
-				{{game.udog_score}}<sub>{{ game.spread }}</sub>	
-			</td>
+			<tr class = 'table-default'>
 		{% else %}
-			<td class='text-center' colspan=3>
-				{{game.game_day}}<sub>{{ game.spread }}</sub>
-			</td>
-		{%  endif %}
-		<td class='text-right'>
-				{% if game.picked_fav %}
-					{{ game.udog }}
-				{% else %}
-					<b>{{ game.udog }}</b>
-				{%  endif %}
-			</td>
-		<td align='center'>
-			{% if game.right == 'Yes' %}
-				<img src='http://www.tammer.com/banana.svg' width='20'>
+			<tr class="table-default">
+		{% endif %}
+			<td class='text-left'>
+			{% if game.picked_fav %}
+				<span style='background:#FBFFB7'>{{ game.fav }}</span>
 			{% else %}
-			
-			{% endif %}
+				{{ game.fav }}
+			{%  endif %}
 		</td>
-	</tr>
+			{% if game.isOver %}
+				<td class='text-right'>{{game.fav_score}}</td>
+				<td class='text-center'>-</td>
+				<td class='text-left'>
+					{{game.udog_score}}<sub>{{ game.spread }}</sub>	
+				</td>
+			{% else %}
+				<td class='text-center' colspan=3>
+					{{game.game_day}}<sub>{{ game.spread }}</sub>
+				</td>
+			{%  endif %}
+			<td class='text-right'>
+					{% if game.picked_fav %}
+						{{ game.udog }}
+					{% else %}
+						<span style='background:#FBFFB7'>{{ game.udog }}</span>
+					{%  endif %}
+				</td>
+			<td align='center'>
+				{% if game.right == 'Yes' %}
+					<img src='http://www.tammer.com/banana.svg' width='20'>
+				{% else %}
+				
+				{% endif %}
+			</td>
+		</tr>
 	{% endfor %}
 	<tr>
-		<th class='text-right' colspan=6><h4>{{right}}</h4></th>
+		<th class='text-right table-default' colspan=5>Total:</th>
+		<th class='text-center'>{{right}}</th>
 	</tr>
 </table>
 
