@@ -23,7 +23,7 @@
 				</td>
 			{% else %}
 				<td class='text-center' colspan=3>
-					{{game.game_day}}<sub>{{ game.spread }}</sub>
+					{{ game.spread }}
 				</td>
 			{%  endif %}
 			<td class='text-right'>
@@ -37,7 +37,11 @@
 				{% if game.right == 'Yes' %}
 					<img src='http://www.tammer.com/banana.svg' width='20'>
 				{% else %}
-				
+					{% if game.isOver %}
+					<small class="text-muted" style='font-size: 9px'>x</small>
+					{% else %}
+					<small class="text-muted" style='font-size: 11px'>{{game.game_day}}</small>
+					{% endif %}
 				{% endif %}
 			</td>
 		</tr>
