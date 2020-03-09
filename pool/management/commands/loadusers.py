@@ -15,7 +15,7 @@ class Command(BaseCommand):
 			print("Aborting")
 			exit()
 
-		for username in ['John','Adel','Andy','Madelyn','Mike','David']:
+		for username in ['John','Adel','Andy','Madelyn','Mike','David','Feldman','MichaelC','MikeLeroux','Lee','Whiler','Joff','Adam','Ivan','Tristan','Snow','MikeK','Steve','Ethan','Jason','Mark','Dustan','Warren','Karsten','Jeff']:
 			try:
 				user = User.objects.get(username=username)
 			except User.DoesNotExist:

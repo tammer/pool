@@ -3,7 +3,7 @@
 	<main role="main" class="container">
 		<div class="row">
 			<div class="col">
-      			<h4>Week {{week_number}}</h4>
+      			<h4>Week {{week_number}} <small class="text-muted">(12 of {{total}} games completed)</small></h4>
       			<h2>
       				{{player}}
 					{% for b in right_array %}
@@ -13,10 +13,13 @@
 		    </div>
 		</div>	
 		<div class="row">
-			<div class="col-md-8">
+			<div class="col-md-7">
 				{% include "./results_snippet.html" %}
 			</div>
-			<div class="col-md-2">
+			<div class="col-md-1">
+				
+			</div>
+			<div class="col-md-1">
 				{% include "./standings_snippet.html" %}
 			</div>
 		</div>
