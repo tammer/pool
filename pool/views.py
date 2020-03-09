@@ -46,11 +46,11 @@ def results(request):
 		g = {}
 		# !!! change to function shortName()
 		if game.fav_is_home:
-			g['fav'] = game.fav.full_name.upper()
-			g['udog'] = game.udog.full_name.lower()
+			g['fav'] = game.fav.nick_name.upper()
+			g['udog'] = game.udog.nick_name.lower()
 		else:
-			g['fav'] = game.fav.full_name.lower()
-			g['udog'] = game.udog.full_name.upper()
+			g['fav'] = game.fav.nick_name.lower()
+			g['udog'] = game.udog.nick_name.upper()
 		g['fav_score'] = game.fav_score
 		g['udog_score'] = game.udog_score
 		if game.spread is None:
