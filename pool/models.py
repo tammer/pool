@@ -19,7 +19,7 @@ class Game(models.Model):
 	fav_score = models.IntegerField( null=True )
 	udog_score = models.IntegerField( null=True )
 	fav_is_home = models.BooleanField()
-	is_final = models.BooleanField( default = False )
+	is_final = models.BooleanField( default = False ) # !!! get rid of this !!!
 	class Meta:
 		constraints = [
 			models.UniqueConstraint(fields=['week_number', 'game_number'], name='unique_week_game'),
@@ -53,6 +53,12 @@ class Game(models.Model):
 		else:
 			return False
 
+	def isOver(self):
+		if self.fav_score is None or self.udog_score is None:
+			return False
+		else:
+			return True
+
 	def isOpen(self, current_time = None):
 		return not(self.isClosed(current_time = current_time))
 
@@ -81,8 +87,10 @@ class Pick(models.Model):
 
 	def isCorrect(self):
 		game = Game.objects.get(week_number=self.week_number, game_number=self.game_number)
-		# throw something if game.final() == False
-		return self.picked_fav and game.favWins() or not(self.picked_fav) and not(game.favWins())
+		if game.isOver():
+			return self.picked_fav and game.favWins() or not(self.picked_fav) and not(game.favWins())
+		else:
+			return False;
 
 class Monday(models.Model):
 	player = models.ForeignKey(User,on_delete=models.CASCADE)

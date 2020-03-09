@@ -41,6 +41,7 @@ def results(request):
 	right = 0
 	right_array = []
 	total = 0
+	completed = 0;
 	for game in Game.objects.filter(week_number=week_number).order_by('game_number'):
 		g = {}
 		# !!! change to function shortName()
@@ -63,10 +64,14 @@ def results(request):
 			right_array.append('a banana!')
 		else:
 			g['right'] = "No"
+		if pick.game().isOver():
+			completed += 1
 		total+=1
 		g['picked_fav'] = pick.picked_fav
+		g['isOver'] = game.isOver()
+		g['game_day'] = game.game_date.strftime('%A')
 		games.append(g)
-	return render(request, 'pool/results.html',{'right_array':right_array,  'week_number': week_number, 'standings':standings_(week_number=week_number), 'games': games, 'player': player, 'right': right, 'total': total} )
+	return render(request, 'pool/results.html',{'completed':completed, 'right_array':right_array,  'week_number': week_number, 'standings':standings_(week_number=week_number), 'games': games, 'player': player, 'right': right, 'total': total} )
 
 def home(request):
 	return HttpResponse("<h1>Hello World</h1>")

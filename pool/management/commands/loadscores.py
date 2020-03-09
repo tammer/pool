@@ -8,8 +8,10 @@ class Command(BaseCommand):
 	def handle(self, *args, **options):
 
 		for game in Game.objects.all():
-			game.fav_score = choice([10,14,20,21,35,40])
-			game.udog_score = choice([7,10,14,20,21,35])
-			game.spread = choice([3.5,7.5,10.5])
-			game.fav_is_home = choice([True,True,False])
+			if game.week_number < 8:
+				game.spread = choice([3.5,7.5,10.5])
+				game.fav_is_home = choice([True,True,False])
+				if game.week_number < 7 or game.game_number < 10:
+					game.fav_score = choice([10,14,20,21,35,40])
+					game.udog_score = choice([7,10,14,20,21,35])
 			game.save()
