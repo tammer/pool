@@ -1,11 +1,11 @@
-<table class="table">
-	<tr>
+<table class="table table-sm" style="background-color: white">
+	<tr class="thead-dark text-center">
 		<th>Player</th><th>Score</th>
 	</tr>
 	{% for row in standings %}
 	<tr>
 		<td><a href="{% url 'pool-results' %}?p={{row.0}}&w={{week_number}}">{{row.0}}</a></td>
-		<td>{{row.1}}</td>
+		<td class='text-right'>{{row.1}}</td>
 	</tr>
 	{% endfor %}
 </table>

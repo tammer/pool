@@ -1,19 +1,40 @@
-<table border=1>
-	<tr><th>Favorite</th><th>Spread</th><th>Underdog</th><th>Right?</th></tr>
+<table class='table table-sm' style="background-color: white">
+	<tr class="thead-dark text-center">
+		<th class='text-left'>Favorite</th><th colspan=3>Score<sub>+spread<sub></th><th class='text-right'>Underdog</th><th></th>
+	</tr>	
 	{% for game in games %}
 	<tr>
+		<td class='text-left'>
 		{% if game.picked_fav %}
-			<td><b>{{ game.fav }} {{game.fav_score}}</b></td>
+			<b>{{ game.fav }}</b>
 		{% else %}
-			<td>{{ game.fav }} {{game.fav_score}}</td>
+			{{ game.fav }}
 		{%  endif %}
-		<td>{{ game.spread }}</td>
-		{% if game.picked_fav %}
-			<td>{{game.udog_score}} {{ game.udog }}</td>
-		{% else %}
-			<td><b>{{game.udog_score}} {{ game.udog }}</b></td>
-		{%  endif %}
-		<td>{{ game.right }}</td>
+	</td>
+		<td class='text-left'>{{game.fav_score}}</td>
+		<td class='text-center'>-</td>
+		<td class='text-left'>
+			{{game.udog_score}}<sub>+{{ game.spread }}</sub>
+			
+		</td>
+		<td class='text-right'>
+			{% if game.picked_fav %}
+				{{ game.udog }}
+			{% else %}
+				<b>{{ game.udog }}</b>
+			{%  endif %}
+		</td>
+		<td align='center'>
+			{% if game.right == 'Yes' %}
+				<img src='http://www.tammer.com/banana.svg' width='20'>
+			{% else %}
+			
+			{% endif %}
+		</td>
 	</tr>
 	{% endfor %}
+	<tr>
+		<th class='text-right' colspan=6><h4>{{right}}</h4></th>
+	</tr>
 </table>
+

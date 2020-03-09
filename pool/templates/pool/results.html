@@ -1,8 +1,17 @@
 {% extends "pool/base.html" %}
 {% block content %}
-	<h1>{{player}} ({{right}}/{{total}})</h1>
-
 	<main role="main" class="container">
+		<div class="row">
+			<div class="col">
+      			<h4>Week {{week_number}}</h4>
+      			<h2>
+      				{{player}}
+					{% for b in right_array %}
+						<img src='http://www.tammer.com/banana.svg' width='30'>
+					{%  endfor %}
+      			</h2>
+		    </div>
+		</div>	
 		<div class="row">
 			<div class="col-md-8">
 				{% include "./results_snippet.html" %}

@@ -39,6 +39,7 @@ def results(request):
 	games = []
 	user = User.objects.get(username=player)
 	right = 0
+	right_array = []
 	total = 0
 	for game in Game.objects.filter(week_number=week_number).order_by('game_number'):
 		g = {}
@@ -59,12 +60,13 @@ def results(request):
 		if pick.isCorrect():
 			g['right'] = "Yes"
 			right += 1
+			right_array.append('a banana!')
 		else:
 			g['right'] = "No"
 		total+=1
 		g['picked_fav'] = pick.picked_fav
 		games.append(g)
-	return render(request, 'pool/results.html',{'week_number': week_number, 'standings':standings_(week_number=week_number), 'games': games, 'player': player, 'right': right, 'total': total} )
+	return render(request, 'pool/results.html',{'right_array':right_array,  'week_number': week_number, 'standings':standings_(week_number=week_number), 'games': games, 'player': player, 'right': right, 'total': total} )
 
 def home(request):
 	return HttpResponse("<h1>Hello World</h1>")
