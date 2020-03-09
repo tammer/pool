@@ -56,7 +56,7 @@ def results(request):
 		if game.spread is None:
 			g['spread'] = 'NA'
 		else:
-			g['spread'] = game.spread
+			g['spread'] = round(game.spread - 0.1) # we'll display 1/2 nicely
 		pick = Pick.objects.get(player=user, week_number=week_number, game_number = game.game_number)
 		if pick.isCorrect():
 			g['right'] = "Yes"
