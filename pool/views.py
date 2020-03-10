@@ -3,22 +3,22 @@ from django.http import HttpResponse
 from pool.models import Team,Game,Pick
 from django.contrib.auth.models import User
 
-# def winner(week_number):
-# 	#!!! still have to add MNTP logic
-# 	leader = None
-# 	best_score = 0
-# 	for user in User.objects.all():
-# 		score = 0
-# 		for pick in Pick.objects.filter(week_number=week_number,player=user):
-# 			if pick.isCorrect():
-# 				score +=1
-# 		if score > best_score:
-# 			best_score = score
-# 			leader = user
-# 	if best_score == 0:
-# 		return None
-# 	else:
-# 		return leader
+def whoWon(week_number):
+	#!!! still have to add MNTP logic
+	leader = None
+	best_score = 0
+	for user in User.objects.all():
+		score = 0
+		for pick in Pick.objects.filter(week_number=week_number,player=user):
+			if pick.isCorrect():
+				score +=1
+		if score > best_score:
+			best_score = score
+			leader = user.username
+	if best_score == 0:
+		return None
+	else:
+		return leader
 
 def scoreMatrix():
 	matrix = {}
@@ -50,14 +50,20 @@ def overall(request):
 		total[player] = sum(scores.values())
 	rank_order = sorted(total.items(), key=lambda kv: kv[1], reverse=True)
 	table = []
+	winner = []
+	for i in range(1,18): # !!! We're ready for expanded schedule (can we infer the 16?)
+		winner.append(whoWon(i))
 	for item in rank_order:
 		player = item[0]
-		this_row = [player]
+		this_row = [[player,0]]
 		weeks = list(sm[player].keys())
 		weeks.sort()
 		for week in weeks:
-			this_row.append(sm[player][week])
-		this_row.append(total[player])
+			win = 0
+			if winner[week-1] == player: # index starts at zero
+				win=1
+			this_row.append([sm[player][week],win])
+		this_row.append([total[player],0])
 		table.append(this_row)
 	headers = range(1,len(table[0])-1)
 	return render(request, 'pool/overall.html',{'week_number':week_number, 'table':table, 'headers':headers})
@@ -96,7 +102,10 @@ def allpicks(request):
 
 def results(request):
 	week_number = request.GET['w']
-	player = request.GET['p']
+	if request.GET.get('p'):
+		player = request.GET['p']
+	else:
+		player = request.user.username
 	games = []
 	user = User.objects.get(username=player)
 	right = 0

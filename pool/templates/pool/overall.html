@@ -18,7 +18,11 @@
 				<tr>
 					{% for item in row %}
 						<td>
-							{{item}}
+							{% if item.1 == 0 %}
+								{{item.0}}
+							{% else %}
+								<b>{{item.0}}</b>
+							{% endif %}
 						</td>
 					{% endfor %}		
 				</tr>
