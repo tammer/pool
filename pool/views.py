@@ -3,18 +3,14 @@ from django.http import HttpResponse
 from pool.models import Team,Game,Pick
 from django.contrib.auth.models import User
 
-def whoWon(week_number):
+def whoWon(week_number, score_matrix):
 	#!!! still have to add MNTP logic
 	leader = None
 	best_score = 0
-	for user in User.objects.all():
-		score = 0
-		for pick in Pick.objects.filter(week_number=week_number,player=user):
-			if pick.isCorrect():
-				score +=1
-		if score > best_score:
-			best_score = score
-			leader = user.username
+	for player, score in score_matrix.items():
+		if score[week_number] > best_score:
+			best_score = score[week_number]
+			leader = player
 	if best_score == 0:
 		return None
 	else:
@@ -51,8 +47,6 @@ def overall(request):
 	rank_order = sorted(total.items(), key=lambda kv: kv[1], reverse=True)
 	table = []
 	winner = []
-	for i in range(1,18): # !!! We're ready for expanded schedule (can we infer the 16?)
-		winner.append(whoWon(i))
 	for item in rank_order:
 		player = item[0]
 		this_row = [[player,0]]
@@ -60,7 +54,7 @@ def overall(request):
 		weeks.sort()
 		for week in weeks:
 			win = 0
-			if winner[week-1] == player: # index starts at zero
+			if whoWon(week,sm) == player:
 				win=1
 			this_row.append([sm[player][week],win])
 		this_row.append([total[player],0])
