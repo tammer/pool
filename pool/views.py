@@ -3,6 +3,67 @@ from django.http import HttpResponse
 from pool.models import Team,Game,Pick
 from django.contrib.auth.models import User
 
+# def winner(week_number):
+# 	#!!! still have to add MNTP logic
+# 	leader = None
+# 	best_score = 0
+# 	for user in User.objects.all():
+# 		score = 0
+# 		for pick in Pick.objects.filter(week_number=week_number,player=user):
+# 			if pick.isCorrect():
+# 				score +=1
+# 		if score > best_score:
+# 			best_score = score
+# 			leader = user
+# 	if best_score == 0:
+# 		return None
+# 	else:
+# 		return leader
+
+def scoreMatrix():
+	matrix = {}
+	query = 'SELECT *, \
+	(fav_score-udog_score-spread > 0 and picked_fav OR fav_score-udog_score-spread <0 and not(picked_fav)) as correct, \
+	auth_user.username as player_name\
+	from pool_pick,pool_game,auth_user \
+	where pool_pick.game_number = pool_game.game_number and \
+	      pool_pick.week_number=pool_game.week_number and \
+	      pool_pick.player_id = auth_user.id and\
+	      not(pool_game.fav_score is NULL)'
+
+	for pick in Pick.objects.raw(query):
+		player = pick.player_name
+		week_number = pick.week_number
+		if not(player in matrix):
+			matrix[player] = {}
+		if not(week_number in matrix[player]):
+			matrix[player][week_number] = 0
+		if pick.correct:
+			matrix[player][week_number] += 1
+	return matrix
+
+def overall(request):
+	week_number = request.GET['w']
+	sm = scoreMatrix()
+	total = {}
+	for player, scores in sm.items():
+		total[player] = sum(scores.values())
+	rank_order = sorted(total.items(), key=lambda kv: kv[1], reverse=True)
+	table = []
+	for item in rank_order:
+		player = item[0]
+		this_row = [player]
+		weeks = list(sm[player].keys())
+		weeks.sort()
+		for week in weeks:
+			this_row.append(sm[player][week])
+		this_row.append(total[player])
+		table.append(this_row)
+	headers = range(1,len(table[0])-1)
+	return render(request, 'pool/overall.html',{'week_number':week_number, 'table':table, 'headers':headers})
+
+
+
 def standings_(week_number):
 	matrix = {}
 	for user in User.objects.all():

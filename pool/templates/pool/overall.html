@@ -1,0 +1,30 @@
+{% extends "pool/base.html" %}
+{% block content %}
+	<div class="col">
+
+		<h4>
+			Overall Standings
+			<small class="text-muted"> at Week {{week_number}}</small>
+		</h4>
+
+		<table class="table table-hover table-sm text-right">	
+			<tr class='thead-dark'>
+				<th></th>
+				{% for h in headers %}
+					<th>{{h}}</th>
+				{% endfor %}
+				<th>Ttl</th>
+			</tr>
+			{% for row in table %}
+				<tr>
+					{% for item in row %}
+						<td>
+							{{item}}
+						</td>
+					{% endfor %}		
+				</tr>
+			{% endfor %}
+		</table>
+
+	</div>
+{% endblock content %}
