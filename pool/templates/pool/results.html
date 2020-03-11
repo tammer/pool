@@ -2,7 +2,7 @@
 {% block content %}
 	<main role="main" class="container">
 		<div class="row">
-			<div class="col">
+			<div class="col-sm">
       			<h4>Week {{week_number}} <small class="text-muted">({{completed}} of {{total}} games completed)</small></h4>
       			<h2>
       				{{player}}
@@ -13,14 +13,14 @@
 		    </div>
 		</div>	
 		<div class="row">
-			<div class="col-md-5">
+			<div class="col-md-auto">
 				{% include "./results_snippet.html" %}
 			</div>
-			<div class="col-md-1">
-				
-			</div>
-			<div class="col-md-1">
+			<div class="col-md-auto">
 				{% include "./standings_snippet.html" %}
+			</div>
+			<div class="col">
+				<img class="img-fluid" src="http://onebreathglobal.com/wp-content/uploads/2018/06/Taming-The-Monkey-Mind-768x680.jpg">
 			</div>
 		</div>
 	</main>

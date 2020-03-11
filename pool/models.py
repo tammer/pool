@@ -102,6 +102,10 @@ class Bank(models.Model):
 	note = models.CharField(max_length=50, default='')
 	transaction_date = models.DateTimeField( auto_now=True, blank=False)
 
+class Blog(models.Model):
+	entry_date = models.DateTimeField( auto_now=True, blank=False)
+	entry = models.CharField(max_length=2048, default='')
+
 class Main(models.Model):
 	week_number = models.IntegerField()
 	def isOpen(self,current_time = None):

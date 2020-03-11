@@ -1,9 +1,14 @@
-<table class="table table-sm table-condensed" style="background-color: white">
-	<tr class="thead-dark">
+<table class="table table-sm" style="background-color: white">
+	<tr class="thead-light">
 		<th class='text-left'>Player</th><th class='text-right'>Score</th>
 	</tr>
 	{% for row in standings %}
-	<tr>
+	{% if player == row.0%}
+	<tr style='background:#D5F5E3'>
+	{% else %}
+	<tr style=''>
+	{% endif %}
+
 		<td><a href="{% url 'pool-results' %}?p={{row.0}}&w={{week_number}}">{{row.0}}</a></td>
 		<td class='text-right'>{{row.1}}</td>
 	</tr>
