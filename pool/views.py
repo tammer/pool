@@ -16,7 +16,7 @@ def money(request):
 		table2.append([row[0],"{:.2f}".format(row[1])])
 
 	table3 = []
-	for row in Bank.objects.filter(player=request.user).order_by('transaction_date'):
+	for row in Bank.objects.filter(player=request.user).order_by('-transaction_date'):
 		table3.append([
 			row.transaction_date.strftime("%b %-d, %Y"),
 			"{:.2f}".format(row.deposit_amount),

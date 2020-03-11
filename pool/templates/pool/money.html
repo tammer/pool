@@ -10,14 +10,18 @@
 					</tr>
 					{% for item in table %}
 						{% if item.0 == player%}
-							<tr style='background:#FBFFB7'>
+							{% if item.1.0 == '-' %}
+								<tr style='background:#F5B7B1 '>
+							{% else %}
+								<tr style='background:#D5F5E3'>
+							{% endif %}
 						{% else %}
 							<tr>
 						{% endif %}
 								<td>
 									{{item.0}}
 								</td>
-								<td>
+								<td class='text-right'>
 									${{item.1}}
 								</td>
 							</tr>
