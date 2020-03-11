@@ -1,12 +1,20 @@
 {% extends "pool/base.html" %}
 {% block content %}
 	<main role="main" class="container">
-		<h3>Money</h3>
 		<div class="row">
-			<div class="col-md-5">
-				<table class="table table-condensed table-responsive" style="background-color: white">
-					<tr class="thead-dark">
-						<th>Player</th><th>Balance</th>
+			<div class="col-sm">
+				<h2>Accounting</h2>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm">
+				<table class="table table-sm" style="background-color: white">
+					<tr class="thead-light text-center">
+						<th colspan=2>Leader board</th>
+					</tr>
+					<tr>
+						<th>Player</th><th class='text-right'>Balance</th>
 					</tr>
 					{% for item in table %}
 						{% if item.0 == player%}
@@ -30,21 +38,28 @@
 			</div>	
 
 
-			<div class="col-md-7">
-				<h3>{{player}}</h3>
-				<table class="table table-responsive table-hover" style="background-color: white">
-					<tr class="thead-dark">
-						<th>Date</th><th>Amount</th><th>Note</th>
+			<div class="col-sm">
+				<table class="table table-sm table-bordered" style="background-color: white">
+					<tr class="thead-light text-center">
+						<th colspan=3>Your Account</th>
+					</tr><tr class='text-center'>
+						<th>Date</th><th class='text-right'>Amount</th><th>Note</th>
 					</tr>
 					{% for item in table2 %}
 					<tr>
 						<td>{{item.0}}</td>
 						<td class='text-right'>${{item.1}}</td>
-						<td>{{item.2}}</td>
+						<td class='text-center'><i>{{item.2}}</i></td>
 					</tr>
 					{% endfor %}
 				</table>
 			</div>
+
+			<div class="col-sm">
+				<img class="img-fluid" src="http://www.takepart.com/sites/default/files/styles/large/public/VegeCalculatorMAIN.jpg">
+			</div>
+
+
 		</div>
 	</main>
 
