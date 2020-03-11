@@ -14,7 +14,15 @@ def money(request):
 	table2 = []
 	for row in table:
 		table2.append([row[0],"{:.2f}".format(row[1])])
-	return render(request, 'pool/money.html',{'table':table2})
+
+	table3 = []
+	for row in Bank.objects.filter(player=request.user).order_by('transaction_date'):
+		table3.append([
+			row.transaction_date.strftime("%b %-d, %Y"),
+			"{:.2f}".format(row.deposit_amount),
+			row.note])
+
+	return render(request, 'pool/money.html',{'table':table2, 'table2':table3})
 
 def whoWon(week_number, score_matrix):
 	#!!! still have to add MNTP logic
