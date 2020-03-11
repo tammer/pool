@@ -1,7 +1,20 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from pool.models import Team,Game,Pick
+from pool.models import Team,Game,Pick,Bank
 from django.contrib.auth.models import User
+from django.db.models import Sum
+
+def money(request):
+	table = {}
+	for user in User.objects.all():
+		value = Bank.objects.filter(player=user).aggregate(Sum('deposit_amount'))['deposit_amount__sum']
+		table[user.username] = value
+		# table[user.username] = "{:.2f}".format(value)
+	table = sorted(table.items(), key=lambda kv: kv[1], reverse=True)
+	table2 = []
+	for row in table:
+		table2.append([row[0],"{:.2f}".format(row[1])])
+	return render(request, 'pool/money.html',{'table':table2})
 
 def whoWon(week_number, score_matrix):
 	#!!! still have to add MNTP logic

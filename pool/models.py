@@ -19,7 +19,6 @@ class Game(models.Model):
 	fav_score = models.IntegerField( null=True )
 	udog_score = models.IntegerField( null=True )
 	fav_is_home = models.BooleanField()
-	is_final = models.BooleanField( default = False ) # !!! get rid of this !!!
 	class Meta:
 		constraints = [
 			models.UniqueConstraint(fields=['week_number', 'game_number'], name='unique_week_game'),
@@ -100,6 +99,8 @@ class Monday(models.Model):
 class Bank(models.Model):
 	player = models.ForeignKey(User,on_delete=models.CASCADE)
 	deposit_amount = models.FloatField()
+	note = models.CharField(max_length=50, default='')
+	transaction_date = models.DateTimeField( auto_now=True, blank=False)
 
 class Main(models.Model):
 	week_number = models.IntegerField()
