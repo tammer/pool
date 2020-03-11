@@ -133,7 +133,10 @@ def standings(request):
 	return render(request,'pool/standings.html',{'player':player,'week_number':request.GET['w'],'standings':standings_(request.GET['w'])})
 
 def allpicks(request):
-	week_number = request.GET['w']
+	if request.GET.get('p'):
+		week_number = request.GET['w']
+	else:
+		week_number = impliedWeek()
 	header = []
 	for game in Game.objects.filter(week_number=week_number).order_by('game_number'):
 		header.append([game.favShortName(), str(game.spread), game.udogShortName(), game.game_date.strftime('%a')])

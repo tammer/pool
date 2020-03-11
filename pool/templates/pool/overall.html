@@ -1,33 +1,36 @@
 {% extends "pool/base.html" %}
 {% block content %}
-	<div class="col">
 
-		<h4>
-			Overall Standings
-		</h4>
+<main role="main" class="container">
+	<div class="row">
+		<div class="col-sm">
+			<h4>
+				Overall Standings
+			</h4>
 
-		<table class="table table-hover table-sm text-right">	
-			<tr class='thead-dark'>
-				<th></th>
-				{% for h in headers %}
-					<th>{{h}}</th>
-				{% endfor %}
-				<th>Ttl</th>
-			</tr>
-			{% for row in table %}
-				<tr>
-					{% for item in row %}
-						<td>
-							{% if item.1 == 0 %}
-								{{item.0}}
-							{% else %}
-								<span style='background:#FBFFB7'>{{item.0}}</span>
-							{% endif %}
-						</td>
-					{% endfor %}		
+			<table class="table table-hover table-sm text-right table-bordered">	
+				<tr class='thead-light'>
+					<th></th>
+					{% for h in headers %}
+						<th>{{h}}</th>
+					{% endfor %}
+					<th>Ttl</th>
 				</tr>
-			{% endfor %}
-		</table>
-
+				{% for row in table %}
+					<tr>
+						{% for item in row %}
+							<td>
+								{% if item.1 == 0 %}
+									{{item.0}}
+								{% else %}
+									<span style='background:#FBFFB7'>{{item.0}}</span>
+								{% endif %}
+							</td>
+						{% endfor %}		
+					</tr>
+				{% endfor %}
+			</table>
+		</div>
 	</div>
+</main>
 {% endblock content %}
