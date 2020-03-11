@@ -1,8 +1,22 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from pool.models import Team,Game,Pick,Bank
 from django.contrib.auth.models import User
 from django.db.models import Sum
+from .forms import BankForm
+from django.contrib import messages
+
+
+def deposit(request):
+	form = BankForm(request.POST)
+	if request.user.is_superuser and form.is_valid():
+		player = form.cleaned_data.get('player')
+		form.save()
+		messages.success(request, f'Account balance has been updated for {player}')
+		return redirect('pool-money')
+	else:
+		messages.warning(request, f'Not!')
+		return redirect('pool-money')
 
 def money(request):
 	table = {}
@@ -22,7 +36,7 @@ def money(request):
 			"{:.0f}".format(row.deposit_amount),
 			row.note])
 
-	return render(request, 'pool/money.html',{'player':request.user.username, 'table':table2, 'table2':table3})
+	return render(request, 'pool/money.html',{'is_superuser':request.user.is_superuser, 'form':BankForm(),  'player':request.user.username, 'table':table2, 'table2':table3})
 
 def whoWon(week_number, score_matrix):
 	#!!! still have to add MNTP logic

@@ -1,4 +1,5 @@
 {% extends "pool/base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
 	<main role="main" class="container">
 		<div class="row">
@@ -41,7 +42,7 @@
 			<div class="col-md-auto">
 				<table class="table table-sm table-bordered" style="background-color: white">
 					<tr class="thead-light text-center">
-						<th colspan=3>Your Account</th>
+						<th colspan=3>{{player}}'s Account</th>
 					</tr><tr class='text-center'>
 						<th>Date</th><th class='text-right'>Amount</th><th>Note</th>
 					</tr>
@@ -53,6 +54,23 @@
 					</tr>
 					{% endfor %}
 				</table>
+				{% if is_superuser %}
+					<table class="table table-sm" style="background-color: white">
+						<tr class="thead-light text-center">
+							<th>Account Management</th>
+						</tr>
+						<tr>
+							<td>Use the form below to add money to a player's account.</td>
+						</tr>
+						<tr><td>
+						<form action="{%url 'pool-deposit'%}" method="post">
+						    {% csrf_token %}
+						    {{ form|crispy }}
+						    <input type="submit" value="Submit">
+						</form>
+					</td></tr>
+					</table>
+				{% endif %}
 			</div>
 
 			<div class="col">
