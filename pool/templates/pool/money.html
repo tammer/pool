@@ -28,7 +28,11 @@
 							<tr>
 						{% endif %}
 								<td>
-									{{item.0}}
+									{% if is_superuser %}
+										<a href="{% url 'pool-money' %}?p={{item.0}}">{{item.0}}</a>
+									{% else %}
+										{{item.0}}
+									{% endif %}
 								</td>
 								<td class='text-right'>
 									${{item.1}}

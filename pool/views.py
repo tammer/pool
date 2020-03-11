@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.db.models import Sum
 from .forms import BankForm
 from django.contrib import messages
+from django.urls import reverse
 
 
 def deposit(request):
@@ -13,7 +14,8 @@ def deposit(request):
 		player = form.cleaned_data.get('player')
 		form.save()
 		messages.success(request, f'Account balance has been updated for {player}')
-		return redirect('pool-money')
+		url = reverse('pool-money')+f'?p={player}'
+		return redirect(url,{'p':player})
 	else:
 		messages.warning(request, f'Not!')
 		return redirect('pool-money')
@@ -30,13 +32,18 @@ def money(request):
 		table2.append([row[0],"{:.0f}".format(row[1])])
 
 	table3 = []
-	for row in Bank.objects.filter(player=request.user).order_by('-transaction_date'):
+	player = request.user
+	if request.user.is_superuser:
+		if request.GET.get('p'):
+			player = User.objects.get(username=request.GET['p'])
+
+	for row in Bank.objects.filter(player=player).order_by('-transaction_date'):
 		table3.append([
 			row.transaction_date.strftime("%b %-d, %Y"),
 			"{:.0f}".format(row.deposit_amount),
 			row.note])
 
-	return render(request, 'pool/money.html',{'is_superuser':request.user.is_superuser, 'form':BankForm(),  'player':request.user.username, 'table':table2, 'table2':table3})
+	return render(request, 'pool/money.html',{'is_superuser':request.user.is_superuser, 'form':BankForm(),  'player':player.username, 'table':table2, 'table2':table3})
 
 def whoWon(week_number, score_matrix):
 	#!!! still have to add MNTP logic
