@@ -7,6 +7,14 @@ from .forms import BankForm
 from django.contrib import messages
 from django.urls import reverse
 
+def impliedWeek():
+	first_week_without_a_score = Game.objects.filter(fav_score__isnull = True).order_by('week_number').first().week_number
+	if Game.objects.filter(week_number = first_week_without_a_score, fav_score__isnull = False).order_by('week_number').first().week_number == first_week_without_a_score:
+		# first_week_without_a_score has nuls and scores.  This must be the week we're in
+		return first_week_without_a_score
+	else:
+		return first_week_without_a_score - 1
+
 
 def deposit(request):
 	form = BankForm(request.POST)
@@ -137,7 +145,11 @@ def allpicks(request):
 	return render(request, 'pool/allpicks.html', {'week_number': week_number, 'header': header, 'matrix': matrix})
 
 def results(request):
-	week_number = request.GET['w']
+	if request.GET.get('p'):
+		week_number = request.GET['w']
+	else:
+		week_number = impliedWeek()
+
 	if request.GET.get('p'):
 		player = request.GET['p']
 	else:

@@ -3,7 +3,12 @@
 	<main role="main" class="container">
 		<div class="row">
 			<div class="col-sm">
-      			<h4>Week {{week_number}} <small class="text-muted">({{completed}} of {{total}} games completed)</small></h4>
+      			<h4>
+      				<a href="{% url 'pool-results'%}?p={{player}}&w={{week_number|add:'-1'}}">&laquo;</a>
+      				Week {{week_number}}
+      				<small class="text-muted">({{completed}} of {{total}} games completed)</small>
+      				<a href="{% url 'pool-results'%}?p={{player}}&w={{week_number|add:'1'}}">&raquo;</a>
+      			</h4>
       			<h2>
       				{{player}}
 					{% for b in right_array %}
