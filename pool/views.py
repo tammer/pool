@@ -22,7 +22,7 @@ def money(request):
 			"{:.2f}".format(row.deposit_amount),
 			row.note])
 
-	return render(request, 'pool/money.html',{'table':table2, 'table2':table3})
+	return render(request, 'pool/money.html',{'player':request.user.username, 'table':table2, 'table2':table3})
 
 def whoWon(week_number, score_matrix):
 	#!!! still have to add MNTP logic
