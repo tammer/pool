@@ -55,7 +55,8 @@ def money(request):
 
 def blog(request):
 	if request.GET.get('edit'):
-		form = BlogForm()
+		blog = Blog.objects.all().order_by('-entry_date').first()
+		form = BlogForm(instance=blog)
 	else:
 		form = BlogForm()
 	return render(request, 'pool/blog.html',{'form':form})
