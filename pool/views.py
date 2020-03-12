@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from pool.models import Team,Game,Pick,Bank
+from pool.models import Team,Game,Pick,Bank,Blog
 from django.contrib.auth.models import User
 from django.db.models import Sum
-from .forms import BankForm
+from .forms import BankForm,BlogForm
 from django.contrib import messages
 from django.urls import reverse
 
@@ -52,6 +52,20 @@ def money(request):
 			row.note])
 
 	return render(request, 'pool/money.html',{'is_superuser':request.user.is_superuser, 'form':BankForm(),  'player':player.username, 'table':table2, 'table2':table3})
+
+def blog(request):
+	return render(request, 'pool/blog.html',{'form':BlogForm()})
+
+def post(request):
+	form = BlogForm(request.POST)
+	if request.user.is_superuser and form.is_valid():
+		form.save()
+		messages.success(request, f'Update Completed')
+		return redirect('pool-home')
+	else:
+		messages.warning(request, f'You are not logged in as someone who is authorized to do this action.  Try logging in as Adel')
+		return redirect('pool-blog')
+
 
 def whoWon(week_number, score_matrix):
 	#!!! still have to add MNTP logic

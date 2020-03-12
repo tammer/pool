@@ -11,4 +11,6 @@ urlpatterns = [
     path('overall/', views.overall, name='pool-overall'),
     path('money/', views.money, name='pool-money'),
     path('deposit/', views.deposit, name='pool-deposit'),
+    path('blog/', views.blog, name='pool-blog'),
+    path('post/', views.post, name='pool-post'),
 ]

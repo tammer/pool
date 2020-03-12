@@ -1,0 +1,30 @@
+{% extends "pool/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+	<main role="main" class="container">
+		<div class="row">
+			<div class="col-md12">
+				<h2>Messages</h2>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-auto">
+				
+
+				<form action="{%url 'pool-post'%}" method="post">
+				    {% csrf_token %}
+				    {{ form|crispy }}
+				    <input type="submit" value="Submit">
+				</form>
+
+			</div>
+		</div>
+	</main>
+
+
+	
+
+
+
+{% endblock content %}
