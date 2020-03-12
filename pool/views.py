@@ -222,10 +222,14 @@ def home(request):
 	rank_order = sorted(total.items(), key=lambda kv: kv[1], reverse=True)
 	ng = Game.objects.filter(fav_score__isnull = True).order_by('game_date').first()
 	next_game = f'{ng.awayNickName()} @ {ng.homeNickName()} {ng.game_date.strftime("%A")} at {ng.game_date.strftime("%-I:%M%p").lower().replace("pm","p")}'
-	blogs = Blog.objects.all().order_by('-entry_date')[:18]
-	first_blog_date = blogs[0].entry_date.strftime('%A %B %-d')
-	first_blog = blogs[0].entry
-	return render(request, 'pool/home.html',{'first_blog_date':first_blog_date, 'first_blog':first_blog, 'next_game':next_game, 'player':player, 'standings':standings, 'overall': rank_order, 'week_number': week_number})
+
+	blog_list = []
+	for blog in Blog.objects.all().order_by('-entry_date')[:18]:
+		blog_list.append([blog.entry_date.strftime('%A %B %-d'), blog.entry])
+	first_blog_date = blog_list[0][0]
+	first_blog = blog_list[0][1]
+	blog_list.pop(0)
+	return render(request, 'pool/home.html',{'rest_of_blog':blog_list, 'first_blog_date':first_blog_date, 'first_blog':first_blog, 'next_game':next_game, 'player':player, 'standings':standings, 'overall': rank_order, 'week_number': week_number})
 
 def teams(request):
 	teams = Team.objects.all()
