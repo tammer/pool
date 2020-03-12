@@ -54,7 +54,11 @@ def money(request):
 	return render(request, 'pool/money.html',{'is_superuser':request.user.is_superuser, 'form':BankForm(),  'player':player.username, 'table':table2, 'table2':table3})
 
 def blog(request):
-	return render(request, 'pool/blog.html',{'form':BlogForm()})
+	if request.GET.get('edit'):
+		form = BlogForm()
+	else:
+		form = BlogForm()
+	return render(request, 'pool/blog.html',{'form':form})
 
 def post(request):
 	form = BlogForm(request.POST)
@@ -217,8 +221,8 @@ def home(request):
 	standings = standings_(week_number)
 	sm = scoreMatrix()
 	total = {}
-	for player, scores in sm.items():
-		total[player] = sum(scores.values())
+	for p, scores in sm.items():
+		total[p] = sum(scores.values())
 	rank_order = sorted(total.items(), key=lambda kv: kv[1], reverse=True)
 	ng = Game.objects.filter(fav_score__isnull = True).order_by('game_date').first()
 	next_game = f'{ng.awayNickName()} @ {ng.homeNickName()} {ng.game_date.strftime("%A")} at {ng.game_date.strftime("%-I:%M%p").lower().replace("pm","p")}'
@@ -229,7 +233,7 @@ def home(request):
 	first_blog_date = blog_list[0][0]
 	first_blog = blog_list[0][1]
 	blog_list.pop(0)
-	return render(request, 'pool/home.html',{'rest_of_blog':blog_list, 'first_blog_date':first_blog_date, 'first_blog':first_blog, 'next_game':next_game, 'player':player, 'standings':standings, 'overall': rank_order, 'week_number': week_number})
+	return render(request, 'pool/home.html',{'is_superuser':request.user.is_superuser, 'rest_of_blog':blog_list, 'first_blog_date':first_blog_date, 'first_blog':first_blog, 'next_game':next_game, 'player':player, 'standings':standings, 'overall': rank_order, 'week_number': week_number})
 
 def teams(request):
 	teams = Team.objects.all()
