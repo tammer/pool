@@ -37,6 +37,18 @@ class Game(models.Model):
 		else:
 			return self.udog.short_name.lower()
 
+	def homeNickName(self):
+		if self.fav_is_home:
+			return self.fav.nick_name
+		else:
+			return self.udog.nick_name
+
+	def awayNickName(self):
+		if self.fav_is_home:
+			return self.udog.nick_name
+		else:
+			return self.fav.nick_name
+
 
 	def isClosed(self, current_time = None):
 		if current_time is None:

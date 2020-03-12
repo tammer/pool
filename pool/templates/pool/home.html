@@ -1,0 +1,48 @@
+{% extends "pool/base.html" %}
+{% block content %}
+	<main role="main" class="container">
+		<div class="row">
+			<div class="col-md-auto">
+				<h4>Week {{week_number}}</h4>
+				<h5>Next Game: {{next_game}}</h5>
+			</div>
+		</div>
+		<div class='row'>
+			<div class="col-md">
+				<img class="img-fluid" src="https://images.squarespace-cdn.com/content/v1/5a212667d0e628d8c8ac0ac1/1520252868474-WLLTZA9F3PY9B6JIR3UW/ke17ZwdGBToddI8pDm48kBRdTHs8TizAmcWvGMqhcQlZw-zPPgdn4jUwVcJE1ZvWQUxwkmyExglNqGp0IvTJZamWLI2zvYWH8K3-s_4yszcp2ryTI0HqTOaaUohrI8PI4SSyQhtT7TcChK-Dm7EFoYgw6bt8802UmaSWlNuOZNkKMshLAGzx4R3EDFOm1kBS/Chimp-352-570x270.jpg?format=1000w">
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+				quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+				consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+				cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			</div>
+			<div class="col-md-auto">
+				<div class='text-center'>Week {{week_number}}</div>
+				{% include "./standings_snippet.html" %}
+			</div>
+			<div class="col-md-auto">
+				<div class='text-center'>Overall</div>
+				<table class="table table-sm" style="background-color: white">
+					<tr class="thead-light">
+						<th class='text-left'>Player</th><th class='text-right'>Score</th>
+					</tr>
+					{% for k,v in overall %}
+						{% if player == k%}
+							<tr style='background:#D5F5E3'>
+						{% else %}
+							<tr style=''>
+						{% endif %}
+								<td>{{k}}</td>
+								<td class='text-right'>{{v}}</td>
+							</tr>
+					{% endfor %}
+				</table>
+
+
+
+
+			</div>
+		</div>
+	</main>
+{% endblock content %}

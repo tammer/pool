@@ -25,17 +25,16 @@
 	<header class="site-header">
 	  <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
 	    <div class="container">
-	      <a class="navbar-brand mr-4" href="/">Monkey Pool</a>
+	      <a class="navbar-brand mr-4" href="{% url 'pool-home' %}">Monkey Pool</a>
 	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
 	      <span class="navbar-toggler-icon"></span>
 	      </button>
 	      <div class="collapse navbar-collapse" id="navbarToggle">
 	        <div class="navbar-nav mr-auto">
-	          <a class="nav-item nav-link" href="{% url 'pool-results' %}?w={{week_number}}&p={{player}}">Home</a>
+	          <a class="nav-item nav-link" href="{% url 'pool-home' %}">Home</a>
 	          <a class="nav-item nav-link" href="{% url 'pool-results' %}">My Picks</a>
-	          <a class="nav-item nav-link" href="{% url 'pool-allpicks' %}?w={{week_number}}&p={{player}}">All Picks</a>
-	          <a class="nav-item nav-link" href="{% url 'pool-standings' %}?w={{week_number}}&p={{player}}">Standings</a>
-	          <a class="nav-item nav-link" href="{% url 'pool-overall' %}?w={{week_number}}&p={{player}}">Overall Standings</a>
+	          <a class="nav-item nav-link" href="{% url 'pool-allpicks' %}">All Picks</a>
+	          <a class="nav-item nav-link" href="{% url 'pool-overall' %}">Overall Standings</a>
 	          <a class="nav-item nav-link" href="{% url 'pool-money' %}">Money</a>
 	          <a class="nav-item nav-link" href="{% url 'pool-results' %}?w={{week_number}}&p={{player}}">Help</a>
 	        </div>

@@ -13,7 +13,7 @@ def impliedWeek():
 		# first_week_without_a_score has nuls and scores.  This must be the week we're in
 		return first_week_without_a_score
 	else:
-		return first_week_without_a_score - 1
+		return first_week_without_a_score + 1
 
 
 def deposit(request):
@@ -89,7 +89,7 @@ def scoreMatrix():
 	return matrix
 
 def overall(request):
-	week_number = request.GET['w']
+	week_number = impliedWeek()
 	sm = scoreMatrix()
 	total = {}
 	for player, scores in sm.items():
@@ -195,7 +195,20 @@ def results(request):
 	return render(request, 'pool/results.html',{'completed':completed, 'right_array':right_array,  'week_number': week_number, 'standings':standings_(week_number=week_number), 'games': games, 'player': player, 'right': right, 'total': total} )
 
 def home(request):
-	return HttpResponse("<h1>Hello World</h1>")
+	if request.GET.get('p'):
+		week_number = request.GET['w']
+	else:
+		week_number = impliedWeek()
+	player = request.user.username
+	standings = standings_(week_number)
+	sm = scoreMatrix()
+	total = {}
+	for player, scores in sm.items():
+		total[player] = sum(scores.values())
+	rank_order = sorted(total.items(), key=lambda kv: kv[1], reverse=True)
+	ng = Game.objects.filter(fav_score__isnull = True).order_by('game_date').first()
+	next_game = f'{ng.awayNickName()} @ {ng.homeNickName()} {ng.game_date.strftime("%A")} at {ng.game_date.strftime("%-I:%M%p").lower().replace("pm","p")}'
+	return render(request, 'pool/home.html',{'next_game':next_game, 'player':player, 'standings':standings, 'overall': rank_order, 'week_number': week_number})
 
 def teams(request):
 	teams = Team.objects.all()
