@@ -54,15 +54,22 @@ def money(request):
 	return render(request, 'pool/money.html',{'is_superuser':request.user.is_superuser, 'form':BankForm(),  'player':player.username, 'table':table2, 'table2':table3})
 
 def blog(request):
-	if request.GET.get('edit'):
-		blog = Blog.objects.all().order_by('-entry_date').first()
+	if request.GET.get('id'):
+		id = request.GET['id']
+		blog = Blog.objects.get(id=id)
 		form = BlogForm(instance=blog)
 	else:
 		form = BlogForm()
-	return render(request, 'pool/blog.html',{'form':form})
+		id = ''
+	return render(request, 'pool/blog.html',{'form':form, 'id':id})
 
 def post(request):
-	form = BlogForm(request.POST)
+	if request.GET.get('id'):
+		id = request.GET['id']
+		blog = Blog.objects.get(id=id)
+		form = BlogForm(request.POST, instance=blog)
+	else:
+		form = BlogForm(request.POST)
 	if request.user.is_superuser and form.is_valid():
 		form.save()
 		messages.success(request, f'Update Completed')
@@ -229,12 +236,13 @@ def home(request):
 	next_game = f'{ng.awayNickName()} @ {ng.homeNickName()} {ng.game_date.strftime("%A")} at {ng.game_date.strftime("%-I:%M%p").lower().replace("pm","p")}'
 
 	blog_list = []
-	for blog in Blog.objects.all().order_by('-entry_date')[:18]:
+	for blog in Blog.objects.all().order_by('-entry_date')[:4]:
 		blog_list.append([blog.entry_date.strftime('%A %B %-d'), blog.entry])
 	first_blog_date = blog_list[0][0]
 	first_blog = blog_list[0][1]
+	id = Blog.objects.all().order_by('-entry_date').first().id
 	blog_list.pop(0)
-	return render(request, 'pool/home.html',{'is_superuser':request.user.is_superuser, 'rest_of_blog':blog_list, 'first_blog_date':first_blog_date, 'first_blog':first_blog, 'next_game':next_game, 'player':player, 'standings':standings, 'overall': rank_order, 'week_number': week_number})
+	return render(request, 'pool/home.html',{'id':id, 'is_superuser':request.user.is_superuser, 'rest_of_blog':blog_list, 'first_blog_date':first_blog_date, 'first_blog':first_blog, 'next_game':next_game, 'player':player, 'standings':standings, 'overall': rank_order, 'week_number': week_number})
 
 def teams(request):
 	teams = Team.objects.all()

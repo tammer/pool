@@ -11,11 +11,16 @@
 			<div class="col-md">
 				<img class="img-fluid" src="http://www.tammer.com/Chimp-352-570x270.jpg">
 				<br><br>
+				{% if is_superuser == True %}
+					<a class="btn btn-sm btn-primary" href="{% url 'pool-blog' %}" role="button">New Announcement</a>
+					<br><br><br>
+				{% endif %}
 				<h5>
 					{{first_blog_date}}
-					{% if is_superuser == True %}<a class="btn btn-sm btn-primary" href="{% url 'pool-blog' %}?edit=true" role="button">Edit</a>{% endif %}
 				</h5>
-				<p style='white-space: pre-wrap'>{{first_blog}}</p>
+				
+				<p style='white-space: pre-wrap'>{{first_blog}} {% if is_superuser == True %}<a href="{% url 'pool-blog' %}?id={{id}}">Edit&raquo;</a>{% endif %}</p>
+				
 				<small>
 				{% for k,v in rest_of_blog %}
 					<h6>{{k}}</h6>
