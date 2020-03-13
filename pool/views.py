@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from pool.models import Team,Game,Pick,Bank,Blog
 from django.contrib.auth.models import User
 from django.db.models import Sum
-from .forms import BankForm,BlogForm
+from .forms import BankForm,BlogForm,PicksForm
 from django.contrib import messages
 from django.urls import reverse
 
@@ -248,6 +248,12 @@ def teams(request):
 	teams = Team.objects.all()
 	return render(request, 'pool/teams.html', {'teams': teams} )
 
+def dopicks(request):
+	user = request.user
+	pick = Pick.objects.get(week_number=8,game_number=2,player=user)
+	form = PicksForm(instance=pick)
+	return render(request, 'pool/dopicks.html', {'form':form} )	
+
 def games(request):
 	week_number = request.GET['w']
 	current_date = ''
@@ -271,3 +277,6 @@ def games(request):
 			g['spread'] = game.spread
 		games[dt].append(g)
 	return render(request, 'pool/games.html', {'games': games} )
+
+
+

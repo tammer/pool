@@ -13,4 +13,5 @@ urlpatterns = [
     path('deposit/', views.deposit, name='pool-deposit'),
     path('blog/', views.blog, name='pool-blog'),
     path('post/', views.post, name='pool-post'),
+    path('dopicks/', views.dopicks, name='pool-dopicks'),
 ]

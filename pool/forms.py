@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 from django.contrib.auth.models import User
-from pool.models import Bank,Blog
+from pool.models import Bank,Blog,Pick,Game
 
 
 
@@ -22,3 +22,14 @@ class BlogForm(ModelForm):
 	class Meta:
 		model = Blog
 		fields = ['entry']
+
+class PicksForm(ModelForm):
+	def __init__(self, *args, **kwargs):
+		super(PicksForm, self).__init__(*args, **kwargs)
+		fav = Game.objects.get(game_number=self.instance.game_number, week_number=self.instance.week_number).fav.nick_name
+		udog = Game.objects.get(game_number=self.instance.game_number, week_number=self.instance.week_number).udog.nick_name
+		self.fields['picked_fav'] = forms.ChoiceField(choices=[[True,fav],[False,udog]], widget=forms.RadioSelect(), label='')
+
+	class Meta:
+		model = Pick
+		fields = ['picked_fav']
