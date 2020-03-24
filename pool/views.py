@@ -242,7 +242,9 @@ def home(request):
 	first_blog = blog_list[0][1]
 	id = Blog.objects.all().order_by('-entry_date').first().id
 	blog_list.pop(0)
-	return render(request, 'pool/home.html',{'id':id, 'is_superuser':request.user.is_superuser, 'rest_of_blog':blog_list, 'first_blog_date':first_blog_date, 'first_blog':first_blog, 'next_game':next_game, 'player':player, 'standings':standings, 'overall': rank_order, 'week_number': week_number})
+	completed = Game.objects.filter(week_number=week_number,fav_score__isnull = False).count()
+	total = Game.objects.filter(week_number=week_number).count()
+	return render(request, 'pool/home.html',{'total':total, 'completed':completed, 'id':id, 'is_superuser':request.user.is_superuser, 'rest_of_blog':blog_list, 'first_blog_date':first_blog_date, 'first_blog':first_blog, 'next_game':next_game, 'player':player, 'standings':standings, 'overall': rank_order, 'week_number': week_number})
 
 def teams(request):
 	teams = Team.objects.all()
