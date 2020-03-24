@@ -6,6 +6,7 @@ from django.db.models import Sum
 from .forms import BankForm,BlogForm,PicksForm
 from django.contrib import messages
 from django.urls import reverse
+import random
 
 def impliedWeek():
 	first_week_without_a_score = Game.objects.filter(fav_score__isnull = True).order_by('week_number').first().week_number
@@ -244,7 +245,12 @@ def home(request):
 	blog_list.pop(0)
 	completed = Game.objects.filter(week_number=week_number,fav_score__isnull = False).count()
 	total = Game.objects.filter(week_number=week_number).count()
-	return render(request, 'pool/home.html',{'total':total, 'completed':completed, 'id':id, 'is_superuser':request.user.is_superuser, 'rest_of_blog':blog_list, 'first_blog_date':first_blog_date, 'first_blog':first_blog, 'next_game':next_game, 'player':player, 'standings':standings, 'overall': rank_order, 'week_number': week_number})
+	# random.seed(week_number+completed)
+	src = random.choice([
+		'http://www.tammer.com/Chimp-352-570x270.jpg',
+		'https://technologytherapy.com/wp-content/uploads/2018/06/getmonkeys-2-768x384.jpg',
+		])
+	return render(request, 'pool/home.html',{'src':src, 'total':total, 'completed':completed, 'id':id, 'is_superuser':request.user.is_superuser, 'rest_of_blog':blog_list, 'first_blog_date':first_blog_date, 'first_blog':first_blog, 'next_game':next_game, 'player':player, 'standings':standings, 'overall': rank_order, 'week_number': week_number})
 
 def teams(request):
 	teams = Team.objects.all()
