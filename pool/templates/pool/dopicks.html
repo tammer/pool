@@ -6,7 +6,9 @@
 			<div class="col-8">
 				<form action="{%url 'pool-post'%}?id={{id}}" method="post">
 				    {% csrf_token %}
-				    {{ form }}
+				    {% for form in forms %}
+				    	{{ form }}
+				    {%endfor%}
 				    <input class='btn btn-sm btn-primary' type="submit" value="Submit">
 				    <a class="btn btn-sm btn-secondary" href="{% url 'pool-home' %}" role="button">Cancel</a>
 				</form>

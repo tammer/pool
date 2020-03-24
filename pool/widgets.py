@@ -1,5 +1,9 @@
 from django import forms
-from django.utils.safestring import mark_safe
 
 class PoolRadio(forms.RadioSelect):
-    template_name = 'pool/radio.html'
+	def __init__(self, *args, **kwargs):
+		game_number = kwargs.pop('game_number')
+		super(PoolRadio, self).__init__(*args, **kwargs)
+		self.attrs['game_number'] = game_number
+
+	template_name = 'pool/radio.html'

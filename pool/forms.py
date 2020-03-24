@@ -29,7 +29,7 @@ class PicksForm(ModelForm):
 		super(PicksForm, self).__init__(*args, **kwargs)
 		fav = Game.objects.get(game_number=self.instance.game_number, week_number=self.instance.week_number).fav.nick_name
 		udog = Game.objects.get(game_number=self.instance.game_number, week_number=self.instance.week_number).udog.nick_name
-		self.fields['picked_fav'] = forms.ChoiceField(choices=[[True,fav],[False,udog]], widget=PoolRadio(), label='')
+		self.fields['picked_fav'] = forms.ChoiceField(choices=[[True,fav],[False,udog]], widget=PoolRadio(game_number=self.instance.game_number), label='')
 
 	class Meta:
 		model = Pick

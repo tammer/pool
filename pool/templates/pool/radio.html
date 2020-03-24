@@ -1,11 +1,16 @@
+{{widget.attrs.game_number}}
 {% with id=widget.attrs.id %}
 	<ul{% if id %} id="{{ id }}"{% endif %}{% if widget.attrs.class %} class="{{ widget.attrs.class }}"{% endif %}>
 		{% for group, options, index in widget.optgroups %}
 			
 	  		{% for option in options %}
-	    		<li>{% include option.template_name with widget=option %}</li>
+	    		<li>
+	    			<input type="{{ option.type }}" name="{{ option.name }}{{widget.attrs.game_number}}"{% if option.value != None %} value="{{ option.value|stringformat:'s' }}"{% endif %}{% include "django/forms/widgets/attrs.html" %}>
+	    			{{ option.label }}
+	    		</li>
 	    	{% endfor %}
 	    	
 		{% endfor %}
 	</ul>
-	{% endwith %}
+{% endwith %}
+

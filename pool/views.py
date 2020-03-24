@@ -261,9 +261,10 @@ def teams(request):
 
 def dopicks(request):
 	user = request.user
-	pick = Pick.objects.get(week_number=8,game_number=2,player=user)
-	form = PicksForm(instance=pick)
-	return render(request, 'pool/dopicks.html', {'form':form} )	
+	forms = []
+	for pick in Pick.objects.filter(week_number=8,player=user).order_by('game_number').all():
+		forms.append(PicksForm(instance=pick))
+	return render(request, 'pool/dopicks.html', {'forms':forms} )	
 
 def games(request):
 	week_number = request.GET['w']
