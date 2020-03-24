@@ -251,6 +251,7 @@ def home(request):
 		'https://technologytherapy.com/wp-content/uploads/2018/06/getmonkeys-2-768x384.jpg',
 		'https://i.pinimg.com/originals/4d/79/c8/4d79c81a255ac387c4cdaea7c1e5ac4d.jpg',
 		'https://www.wakingtimes.com/wp-content/uploads/2017/10/thinking-monkey-1.jpg',
+		'https://i.ytimg.com/vi/6WRLFiujDFY/maxresdefault.jpg',
 		])
 	return render(request, 'pool/home.html',{'src':src, 'total':total, 'completed':completed, 'id':id, 'is_superuser':request.user.is_superuser, 'rest_of_blog':blog_list, 'first_blog_date':first_blog_date, 'first_blog':first_blog, 'next_game':next_game, 'player':player, 'standings':standings, 'overall': rank_order, 'week_number': week_number})
 
