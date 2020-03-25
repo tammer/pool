@@ -1,16 +1,11 @@
-{{widget.attrs.game_number}}
 {% with id=widget.attrs.id %}
-	<ul{% if id %} id="{{ id }}"{% endif %}{% if widget.attrs.class %} class="{{ widget.attrs.class }}"{% endif %}>
-		{% for group, options, index in widget.optgroups %}
-			
-	  		{% for option in options %}
-	    		<li>
-	    			<input type="{{ option.type }}" name="{{ option.name }}{{widget.attrs.game_number}}"{% if option.value != None %} value="{{ option.value|stringformat:'s' }}"{% endif %}{% include "django/forms/widgets/attrs.html" %}>
-	    			{{ option.label }}
-	    		</li>
-	    	{% endfor %}
-	    	
-		{% endfor %}
-	</ul>
+
+		<input type="{{ widget.optgroups.0.1.0.type }}" name="{{ widget.optgroups.0.1.0.name }}{{widget.attrs.game_number}}"{% if widget.optgroups.0.1.0.value != None %} value="{{ widget.optgroups.0.1.0.value|stringformat:'s' }}"{% endif %}{% include "django/forms/widgets/attrs.html" %}>
+	    			{{ widget.optgroups.0.1.0.label }} vs
+	    			{{ widget.optgroups.1.1.0.label }}
+	    <input type="{{ widget.optgroups.1.1.0.type }}" name="{{ widget.optgroups.1.1.0.name }}{{widget.attrs.game_number}}"{% if widget.optgroups.1.1.0.value != None %} value="{{ widget.optgroups.1.1.0.value|stringformat:'s' }}"{% endif %}{% include "django/forms/widgets/attrs.html" %}>
+	    			
+
+
 {% endwith %}
 
