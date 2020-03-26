@@ -1,10 +1,15 @@
 from django import forms
 from django.forms import ModelForm
 from django.contrib.auth.models import User
-from pool.models import Bank,Blog,Pick,Game
+from pool.models import Bank,Blog,Pick,Game,Monday
 from pool.widgets import PoolRadio
 
 
+class MondayForm(ModelForm):
+	total_points = forms.IntegerField(label='MNTP') # set limits
+	class Meta:
+		model = Monday
+		fields = ['total_points']
 
 class BankForm(ModelForm):
 

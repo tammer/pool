@@ -119,7 +119,7 @@ class Pick(models.Model):
 class Monday(models.Model):
 	player = models.ForeignKey(User,on_delete=models.CASCADE)
 	week_number = models.IntegerField()
-	total_points = models.IntegerField()
+	total_points = models.IntegerField(null=True)
 
 class Bank(models.Model):
 	player = models.ForeignKey(User,on_delete=models.CASCADE)

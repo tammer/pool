@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from pool.models import Team,Game,Pick,Bank,Blog
+from pool.models import Team,Game,Pick,Bank,Blog,Monday
 from django.contrib.auth.models import User
 from django.db.models import Sum
-from .forms import BankForm,BlogForm,PickForm
+from .forms import BankForm,BlogForm,PickForm,MondayForm
 from django.contrib import messages
 from django.urls import reverse
 import random,datetime
@@ -262,19 +262,27 @@ def teams(request):
 
 PickFormSet = modelformset_factory(Pick,extra=0, form = PickForm, fields=('game_number','week_number','picked_fav' ))
 def dopicks(request):
-	user = request.user	
-	queryset = Pick.objects.filter(week_number=7,player=user).order_by('game_number').all()
+	user = request.user
+	week_number = 7
+	queryset = Pick.objects.filter(week_number=week_number,player=user).order_by('game_number').all()
 	formset = PickFormSet(queryset=queryset)
-	return render(request, 'pool/dopicks.html', {'formset':formset} )	
+	(monday_instance, created) = Monday.objects.get_or_create(player=user, week_number=week_number)
+	monday_form = MondayForm(instance=monday_instance)
+	return render(request, 'pool/dopicks.html', {'formset':formset, 'monday_form':monday_form} )	
 
 def postpicks(request):
+	user = request.user
+	week_number = 7
 	formset = PickFormSet(request.POST)
-	if formset.is_valid():
+	monday_instance = Monday.objects.get(player=user, week_number=week_number)
+	monday_form = MondayForm(request.POST, instance = monday_instance)
+	if formset.is_valid() and monday_form.is_valid():
 		instances = formset.save()
+		monday_form.save()
 		messages.success(request, "Picks Updated")
 	else:
 		print("Trouble at the Mill")
-		messages.warning(request, formset.errors	)
+		messages.warning(request, formset.errors + monday_form.errors	)
 	return redirect('pool-dopicks')
 
 def games(request):
