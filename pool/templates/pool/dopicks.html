@@ -2,12 +2,17 @@
 {% block content %}
 	<main role="main" class="container">
 		<div class="row">
-			<div class="col-8">
+			<div class="col-4">
 				<form action="{%url 'pool-postpicks'%}" method="post">
 				    {% csrf_token %}
 				    {{ formset.management_form }}
 				    <table class='table table-sm' style="background-color: white">
-				    	<tr><th></th><td>Favourite</td><td>Spread</td><td>Underdog</td></tr>
+				    	<tr class="thead-light text-center">
+				    		<th></th>
+				    		<th class='text-left'>Favourite</th>
+				    		<th>Spread</th>
+				    		<th class='text-right'>Underdog</th>
+				    	</tr>
 				    {% for form in formset %}
 				    	{{ form }}
 				    {%endfor%}
