@@ -16,8 +16,11 @@
 				    {% for form in formset %}
 				    	{{ form }}
 				    {%endfor%}
+				    <tr>
+				    	<th></th>
+				    	<td colspan=3 class='text-right'>{{monday_form.as_p}}</td>
+				    </tr>
 					</table>
-				    {{monday_form}}
 				    <input class='btn btn-sm btn-primary' type="submit" value="Submit">
 				    <a class="btn btn-sm btn-secondary" href="{% url 'pool-home' %}" role="button">Cancel</a>
 				</form>
