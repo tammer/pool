@@ -260,7 +260,7 @@ def teams(request):
 	teams = Team.objects.all()
 	return render(request, 'pool/teams.html', {'teams': teams} )
 
-PickFormSet = modelformset_factory(Pick,extra=0, form = PickForm, fields=('game_number','week_number','picked_fav','player' ))
+PickFormSet = modelformset_factory(Pick,extra=0, form = PickForm, fields=('game_number','week_number','picked_fav' ))
 def dopicks(request):
 	user = request.user	
 	queryset = Pick.objects.filter(week_number=7,player=user).order_by('game_number').all()

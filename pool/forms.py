@@ -43,4 +43,4 @@ class PickForm(ModelForm):
 
 	class Meta:
 		model = Pick
-		fields = ['picked_fav','week_number','game_number','player']
+		fields = ['picked_fav','week_number','game_number']
