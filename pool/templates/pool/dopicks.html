@@ -1,5 +1,4 @@
 {% extends "pool/base.html" %}
-{% load crispy_forms_tags %}
 {% block content %}
 	<main role="main" class="container">
 		<div class="row">
@@ -7,10 +6,12 @@
 				<form action="{%url 'pool-postpicks'%}" method="post">
 				    {% csrf_token %}
 				    {{ formset.management_form }}
+				    <table class='table table-sm' style="background-color: white">
+				    	<tr><th></th><td>Favourite</td><td>Spread</td><td>Underdog</td></tr>
 				    {% for form in formset %}
 				    	{{ form }}
-				    	<br>
 				    {%endfor%}
+					</table>
 				    <input class='btn btn-sm btn-primary' type="submit" value="Submit">
 				    <a class="btn btn-sm btn-secondary" href="{% url 'pool-home' %}" role="button">Cancel</a>
 				</form>
