@@ -33,9 +33,11 @@ class PickForm(ModelForm):
 		else:
 			print(self.instance.week_number)
 			print(self.instance.game_number)
-			fav = Game.objects.get(game_number=self.instance.game_number, week_number=self.instance.week_number).fav.nick_name
-			udog = Game.objects.get(game_number=self.instance.game_number, week_number=self.instance.week_number).udog.nick_name
-			self.fields['picked_fav'] = forms.ChoiceField(choices=[[True,fav],[False,udog]], widget=PoolRadio(picked_fav=self.instance.picked_fav), label='')
+			game = Game.objects.get(game_number=self.instance.game_number, week_number=self.instance.week_number)
+			fav = game.favNickName()
+			udog = game.udogNickName()
+			spread = game.spread
+			self.fields['picked_fav'] = forms.ChoiceField(choices=[[True,fav],[False,udog]], widget=PoolRadio(spread = spread, picked_fav=self.instance.picked_fav), label='')
 
 
 	week_number = forms.CharField(widget=forms.HiddenInput())

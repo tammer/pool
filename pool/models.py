@@ -37,6 +37,19 @@ class Game(models.Model):
 		else:
 			return self.udog.short_name.lower()
 
+	def favNickName(self):
+		if self.fav_is_home:
+			return self.fav.nick_name.upper()
+		else:
+			return self.fav.nick_name.lower()
+
+	def udogNickName(self):
+		if not(self.fav_is_home):
+			return self.udog.nick_name.upper()
+		else:
+			return self.udog.nick_name.lower()
+
+
 	def homeNickName(self):
 		if self.fav_is_home:
 			return self.fav.nick_name

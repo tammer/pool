@@ -274,6 +274,7 @@ def postpicks(request):
 	formset = PickFormSet(request.POST)
 	if formset.is_valid():
 		instances = formset.save()
+		messages.success(request, "Picks Updated")
 	else:
 		print("Trouble at the Mill")
 		print(formset.errors)
