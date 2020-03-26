@@ -1,5 +1,6 @@
 {% extends "pool/base.html" %}
 {% block content %}
+
 	<main role="main" class="container">
 		<div class="row">
 			<div class="col-4">
@@ -18,6 +19,9 @@
 				    {%endfor%}
 				    <tr>
 				    	<th></th>
+				    	<style type="text/css">
+				    		p {padding:0;margin:0;border:0;margin-bottom:-0.2em;}
+				    	</style>
 				    	<td colspan=3 class='text-right'>{{monday_form.as_p}}</td>
 				    </tr>
 					</table>
