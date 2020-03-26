@@ -3,10 +3,12 @@ from django.http import HttpResponse
 from pool.models import Team,Game,Pick,Bank,Blog
 from django.contrib.auth.models import User
 from django.db.models import Sum
-from .forms import BankForm,BlogForm,PicksForm
+from .forms import BankForm,BlogForm,PickForm
 from django.contrib import messages
 from django.urls import reverse
 import random,datetime
+from django.forms import modelformset_factory
+
 
 def impliedWeek():
 	first_week_without_a_score = Game.objects.filter(fav_score__isnull = True).order_by('week_number').first().week_number
@@ -15,7 +17,6 @@ def impliedWeek():
 		return first_week_without_a_score
 	else:
 		return first_week_without_a_score + 1
-
 
 def deposit(request):
 	form = BankForm(request.POST)
@@ -259,12 +260,25 @@ def teams(request):
 	teams = Team.objects.all()
 	return render(request, 'pool/teams.html', {'teams': teams} )
 
+PickFormSet = modelformset_factory(Pick,extra=0, form = PickForm, fields=('game_number','week_number','picked_fav','player' ))
 def dopicks(request):
-	user = request.user
-	forms = []
-	for pick in Pick.objects.filter(week_number=8,player=user).order_by('game_number').all():
-		forms.append(PicksForm(instance=pick))
-	return render(request, 'pool/dopicks.html', {'forms':forms} )	
+	user = request.user	
+	queryset = Pick.objects.filter(week_number=7,player=user).order_by('game_number').all()
+	formset = PickFormSet(queryset=queryset)
+	# forms = []
+	# for pick in Pick.objects.filter(game_number=1,week_number=8,player=user).order_by('game_number').all():
+	# 	forms.append(PickForm(instance=pick))
+	return render(request, 'pool/dopicks.html', {'formset':formset} )	
+
+def postpicks(request):
+	formset = PickFormSet(request.POST)
+	if formset.is_valid():
+		instances = formset.save()
+	else:
+		print("Trouble at the Mill")
+		print(formset.errors)
+		messages.warning(request, formset.errors	)
+	return redirect('pool-dopicks')
 
 def games(request):
 	week_number = request.GET['w']

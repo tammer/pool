@@ -24,13 +24,23 @@ class BlogForm(ModelForm):
 		model = Blog
 		fields = ['entry']
 
-class PicksForm(ModelForm):
+class PickForm(ModelForm):
 	def __init__(self, *args, **kwargs):
-		super(PicksForm, self).__init__(*args, **kwargs)
-		fav = Game.objects.get(game_number=self.instance.game_number, week_number=self.instance.week_number).fav.nick_name
-		udog = Game.objects.get(game_number=self.instance.game_number, week_number=self.instance.week_number).udog.nick_name
-		self.fields['picked_fav'] = forms.ChoiceField(choices=[[True,fav],[False,udog]], widget=PoolRadio(game_number=self.instance.game_number), label='')
+		super(PickForm, self).__init__(*args, **kwargs)
+		if self.instance.game_number is None:
+			raise("PickForm created but no game number in the instance.")
+			pass
+		else:
+			print(self.instance.week_number)
+			print(self.instance.game_number)
+			fav = Game.objects.get(game_number=self.instance.game_number, week_number=self.instance.week_number).fav.nick_name
+			udog = Game.objects.get(game_number=self.instance.game_number, week_number=self.instance.week_number).udog.nick_name
+			self.fields['picked_fav'] = forms.ChoiceField(choices=[[True,fav],[False,udog]], widget=PoolRadio(picked_fav=self.instance.picked_fav), label='')
+
+
+	week_number = forms.CharField(widget=forms.HiddenInput())
+	game_number = forms.CharField(widget=forms.HiddenInput())
 
 	class Meta:
 		model = Pick
-		fields = ['picked_fav']
+		fields = ['picked_fav','week_number','game_number','player']
