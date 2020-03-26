@@ -6,7 +6,7 @@ from pool.widgets import PoolRadio
 
 
 class MondayForm(ModelForm):
-	total_points = forms.IntegerField(label='Monday night total points',widget=forms.TextInput(attrs={'maxlength':'2', 'size': '2'})) # set limits
+	total_points = forms.IntegerField(label='Monday night total points',widget=forms.NumberInput(attrs={'style':'width: 40px', 'max': '99','min':'0'})) # set limits
 	class Meta:
 		model = Monday
 		fields = ['total_points']
