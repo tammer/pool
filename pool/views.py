@@ -265,9 +265,6 @@ def dopicks(request):
 	user = request.user	
 	queryset = Pick.objects.filter(week_number=7,player=user).order_by('game_number').all()
 	formset = PickFormSet(queryset=queryset)
-	# forms = []
-	# for pick in Pick.objects.filter(game_number=1,week_number=8,player=user).order_by('game_number').all():
-	# 	forms.append(PickForm(instance=pick))
 	return render(request, 'pool/dopicks.html', {'formset':formset} )	
 
 def postpicks(request):
@@ -277,7 +274,6 @@ def postpicks(request):
 		messages.success(request, "Picks Updated")
 	else:
 		print("Trouble at the Mill")
-		print(formset.errors)
 		messages.warning(request, formset.errors	)
 	return redirect('pool-dopicks')
 

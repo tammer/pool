@@ -29,10 +29,7 @@ class PickForm(ModelForm):
 		super(PickForm, self).__init__(*args, **kwargs)
 		if self.instance.game_number is None:
 			raise("PickForm created but no game number in the instance.")
-			pass
 		else:
-			print(self.instance.week_number)
-			print(self.instance.game_number)
 			game = Game.objects.get(game_number=self.instance.game_number, week_number=self.instance.week_number)
 			fav = game.favNickName()
 			udog = game.udogNickName()
