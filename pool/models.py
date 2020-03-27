@@ -133,7 +133,7 @@ class Monday(models.Model):
 	total_points = models.IntegerField(null=True)
 
 	def save(self, *args, **kwargs):
-		if Game.objects.get(game_number=12,week_number=self.week_number).isClosed():
+		if Game.objects.filter(week_number=self.week_number).order_by('game_number').last().isClosed():
 			# You can't change this pick!
 			pass
 		else:
