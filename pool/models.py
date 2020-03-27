@@ -4,7 +4,7 @@ import datetime
 from pytz import timezone
 
 def CurrentTime():
-	return datetime.datetime(2019,10,20,13,21,0)
+	return datetime.datetime(2019,10,18,13,21,0)
 	# return datetime.datetime.now(self.game_date.tzinfo)
 
 class Team(models.Model):
@@ -137,7 +137,7 @@ class Monday(models.Model):
 			# You can't change this pick!
 			pass
 		else:
-			super(Pick, self).save(*args, **kwargs)
+			super(Monday, self).save(*args, **kwargs)
 
 class Bank(models.Model):
 	player = models.ForeignKey(User,on_delete=models.CASCADE)
