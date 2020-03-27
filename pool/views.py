@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from pool.models import Team,Game,Pick,Bank,Blog,Monday
+from pool.models import Team,Game,Pick,Bank,Blog,Monday,now
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from .forms import BankForm,BlogForm,PickForm,MondayForm
@@ -16,7 +16,11 @@ def impliedWeek():
 		# first_week_without_a_score has nuls and scores.  This must be the week we're in
 		return first_week_without_a_score
 	else:
-		return first_week_without_a_score + 1
+		# all scores have been input
+		if models.now().weekday() == 6 or models.now().weekday() == 0:
+			return first_week_without_a_score - 1 # it's not Tuesday yet
+		else:
+			return first_week_without_a_score
 
 def deposit(request):
 	form = BankForm(request.POST)
@@ -263,7 +267,7 @@ def teams(request):
 PickFormSet = modelformset_factory(Pick,extra=0, form = PickForm, fields=('game_number','week_number','picked_fav' ))
 def dopicks(request):
 	user = request.user
-	week_number = 7
+	week_number = impliedWeek()
 	queryset = Pick.objects.filter(week_number=week_number,player=user).order_by('game_number').all()
 	formset = PickFormSet(queryset=queryset)
 	(monday_instance, created) = Monday.objects.get_or_create(player=user, week_number=week_number)
@@ -271,11 +275,12 @@ def dopicks(request):
 	disabled = ''
 	if Game.objects.filter(week_number=week_number).order_by('game_number').last().isClosed():
 		disabled = 'disabled'
-	return render(request, 'pool/dopicks.html', { 'disabled':disabled, 'player':user.username, 'week_number':week_number, 'formset':formset, 'monday_form':monday_form} )
+	now_ = now().strftime('%A %B %-d %-I:%M %p')
+	return render(request, 'pool/dopicks.html', { 'now':now_, 'disabled':disabled, 'player':user.username, 'week_number':week_number, 'formset':formset, 'monday_form':monday_form} )
 
 def postpicks(request):
 	user = request.user
-	week_number = 7
+	week_number = impliedWeek()
 	formset = PickFormSet(request.POST)
 	monday_instance = Monday.objects.get(player=user, week_number=week_number)
 	monday_form = MondayForm(request.POST, instance = monday_instance)

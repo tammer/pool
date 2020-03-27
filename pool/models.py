@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 import datetime
 from pytz import timezone
 
-def CurrentTime():
-	return datetime.datetime(2019,10,18,13,21,0)
+def now():
+	return datetime.datetime(2019,10,22,13,21,0)
 	# return datetime.datetime.now(self.game_date.tzinfo)
 
 class Team(models.Model):
@@ -69,7 +69,7 @@ class Game(models.Model):
 
 	def isClosed(self, current_time = None):
 		if current_time is None:
-			current_time = CurrentTime()
+			current_time = now()
 		if self.game_date.weekday() == 0: # Monday
 			distance_to_sunday = -1
 		else:
