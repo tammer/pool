@@ -7,7 +7,10 @@ class PoolRadio(forms.RadioSelect):
 		game_date = kwargs.pop('game_date')
 		super(PoolRadio, self).__init__(*args, **kwargs)
 		self.attrs['checked_fav'] = checked_fav
-		self.attrs['spread'] = round(spread - 0.1)
+		if spread is None:
+			self.attrs['spread'] = 'na'
+		else:
+			self.attrs['spread'] = round(spread - 0.1)
 		self.attrs['game_date'] = game_date
 
 	template_name = 'pool/radio.html'
