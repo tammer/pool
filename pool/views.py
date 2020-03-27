@@ -6,21 +6,35 @@ from django.db.models import Sum
 from .forms import BankForm,BlogForm,PickForm,MondayForm
 from django.contrib import messages
 from django.urls import reverse
-import random,datetime
+import random
+from datetime import datetime, timedelta
+
 from django.forms import modelformset_factory
 
 
-def impliedWeek():
-	first_week_without_a_score = Game.objects.filter(fav_score__isnull = True).order_by('week_number').first().week_number
-	if Game.objects.filter(week_number = first_week_without_a_score, fav_score__isnull = False).order_by('week_number').first().week_number == first_week_without_a_score:
-		# first_week_without_a_score has nuls and scores.  This must be the week we're in
-		return first_week_without_a_score
-	else:
-		# all scores have been input
-		if models.now().weekday() == 6 or models.now().weekday() == 0:
-			return first_week_without_a_score - 1 # it's not Tuesday yet
+def implied_week(now_ = None):
+	if now_ is None:
+			now_ = now()
+	week_number = 1
+	last_week_of_season = Game.objects.filter(game_number=1).order_by('week_number').last().week_number
+	while week_number < last_week_of_season:
+		if now_ < Game.objects.filter(week_number=week_number).order_by('game_date').last().game_date + timedelta(hours=30):
+			return week_number
 		else:
-			return first_week_without_a_score
+			week_number += 1
+	return last_week_of_season
+
+# def impliedWeek_by_filled_in_scores():
+# 	first_week_without_a_score = Game.objects.filter(fav_score__isnull = True).order_by('week_number').first().week_number
+# 	if Game.objects.filter(week_number = first_week_without_a_score, fav_score__isnull = False).order_by('week_number').first().week_number == first_week_without_a_score:
+# 		# first_week_without_a_score has nuls and scores.  This must be the week we're in
+# 		return first_week_without_a_score
+# 	else:
+# 		# all scores have been input
+# 		if now().weekday() == 6 or now().weekday() == 0:
+# 			return first_week_without_a_score - 1 # it's not Tuesday yet
+# 		else:
+# 			return first_week_without_a_score
 
 def deposit(request):
 	form = BankForm(request.POST)
@@ -121,7 +135,7 @@ def scoreMatrix():
 	return matrix
 
 def overall(request):
-	week_number = impliedWeek()
+	week_number = implied_week()
 	sm = scoreMatrix()
 	total = {}
 	for player, scores in sm.items():
@@ -168,7 +182,7 @@ def allpicks(request):
 	if request.GET.get('p'):
 		week_number = request.GET['w']
 	else:
-		week_number = impliedWeek()
+		week_number = implied_week()
 	header = []
 	for game in Game.objects.filter(week_number=week_number).order_by('game_number'):
 		header.append([game.favShortName(), str(game.spread), game.udogShortName(), game.game_date.strftime('%a')])
@@ -230,7 +244,7 @@ def home(request):
 	if request.GET.get('p'):
 		week_number = request.GET['w']
 	else:
-		week_number = impliedWeek()
+		week_number = implied_week()
 	player = request.user.username
 	standings = standings_(week_number)
 	sm = scoreMatrix()
@@ -267,7 +281,7 @@ def teams(request):
 PickFormSet = modelformset_factory(Pick,extra=0, form = PickForm, fields=('game_number','week_number','picked_fav' ))
 def dopicks(request):
 	user = request.user
-	week_number = impliedWeek()
+	week_number = implied_week()
 	queryset = Pick.objects.filter(week_number=week_number,player=user).order_by('game_number').all()
 	formset = PickFormSet(queryset=queryset)
 	(monday_instance, created) = Monday.objects.get_or_create(player=user, week_number=week_number)
@@ -280,7 +294,7 @@ def dopicks(request):
 
 def postpicks(request):
 	user = request.user
-	week_number = impliedWeek()
+	week_number = implied_week()
 	formset = PickFormSet(request.POST)
 	monday_instance = Monday.objects.get(player=user, week_number=week_number)
 	monday_form = MondayForm(request.POST, instance = monday_instance)
