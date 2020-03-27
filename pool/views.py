@@ -197,7 +197,7 @@ def results(request):
 	if request.GET.get('p'):
 		week_number = request.GET['w']
 	else:
-		week_number = impliedWeek()
+		week_number = implied_week()
 
 	if request.GET.get('p'):
 		player = request.GET['p']
