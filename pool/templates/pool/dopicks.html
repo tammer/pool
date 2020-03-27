@@ -3,13 +3,14 @@
 
 	<main role="main" class="container">
 		<div class="row">
-			<div class="col-4">
+			<div class="col-5">
 				<form action="{%url 'pool-postpicks'%}" method="post">
 				    {% csrf_token %}
 				    {{ formset.management_form }}
 				    <table class='table table-sm' style="background-color: white">
 				    	<tr class="thead-light text-center">
 				    		<th></th>
+				    		<th class='text-left'>Time</th>
 				    		<th class='text-left'>Favourite</th>
 				    		<th>Spread</th>
 				    		<th class='text-right'>Underdog</th>
@@ -22,7 +23,7 @@
 				    	<style type="text/css">
 				    		p {padding:0;margin:0;border:0;margin-bottom:-0.2em;}
 				    	</style>
-				    	<td colspan=3 class='text-right'>{{monday_form.as_p}}</td>
+				    	<td colspan=4 class='text-right'>{{monday_form.as_p}}</td>
 				    </tr>
 					</table>
 				    <div class='text-right'><input class='btn btn-primary' type="submit" value="Submit"></div>
