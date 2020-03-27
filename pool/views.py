@@ -264,7 +264,7 @@ def home(request):
 	blog_list.pop(0)
 	completed = Game.objects.filter(week_number=week_number,fav_score__isnull = False).count()
 	total = Game.objects.filter(week_number=week_number).count()
-	random.seed(week_number+datetime.datetime.now().day)
+	random.seed(week_number+now().day)
 	src = random.choice([
 		'http://www.tammer.com/Chimp-352-570x270.jpg',
 		'https://technologytherapy.com/wp-content/uploads/2018/06/getmonkeys-2-768x384.jpg',
@@ -288,7 +288,8 @@ def dopicks(request):
 	monday_form = MondayForm(instance=monday_instance)
 	disabled = ''
 	if Game.objects.filter(week_number=week_number).order_by('game_number').last().isClosed():
-		disabled = 'disabled'
+		messages.warning(request,f'Week {week_number} is closed.')
+		return redirect('pool-results')
 	now_ = now().strftime('%A %B %-d %-I:%M %p')
 	return render(request, 'pool/dopicks.html', { 'now':now_, 'disabled':disabled, 'player':user.username, 'week_number':week_number, 'formset':formset, 'monday_form':monday_form} )
 
