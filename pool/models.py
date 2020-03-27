@@ -3,6 +3,10 @@ from django.contrib.auth.models import User
 import datetime
 from pytz import timezone
 
+def CurrentTime():
+	return datetime.datetime(2019,10,20,13,21,0)
+	# return datetime.datetime.now(self.game_date.tzinfo)
+
 class Team(models.Model):
 	full_name = models.CharField(max_length=50)
 	short_name = models.CharField(max_length=3)
@@ -65,7 +69,7 @@ class Game(models.Model):
 
 	def isClosed(self, current_time = None):
 		if current_time is None:
-			current_time = datetime.datetime.now(self.game_date.tzinfo)
+			current_time = CurrentTime()
 		if self.game_date.weekday() == 0: # Monday
 			distance_to_sunday = -1
 		else:
@@ -100,6 +104,13 @@ class Pick(models.Model):
 	game_number = models.IntegerField()
 	picked_fav = models.BooleanField()
 
+	def save(self, *args, **kwargs):
+		if Game.objects.get(game_number=self.game_number,week_number=self.week_number).isClosed():
+			# You can't change this pick!
+			pass
+		else:
+			super(Pick, self).save(*args, **kwargs)
+
 	def game(self):
 		return Game.objects.get(week_number=self.week_number, game_number=self.game_number)
 
@@ -120,6 +131,13 @@ class Monday(models.Model):
 	player = models.ForeignKey(User,on_delete=models.CASCADE)
 	week_number = models.IntegerField()
 	total_points = models.IntegerField(null=True)
+
+	def save(self, *args, **kwargs):
+		if Game.objects.get(game_number=12,week_number=self.week_number).isClosed():
+			# You can't change this pick!
+			pass
+		else:
+			super(Pick, self).save(*args, **kwargs)
 
 class Bank(models.Model):
 	player = models.ForeignKey(User,on_delete=models.CASCADE)

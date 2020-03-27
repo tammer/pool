@@ -6,7 +6,7 @@ from pool.widgets import PoolRadio
 
 
 class MondayForm(ModelForm):
-	total_points = forms.IntegerField(label='Monday night total points',widget=forms.NumberInput(attrs={'style':'width: 40px', 'max': '99','min':'0'})) # set limits
+	total_points = forms.IntegerField(label='Monday night total points',widget=forms.NumberInput(attrs={'style':'width: 40px', 'max': '99','min':'0'}))
 	class Meta:
 		model = Monday
 		fields = ['total_points']
@@ -41,6 +41,7 @@ class PickForm(ModelForm):
 			spread = game.spread
 			game_date = game.game_date.strftime('%a %-I:%M')
 			self.fields['picked_fav'] = forms.ChoiceField(choices=[[True,fav],[False,udog]], widget=PoolRadio(game_date = game_date, spread = spread, picked_fav=self.instance.picked_fav), label='')
+			self.fields['picked_fav'].disabled = game.isClosed()
 
 
 	week_number = forms.CharField(widget=forms.HiddenInput())
