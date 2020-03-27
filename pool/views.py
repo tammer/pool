@@ -268,7 +268,10 @@ def dopicks(request):
 	formset = PickFormSet(queryset=queryset)
 	(monday_instance, created) = Monday.objects.get_or_create(player=user, week_number=week_number)
 	monday_form = MondayForm(instance=monday_instance)
-	return render(request, 'pool/dopicks.html', { 'player':user.username, 'week_number':week_number, 'formset':formset, 'monday_form':monday_form} )	
+	disabled = ''
+	if Game.objects.filter(week_number=week_number).order_by('game_number').last().isClosed():
+		disabled = 'disabled'
+	return render(request, 'pool/dopicks.html', { 'disabled':disabled, 'player':user.username, 'week_number':week_number, 'formset':formset, 'monday_form':monday_form} )
 
 def postpicks(request):
 	user = request.user
