@@ -8,8 +8,9 @@ from django.contrib import messages
 from django.urls import reverse
 import random
 from datetime import datetime, timedelta
-
 from django.forms import modelformset_factory
+from django.http import HttpResponse, HttpResponseRedirect
+
 
 
 def implied_week(now_ = None):
@@ -302,7 +303,7 @@ def dopicks(request):
 	disabled = ''
 	if Game.objects.filter(week_number=week_number).order_by('game_number').last().isClosed():
 		messages.warning(request,f'Week {week_number} is closed.')
-		return redirect('pool-results')
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 	now_ = now().strftime('%A %B %-d %-I:%M %p')
 	return render(request, 'pool/dopicks.html', { 'now':now_, 'disabled':disabled, 'player':user.username, 'week_number':week_number, 'formset':formset, 'monday_form':monday_form} )
 
