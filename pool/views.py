@@ -186,7 +186,7 @@ def allpicks(request):
 		week_number = implied_week()
 	header = []
 	for game in Game.objects.filter(week_number=week_number).order_by('game_number'):
-		header.append([game.favShortName(), str(game.spread), game.udogShortName(), game.game_date.strftime('%a')])
+		header.append([game.favShortName(), str(game.spread)+"&frac12;", game.udogShortName(), game.game_date.strftime('%a')])
 	header.append('MNTP')
 	matrix = {}
 	for user in User.objects.all().order_by('username'):

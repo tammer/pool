@@ -7,7 +7,7 @@
 			{% for th in header %}
 				<th>
 					{% for i in th %}
-						{{i}}<br>
+						{{i|safe}}<br>
 					{% endfor %}
 				</th>
 			{% endfor %}
