@@ -13,16 +13,25 @@
 		    </div>
 		</div>
 
-		<form action="{%url 'pool-spreads'%}?w={{week_number}}" method="post">
-			{% csrf_token %}
-			{{ formset.management_form }}
-			{% for form in formset %}
-				{{form.fav}}
-				{{ form }}
-				{{form.udog}}
-				<br>
-			{%endfor%}
-			<input class='btn btn-primary' type="submit" value="Submit">
-		</form>
+		<div class="row">
+			<div class="col-5">
+				<form action="{%url 'pool-spreads'%}?w={{week_number}}" method="post">
+					{% csrf_token %}
+					{{ formset.management_form }}
+
+					<table class='table table-sm' style="background-color: white">
+						{% for form in formset %}
+							<tr>
+								<td>{{form.fav}}</td>
+								<td>{{ form.as_p }}</td>
+								<td>{{form.udog}}</td>
+							</tr>
+						{%endfor%}
+					</table>
+
+					<input class='btn btn-primary' type="submit" value="Submit">
+				</form>
+			</div>
+		</div>
 
 {% endblock content %}

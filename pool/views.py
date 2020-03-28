@@ -306,6 +306,7 @@ def spreads(request):
 		formset = SpreadFormSet(request.POST)
 		if formset.is_valid():
 			formset.save()
+			messages.success(request,"Spreads Updated Successfully")
 		else:
 			print("Trouble at the Mill")
 			messages.warning(request, formset.errors)
