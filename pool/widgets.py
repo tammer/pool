@@ -11,7 +11,7 @@ class PoolRadio(forms.RadioSelect):
 		if spread is None:
 			self.attrs['spread'] = 'na'
 		else:
-			self.attrs['spread'] = round(spread - 0.1)
+			self.attrs['spread'] = spread
 		self.attrs['game_date'] = game_date
 		self.attrs['fav_is_home'] = fav_is_home
 
