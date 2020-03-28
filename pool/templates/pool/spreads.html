@@ -13,4 +13,13 @@
 		    </div>
 		</div>
 
+		<form action="{%url 'pool-spreads'%}" method="post">
+			{% for form in formset %}
+				--
+				{{ form }}
+				--<br>
+			{%endfor%}
+			<input class='btn btn-primary' type="submit" value="Submit">
+		</form>
+
 {% endblock content %}

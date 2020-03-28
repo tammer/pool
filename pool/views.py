@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from pool.models import Team,Game,Pick,Bank,Blog,Monday,now
 from django.contrib.auth.models import User
 from django.db.models import Sum
-from .forms import BankForm,BlogForm,PickForm,MondayForm
+from .forms import BankForm,BlogForm,PickForm,MondayForm,SpreadForm
 from django.contrib import messages
 from django.urls import reverse
 import random
@@ -293,12 +293,27 @@ def teams(request):
 	return render(request, 'pool/teams.html', {'teams': teams} )
 
 def spreads(request):
+	if not(request.user.is_superuser):
+		messages.warning(request, "Unauthorized")
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
 	if request.GET.get('w'):
-		week_number = request.GET['w']
+			week_number = request.GET['w']
 	else:
-		week_number = implied_week() + 1
-	player = request.user.username
-	return render(request, 'pool/spreads.html', {})
+			week_number = implied_week() + 1
+
+	if request.method == "POST":
+		formset = SpreadFormSet(request.POST)
+		if formset.is_valid():
+			formset.save()
+		else:
+			print("Trouble at the Mill")
+			messages.warning(request, formset.errors)
+	else:
+		SpreadFormSet = modelformset_factory(Game,extra=0, form = SpreadForm, fields=('spread',))
+		queryset = Game.objects.filter(week_number=week_number).order_by('game_number').all()
+		formset = SpreadFormSet(queryset=queryset)
+	return render(request, 'pool/spreads.html', { 'week_number':week_number, 'formset':formset})
 
 PickFormSet = modelformset_factory(Pick,extra=0, form = PickForm, fields=('game_number','week_number','picked_fav' ))
 def dopicks(request):

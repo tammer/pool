@@ -51,3 +51,11 @@ class PickForm(ModelForm):
 	class Meta:
 		model = Pick
 		fields = ['picked_fav','week_number','game_number']
+
+
+class SpreadForm(ModelForm):
+	spread = forms.IntegerField(label='Spread',widget=forms.NumberInput(attrs={'style':'width: 40px', 'max': '99','min':'-99'}))
+
+	class Meta:
+		model = Game
+		fields = ['spread']
