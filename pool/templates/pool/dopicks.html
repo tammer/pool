@@ -13,11 +13,17 @@ function reverse() {
 return;
 }
 
+var seed = 1;
+function myRandom() {
+    var x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+}
+
 function random() {
 	const inputs = document.querySelectorAll(".team");
 	for (var i = 0; i < inputs.length; i+=2) {
 		if( !inputs[i].disabled ){
-			if( Math.random() < 0.5){
+			if( myRandom() < 0.5){
 				inputs[i].checked = false;
 			}else{
 				inputs[i].checked = true;
@@ -166,13 +172,13 @@ function favs(){
 						<td class='text-left align-middle'>Very risk move.</td>
 					</tr>
 					<tr>
-						<td><a title='Most players lose to The Monkey. You can put him to work.' onclick="random()" class="btn btn-warning btn-sm" href="#" role="button">Baboon</a></td>
+						<td><a title='Most players lose to The Monkey. You can put him to work.' onclick="seed = {{week_number}}+5;random()" class="btn btn-warning btn-sm" href="#" role="button">Baboon</a></td>
 						<td class='text-left align-middle'>
 							Simulated picks using <a target='blank' href="https://en.wikipedia.org/wiki/Supervised_learning">supervised learning</a> ; calibrated on real monkeys.
 						</td>
 					</tr>
 					<tr>
-						<td><a title='You know its best to call in the monkeys.' onclick="random()" class="btn btn-warning btn-sm" href="#" role="button">Ohrangutang</a></td>
+						<td><a title='You know its best to call in the monkeys.' onclick="seed = {{week_number}};random()" class="btn btn-warning btn-sm" href="#" role="button">Ohrangutang</a></td>
 						<td class='text-left align-middle'>
 							Simulated picks using <a target='blank' href="https://en.wikipedia.org/wiki/Deep_learning">deep learning</a> ; calibrated on real monkeys and several players from this pool.
 						</td>
