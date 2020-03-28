@@ -54,7 +54,12 @@ class PickForm(ModelForm):
 
 
 class SpreadForm(ModelForm):
-	spread = forms.IntegerField(label='Spread',widget=forms.NumberInput(attrs={'style':'width: 40px', 'max': '99','min':'-99'}))
+	def __init__(self, *args, **kwargs):
+		super(SpreadForm, self).__init__(*args, **kwargs)
+		self.fav = Game.objects.get(game_number=self.instance.game_number, week_number=self.instance.week_number).favFullName()
+		self.udog = Game.objects.get(game_number=self.instance.game_number, week_number=self.instance.week_number).udogFullName()
+
+	spread = forms.IntegerField(label='',widget=forms.NumberInput(attrs={'style':'width: 40px', 'max': '99','min':'-99'}))
 
 	class Meta:
 		model = Game

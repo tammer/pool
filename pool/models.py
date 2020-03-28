@@ -38,6 +38,18 @@ class Game(models.Model):
 			self.fav_is_home = not(self.fav_is_home)
 		super(Game, self).save(*args, **kwargs)
 
+	def favFullName(self):
+		if self.fav_is_home:
+			return self.fav.full_name.upper()
+		else:
+			return self.fav.full_name.lower()
+
+	def udogFullName(self):
+		if not(self.fav_is_home):
+			return self.udog.full_name.upper()
+		else:
+			return self.udog.full_name.lower()
+
 	def favShortName(self):
 		if self.fav_is_home:
 			return self.fav.short_name.upper()

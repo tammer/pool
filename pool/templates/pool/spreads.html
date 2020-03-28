@@ -17,9 +17,10 @@
 			{% csrf_token %}
 			{{ formset.management_form }}
 			{% for form in formset %}
-				--
+				{{form.fav}}
 				{{ form }}
-				--<br>
+				{{form.udog}}
+				<br>
 			{%endfor%}
 			<input class='btn btn-primary' type="submit" value="Submit">
 		</form>
