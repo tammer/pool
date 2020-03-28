@@ -16,11 +16,33 @@
     padding: 2px;
     font-size: 12px;
 }
+
+.alert {
+    z-index: 10;
+    position: absolute;
+    width: 100%;
+    top: 50px;
+    text-align: center;
+}
+
 	</style>
 
 	<title>Monkey Pool!</title>
 	<link rel="icon" href="http://www.tammer.com/352929-200.png">
 </head>
+
+<script type="text/javascript">
+
+var m = document.getElementsByClassName("alert");  // Return an array
+
+setTimeout(function(){
+   if (m && m.length) {
+       m[0].classList.add('d-none');
+   }
+}, 3000);
+
+</script>
+
 <body>
 
 	<header class="site-header">
