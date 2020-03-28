@@ -1,5 +1,13 @@
-<small class="text-muted"><font face='Lucida Console'>{{widget.attrs.game_date}}</font></small></td><td><input {% if widget.attrs.checked_fav == True %}checked{%endif%} type="{{ widget.optgroups.0.1.0.type }}" name="{{ widget.optgroups.0.1.0.name }}{{widget.attrs.game_number}}"{% if widget.optgroups.0.1.0.value != None %} value="{{ widget.optgroups.0.1.0.value|stringformat:'s' }}"{% endif %}{% include "django/forms/widgets/attrs.html" %}>
-{{ widget.optgroups.0.1.0.label }}</td>
+<small class="text-muted"><font face='Lucida Console'>{{widget.attrs.game_date}}
+	{% if widget.attrs.disabled == True%}<img width='14px' title='Game is closed!' src="https://cdn0.iconfinder.com/data/icons/zondicons/20/lock-closed-512.png">{%endif%}
+</font></small></td><td>
+
+<div class="switch-field">
+<input {% if widget.attrs.checked_fav == True %}checked{%endif%} type="{{ widget.optgroups.0.1.0.type }}" name="{{ widget.optgroups.0.1.0.name }}{{widget.attrs.game_number}}"{% if widget.optgroups.0.1.0.value != None %} value="{{ widget.optgroups.0.1.0.value|stringformat:'s' }}"{% endif %} id="{{widget.attrs.id}}-1" {% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>
+<label {% if widget.attrs.disabled == True%}style ='cursor: default'{%endif%} for="{{widget.attrs.id}}-1">{{ widget.optgroups.0.1.0.label }}</label>
+</div>
+
+</td>
 <td class='text-center'>
 	{% if widget.attrs.spread == 'na' %}
 		na
@@ -7,9 +15,13 @@
 		{{widget.attrs.spread}}&frac12;
 	{%endif%}
 </td>
-<td class='text-right'>{{ widget.optgroups.1.1.0.label }}
-<input {% if widget.attrs.checked_fav != True %}checked{%endif%} type="{{ widget.optgroups.1.1.0.type }}" name="{{ widget.optgroups.1.1.0.name }}{{widget.attrs.game_number}}"{% if widget.optgroups.1.1.0.value != None %} value="{{ widget.optgroups.1.1.0.value|stringformat:'s' }}"{% endif %}{% include "django/forms/widgets/attrs.html" %}>
 
+<td class='text-right'>
+
+<div class="switch-field">
+<input {% if widget.attrs.checked_fav != True %}checked{%endif%} type="{{ widget.optgroups.1.1.0.type }}" name="{{ widget.optgroups.1.1.0.name }}{{widget.attrs.game_number}}"{% if widget.optgroups.1.1.0.value != None %} value="{{ widget.optgroups.1.1.0.value|stringformat:'s' }}"{% endif %} id="{{widget.attrs.id}}-2" {% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>
+<label {% if widget.attrs.disabled == True%}style ='cursor: default'{%endif%} for="{{widget.attrs.id}}-2">{{ widget.optgroups.1.1.0.label }}</label>
+</div>
 
 
 

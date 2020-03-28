@@ -1,6 +1,55 @@
 {% extends "pool/base.html" %}
 {% block content %}
 
+<!-- https://codepen.io/JiveDig/pen/jbdJXR -->
+
+<style type="text/css">
+	.switch-field {
+		margin-bottom: 0px;
+	}
+
+	.switch-field input {
+		position: absolute !important;
+		clip: rect(0, 0, 0, 0);
+		height: 1px;
+		width: 1px;
+		border: 0;
+		overflow: hidden;
+	}
+
+	.switch-field label {
+		background-color: white;
+		text-align: right
+		color: rgba(0, 0, 0, 0.6);
+		line-height: 1;
+		padding: 2px 2px;
+		margin-right: -1px;
+		margin-bottom: 0px;
+		border: 0px solid rgba(0, 0, 0, 0.2);
+		transition: all 0.1s ease-in-out;
+	}
+
+	.switch-field label:hover {
+		cursor: pointer;
+	}
+
+	.switch-field input:checked + label {
+		background-color: #FBFFB7;
+		box-shadow: none;
+	}
+
+	.switch-field label:first-of-type {
+		border-radius: 4px 0 0 4px;
+	}
+
+	.switch-field label:last-of-type {
+		border-radius: 0 4px 4px 0;
+	}
+</style>
+
+
+
+
 	<main role="main" class="container">
 
 		<div class="row">
