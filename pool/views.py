@@ -302,7 +302,15 @@ def postpicks(request):
 	if formset.is_valid() and monday_form.is_valid():
 		instances = formset.save()
 		monday_form.save()
-		messages.success(request, "Picks Updated")
+
+		team=''
+		game_number = random.choice([4,5,6,7,8,9])
+		if instances[game_number].picked_fav:
+			team = Game.objects.get(week_number=week_number,game_number=instances[game_number].game_number).fav.city_name
+		else:
+			team = Game.objects.get(week_number=week_number,game_number=instances[game_number].game_number).udog.city_name
+		message = random.choice(['Picks Updated','Picks Updated','Picks Updated','Picks Updated. (You should probably reverse.)',f'Picks Updated. (You took {team}?)'])
+		messages.success(request, message)
 	else:
 		print("Trouble at the Mill")
 		messages.warning(request, formset.errors + monday_form.errors	)
