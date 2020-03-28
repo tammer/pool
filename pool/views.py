@@ -296,7 +296,7 @@ def spreads(request):
 	if not(request.user.is_superuser):
 		messages.warning(request, "Unauthorized")
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-
+	SpreadFormSet = modelformset_factory(Game,extra=0, form = SpreadForm, fields=('spread',))
 	if request.GET.get('w'):
 			week_number = request.GET['w']
 	else:
@@ -310,7 +310,6 @@ def spreads(request):
 			print("Trouble at the Mill")
 			messages.warning(request, formset.errors)
 	else:
-		SpreadFormSet = modelformset_factory(Game,extra=0, form = SpreadForm, fields=('spread',))
 		queryset = Game.objects.filter(week_number=week_number).order_by('game_number').all()
 		formset = SpreadFormSet(queryset=queryset)
 	return render(request, 'pool/spreads.html', { 'week_number':week_number, 'formset':formset})

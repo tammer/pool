@@ -13,7 +13,9 @@
 		    </div>
 		</div>
 
-		<form action="{%url 'pool-spreads'%}" method="post">
+		<form action="{%url 'pool-spreads'%}?w={{week_number}}" method="post">
+			{% csrf_token %}
+			{{ formset.management_form }}
 			{% for form in formset %}
 				--
 				{{ form }}
