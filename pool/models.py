@@ -18,7 +18,7 @@ class Game(models.Model):
 	game_number = models.IntegerField()
 	fav =  models.ForeignKey(Team, related_name='fav_games', on_delete=models.CASCADE)
 	udog = models.ForeignKey(Team, related_name='udog_games', on_delete=models.CASCADE)
-	spread = models.FloatField( null=True )
+	spread = models.IntegerField( null=True )
 	game_date = models.DateTimeField()
 	fav_score = models.IntegerField( null=True )
 	udog_score = models.IntegerField( null=True )
