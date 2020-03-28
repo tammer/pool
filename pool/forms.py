@@ -39,8 +39,9 @@ class PickForm(ModelForm):
 			fav = game.favNickName()
 			udog = game.udogNickName()
 			spread = game.spread
+			fav_is_home = game.fav_is_home
 			game_date = game.game_date.strftime('%a %-I:%M')
-			self.fields['picked_fav'] = forms.ChoiceField(choices=[[True,fav],[False,udog]], widget=PoolRadio(game_date = game_date, spread = spread, picked_fav=self.instance.picked_fav), label='')
+			self.fields['picked_fav'] = forms.ChoiceField(choices=[[True,fav],[False,udog]], widget=PoolRadio(fav_is_home = fav_is_home, game_date = game_date, spread = spread, picked_fav=self.instance.picked_fav), label='')
 			self.fields['picked_fav'].disabled = game.isClosed()
 
 
