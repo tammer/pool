@@ -221,6 +221,8 @@ def results(request):
 	total = 0
 	completed = 0;
 	for game in Game.objects.filter(week_number=week_number).order_by('game_number'):
+		if game.isOpen():
+			continue
 		g = {}
 		# !!! change to function shortName()
 		if game.fav_is_home:
