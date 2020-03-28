@@ -111,9 +111,9 @@ function favs(){
 
 
 
-		<div class="row">
-			<div class="col-5">
 				<form action="{%url 'pool-postpicks'%}" method="post">
+		<div class="row">
+			<div class="col-sm">
 				    {% csrf_token %}
 				    {{ formset.management_form }}
 				    <table class='table table-sm' style="background-color: white">
@@ -135,17 +135,52 @@ function favs(){
 				    	<td colspan=4 class='text-right'>{{monday_form.as_p}}</td>
 				    </tr>
 					</table>
-				    <div class='text-right'><input {{disabled}} class='btn btn-primary' type="submit" value="Submit"></div>
-				</form>
 			</div>
-			<div class="col">
-				<a title='Always bet on the better team' onclick="favs()" class="btn btn-success" href="#" role="button">All Favs</a>
-				<a title="Take the points! On average, you'll win" onclick="dogs()" class="btn btn-success" href="#" role="button">All Dogs</a>
-				<a title='This action could save your ass this week' onclick="reverse()" class="btn btn-info" href="#" role="button">Reverse</a>
-				<a title='Risky' onclick="reverse();setTimeout(reverse, 400);" class="btn btn-danger" href="#" role="button">Double Reverse</a>
-				<a title='Most players lose to The Monkey. You can put him to work.' onclick="random()" class="btn btn-warning" href="#" role="button">Monkey AI</a>
+			<div class="col-7">
+				<table class='table table-sm text-right text-muted table-borderless' style='border: none'>
+					<tr>
+						<td style="width: 16.66%">
+							<input {{disabled}} class='btn btn-dark' type="submit" value="Submit">
+						</td>
+						<td class='text-left align-middle'>Submit your picks.</td>
+					</tr>
+					<tr>
+						<th class='text-center' colspan=2><br><br>Helper Buttons<br></th>
+					</tr>
+					<tr>
+						<td>
+							<a title='Always bet on the better team' onclick="favs()" class="btn btn-success btn-sm" href="#" role="button">All Favs</a>
+						</td>
+						<td class='text-left align-middle'>The best players know this: always bet on the best team.</td>
+					</tr>
+					<tr>
+						<td><a title="Take the points! On average, you'll win" onclick="dogs()" class="btn btn-success btn-sm" href="#" role="button">All Dogs</a></td>
+						<td class='text-left align-middle'>Statistically, the underdog beats the spread 50.5% of the time.</td>
+					</tr>
+					<tr>
+						<td><a title='This action could save your ass this week' onclick="reverse()" class="btn btn-info btn-sm" href="#" role="button">Reverse</a></td>
+						<td class='text-left align-middle'>Are you wrong more than you are right? This button is for you.</td>
+					</tr>
+					<tr>
+						<td><a title='Risky' onclick="reverse();setTimeout(reverse, 400);" class="btn btn-danger btn-sm" href="#" role="button">Double Reverse</a></td>
+						<td class='text-left align-middle'>Very risk move.</td>
+					</tr>
+					<tr>
+						<td><a title='Most players lose to The Monkey. You can put him to work.' onclick="random()" class="btn btn-warning btn-sm" href="#" role="button">Baboon</a></td>
+						<td class='text-left align-middle'>
+							Simulated picks using <a target='blank' href="https://en.wikipedia.org/wiki/Supervised_learning">supervised learning</a> ; calibrated on real monkeys.
+						</td>
+					</tr>
+					<tr>
+						<td><a title='You know its best to call in the monkeys.' onclick="random()" class="btn btn-warning btn-sm" href="#" role="button">Ohrangutang</a></td>
+						<td class='text-left align-middle'>
+							Simulated picks using <a target='blank' href="https://en.wikipedia.org/wiki/Deep_learning">deep learning</a> ; calibrated on real monkeys and several players from this pool.
+						</td>
+					</tr>
+				</table>
 			</div>
 		</div>
+		</form>
 	</main>
 
 {% endblock content %}
