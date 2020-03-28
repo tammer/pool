@@ -255,7 +255,7 @@ def results(request):
 	return render(request, 'pool/results.html',{'completed':completed, 'right_array':right_array,  'week_number': week_number, 'standings':standings_(week_number=week_number), 'games': games, 'player': player, 'right': right, 'total': total} )
 
 def home(request):
-	if request.GET.get('p'):
+	if request.GET.get('w'):
 		week_number = request.GET['w']
 	else:
 		week_number = implied_week()
@@ -291,6 +291,14 @@ def home(request):
 def teams(request):
 	teams = Team.objects.all()
 	return render(request, 'pool/teams.html', {'teams': teams} )
+
+def spreads(request):
+	if request.GET.get('w'):
+		week_number = request.GET['w']
+	else:
+		week_number = implied_week() + 1
+	player = request.user.username
+	return render(request, 'pool/spreads.html', {})
 
 PickFormSet = modelformset_factory(Pick,extra=0, form = PickForm, fields=('game_number','week_number','picked_fav' ))
 def dopicks(request):

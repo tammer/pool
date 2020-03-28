@@ -15,4 +15,5 @@ urlpatterns = [
     path('post/', views.post, name='pool-post'),
     path('dopicks/', views.dopicks, name='pool-dopicks'),
     path('postpicks/', views.postpicks, name='pool-postpicks'),
+    path('spreads/', views.spreads, name='pool-spreads'),
 ]
