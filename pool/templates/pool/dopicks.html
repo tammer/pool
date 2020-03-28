@@ -1,6 +1,50 @@
 {% extends "pool/base.html" %}
 {% block content %}
 
+<script>
+function reverse() {
+	const inputs = document.querySelectorAll(".team");
+	for (var i = 0; i < inputs.length; i+=2) {
+		if( !inputs[i].disabled ){
+			inputs[i].checked = !inputs[i].checked;
+			inputs[i+1].checked = !inputs[i].checked;
+		}
+	}
+return;
+}
+
+function random() {
+	const inputs = document.querySelectorAll(".team");
+	for (var i = 0; i < inputs.length; i+=2) {
+		if( !inputs[i].disabled ){
+			if( Math.random() < 0.5){
+				inputs[i].checked = false;
+			}else{
+				inputs[i].checked = true;
+			}
+			inputs[i+1].checked = !inputs[i].checked;
+		}
+	}
+}
+
+function dogs(){
+	const inputs = document.querySelectorAll(".team");
+	for (var i = 0; i < inputs.length; i+=2) {
+		if( !inputs[i].disabled ){
+			inputs[i].checked = false;
+			inputs[i+1].checked = !inputs[i].checked;
+		}
+	}
+}
+
+function favs(){
+	dogs();
+	reverse();
+}
+
+</script>
+
+
 <!-- https://codepen.io/JiveDig/pen/jbdJXR -->
 
 <style type="text/css">
@@ -94,7 +138,13 @@
 				    <div class='text-right'><input {{disabled}} class='btn btn-primary' type="submit" value="Submit"></div>
 				</form>
 			</div>
-			<div class="col"></div>
+			<div class="col">
+				<a title='Always bet on the better team' onclick="favs()" class="btn btn-success" href="#" role="button">All Favs</a>
+				<a title="Take the points! On average, you'll win" onclick="dogs()" class="btn btn-success" href="#" role="button">All Dogs</a>
+				<a title='This action could save your ass this week' onclick="reverse()" class="btn btn-info" href="#" role="button">Reverse</a>
+				<a title='Risky' onclick="reverse();setTimeout(reverse, 400);" class="btn btn-danger" href="#" role="button">Double Reverse</a>
+				<a title='Most players lose to The Monkey. You can put him to work.' onclick="random()" class="btn btn-warning" href="#" role="button">Monkey AI</a>
+			</div>
 		</div>
 	</main>
 
