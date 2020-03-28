@@ -179,18 +179,29 @@ def standings(request):
 	return render(request,'pool/standings.html',{'player':player,'week_number':request.GET['w'],'standings':standings_(request.GET['w'])})
 
 def allpicks(request):
-	if request.GET.get('p'):
+	if request.GET.get('w'):
 		week_number = request.GET['w']
 	else:
 		week_number = implied_week()
 	header = []
 	for game in Game.objects.filter(week_number=week_number).order_by('game_number'):
 		header.append([game.favShortName(), str(game.spread), game.udogShortName(), game.game_date.strftime('%a')])
+	header.append('MNTP')
 	matrix = {}
 	for user in User.objects.all().order_by('username'):
 		matrix[user.username] = [];
 		for pick in Pick.objects.filter(player=user,week_number=week_number).order_by('game_number'):
-			matrix[user.username].append(pick.whoShortName())
+			if Game.objects.get(week_number=week_number,game_number=pick.game_number).isClosed():
+				matrix[user.username].append(pick.whoShortName())
+			else:
+				matrix[user.username].append('')
+		try:
+			tp = Monday.objects.get(week_number=week_number,player=user).total_points
+			if tp is None:
+				tp = ''
+		except:
+			tp = ''
+		matrix[user.username].append( tp )
 	return render(request, 'pool/allpicks.html', {'week_number': week_number, 'header': header, 'matrix': matrix})
 
 def results(request):
