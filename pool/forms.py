@@ -59,7 +59,7 @@ class SpreadForm(ModelForm):
 		self.fav = Game.objects.get(game_number=self.instance.game_number, week_number=self.instance.week_number).favFullName()
 		self.udog = Game.objects.get(game_number=self.instance.game_number, week_number=self.instance.week_number).udogFullName()
 
-	spread = forms.IntegerField(label='',widget=forms.NumberInput(attrs={'style':'width: 45px', 'max': '99','min':'-99'}))
+	spread = forms.IntegerField(required=True, label='',widget=forms.NumberInput(attrs={'required': 'true','style':'width: 45px; height:20px', 'max': '99','min':'-99'}))
 
 	class Meta:
 		model = Game

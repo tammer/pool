@@ -4,34 +4,35 @@
 	<main role="main" class="container">
 
 		<div class="row">
-			<div class="col-sm">
+			<div class="col-6">
       			<h2>
-      				Week {{week_number}}
+      				Enter Spreads for Week {{week_number}}
       			</h2>
-      			<p class='text-muted'>HOME TEAM in caps.</p>
-      			TODO:  ensure all fields at inputted
-      			headings on the table
+      			<p class='text-muted'>HOME TEAM in caps. Enter the spread as an integer. Use negative to flip the favorite and underdog.  0.5 will be added to the spread automatically</p>
       			<br>
 		    </div>
 		</div>
 
 		<div class="row">
-			<div class="col-5">
+			<div class="col-7">
 				<form action="{%url 'pool-spreads'%}?w={{week_number}}" method="post">
 					{% csrf_token %}
 					{{ formset.management_form }}
-
+					<style type="text/css">p {margin: 1px;}</style>
 					<table class='table table-sm' style="background-color: white">
+						<tr class='thead-dark'>
+							<th class='text-right'>Favourite</th><th class='text-center'>Spread</th><th>Underdog</th>
+						</tr>
 						{% for form in formset %}
 							<tr>
-								<td>{{form.fav}}</td>
-								<td>{{ form.as_p }}</td>
+								<td class='text-right'>{{form.fav}}</td>
+								<td class='text-center'>{{ form.as_p }}</td>
 								<td>{{form.udog}}</td>
 							</tr>
 						{%endfor%}
 					</table>
 
-					<input class='btn btn-primary' type="submit" value="Submit">
+					<div class='text-right'><input class='btn btn-primary' type="submit" value="Submit"></div>
 				</form>
 			</div>
 		</div>

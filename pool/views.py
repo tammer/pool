@@ -13,13 +13,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 
 
-def implied_week(now_ = None):
+def implied_week(now_ = None, delta_hours = 30):
 	if now_ is None:
 			now_ = now()
 	week_number = 1
 	last_week_of_season = Game.objects.filter(game_number=1).order_by('week_number').last().week_number
 	while week_number < last_week_of_season:
-		if now_ < Game.objects.filter(week_number=week_number).order_by('game_date').last().game_date + timedelta(hours=30):
+		if now_ < Game.objects.filter(week_number=week_number).order_by('game_date').last().game_date + timedelta(hours=delta_hours):
 			return week_number
 		else:
 			week_number += 1
@@ -300,7 +300,7 @@ def spreads(request):
 	if request.GET.get('w'):
 			week_number = request.GET['w']
 	else:
-			week_number = implied_week() + 1
+			week_number = implied_week(delta_hours=0)
 
 	if request.method == "POST":
 		formset = SpreadFormSet(request.POST)
