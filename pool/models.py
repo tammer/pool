@@ -29,6 +29,15 @@ class Game(models.Model):
 			#spread >=0
 		]
 	
+	def save(self, *args, **kwargs):
+		if self.spread < 0:
+			self.spread = -self.spread
+			temp = self.fav
+			self.fav = self.udog
+			self.udog = temp
+			self.fav_is_home = not(self.fav_is_home)
+		super(Game, self).save(*args, **kwargs)
+
 	def favShortName(self):
 		if self.fav_is_home:
 			return self.fav.short_name.upper()

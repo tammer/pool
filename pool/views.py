@@ -309,9 +309,8 @@ def spreads(request):
 		else:
 			print("Trouble at the Mill")
 			messages.warning(request, formset.errors)
-	else:
-		queryset = Game.objects.filter(week_number=week_number).order_by('game_number').all()
-		formset = SpreadFormSet(queryset=queryset)
+	queryset = Game.objects.filter(week_number=week_number).order_by('game_number').all()
+	formset = SpreadFormSet(queryset=queryset)
 	return render(request, 'pool/spreads.html', { 'week_number':week_number, 'formset':formset})
 
 PickFormSet = modelformset_factory(Pick,extra=0, form = PickForm, fields=('game_number','week_number','picked_fav' ))
