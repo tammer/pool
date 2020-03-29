@@ -1,5 +1,4 @@
 # TODO
-# MNTP tie breaker formula
 # load scores.
 # login screen
 # forgot password
@@ -13,7 +12,7 @@ import datetime
 from pytz import timezone
 
 def now():
-	return datetime.datetime(2019,10,23,13,21,0)
+	return datetime.datetime(2019,10,18,13,21,0)
 	# return datetime.datetime.now(self.game_date.tzinfo)
 
 class Team(models.Model):
@@ -148,8 +147,8 @@ class Pick(models.Model):
 			pass
 		if not(force) and Game.objects.get(game_number=self.game_number,week_number=self.week_number).isClosed():
 			# You can't change this pick!
-			err = f'You are trying to change a pick for a game that isClosed. week: {self.week_number} game:{self.game_number}. If you want to do this use force=True' 
-			raise(IndexError(err))
+			err = f'Not actually saving. You are trying to change a pick for a game that isClosed. week: {self.week_number} game:{self.game_number}. If you want to do this use force=True' 
+			print(err)
 		else:
 			super(Pick, self).save(*args, **kwargs)
 
@@ -190,8 +189,8 @@ class Monday(models.Model):
 		except:
 			pass
 		if not(force) and Game.objects.filter(week_number=self.week_number).order_by('game_number').last().isClosed():
-			err = f'You are trying to change MNTP for a game that isClosed. week: {self.week_number}. If you want to do this use force=True' 
-			raise(IndexError(err))
+			err = f'Not actually saving. You are trying to change MNTP for a game that isClosed. week: {self.week_number}. If you want to do this use force=True' 
+			print(err)
 		else:
 			super(Monday, self).save(*args, **kwargs)
 
