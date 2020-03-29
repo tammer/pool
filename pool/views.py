@@ -10,6 +10,7 @@ import random
 from datetime import datetime, timedelta
 from django.forms import modelformset_factory
 from django.http import HttpResponse, HttpResponseRedirect
+from pool.utils import score_matrix as scoreMatrix, standings as standings_
 
 
 
@@ -113,45 +114,6 @@ def whoWon(week_number, score_matrix):
 	else:
 		return leader
 
-def scoreMatrix():
-	matrix = {}
-	query = 'SELECT *, \
-	(fav_score-udog_score-spread > 0 and picked_fav OR fav_score-udog_score-spread <0 and not(picked_fav)) as correct, \
-	auth_user.username as player_name\
-	from pool_pick,pool_game,auth_user \
-	where pool_pick.game_number = pool_game.game_number and \
-	      pool_pick.week_number=pool_game.week_number and \
-	      pool_pick.player_id = auth_user.id and\
-	      not(pool_game.fav_score is NULL)'
-
-	for pick in Pick.objects.raw(query):
-		player = pick.player_name
-		week_number = pick.week_number
-		if not(player in matrix):
-			matrix[player] = {}
-		if not(week_number in matrix[player]):
-			matrix[player][week_number] = 0
-		if pick.correct:
-			matrix[player][week_number] += 1
-	return matrix
-
-def dead_list(start=1, end=None):
-	week_number = end
-	if week_number is None:
-		week_number = implied_week()
-	score_matrix = scoreMatrix()
-	results = set()
-	while week_number > start-1:
-		min_score = 99;
-		for player, score in score_matrix.items():
-			if score[week_number] < min_score:
-				min_score = score[week_number]
-		for player, score in score_matrix.items():
-			if score[week_number] == min_score:
-				results.add(player)
-		week_number -= 1;
-	return results
-
 def overall(request):
 	week_number = implied_week()
 	sm = scoreMatrix()
@@ -175,30 +137,6 @@ def overall(request):
 		table.append(this_row)
 	headers = range(1,len(table[0])-1)
 	return render(request, 'pool/overall.html',{'week_number':week_number, 'table':table, 'headers':headers})
-
-
-
-def standings_(week_number):
-	matrix = {}
-	for user in User.objects.all():
-		count = 0;
-		for pick in Pick.objects.filter(player=user,week_number=week_number):
-			if pick.isCorrect():
-				count +=1
-		try:
-			count += Monday.objects.get(week_number=week_number,player=user).bonus()
-		except:
-			None
-		matrix[user.username] = count
-		standings = sorted(matrix.items(), key=lambda kv: kv[1], reverse=True)
-	standings2 = []
-	dl = dead_list(1,week_number-1)
-	for item in standings:
-		dead = False
-		if item[0] in dl:
-			dead = True
-		standings2.append([item[0],int(item[1]),dead])
-	return standings2
 
 def standings(request):
 	if request.GET.get('p'):
