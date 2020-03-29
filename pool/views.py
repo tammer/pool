@@ -197,7 +197,7 @@ def standings_(week_number):
 		dead = False
 		if item[0] in dl:
 			dead = True
-		standings2.append([item[0],item[1],dead])
+		standings2.append([item[0],int(item[1]),dead])
 	return standings2
 
 def standings(request):
