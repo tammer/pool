@@ -179,7 +179,6 @@ def overall(request):
 
 
 def standings_(week_number):
-	week_number = int(week_number) # sloppy work elsewhere means this might be a string
 	matrix = {}
 	for user in User.objects.all():
 		count = 0;
@@ -202,11 +201,11 @@ def standings(request):
 		player = request.GET['p']
 	else:
 		player = ''
-	return render(request,'pool/standings.html',{'player':player,'week_number':request.GET['w'],'standings':standings_(request.GET['w'])})
+	return render(request,'pool/standings.html',{'player':player,'week_number':int(request.GET['w']),'standings':standings_(int(request.GET['w']))})
 
 def allpicks(request):
 	if request.GET.get('w'):
-		week_number = request.GET['w']
+		week_number = int(request.GET['w'])
 	else:
 		week_number = implied_week()
 	header = []
@@ -232,7 +231,7 @@ def allpicks(request):
 
 def results(request):
 	if request.GET.get('p'):
-		week_number = request.GET['w']
+		week_number = int(request.GET['w'])
 	else:
 		week_number = implied_week()
 
@@ -281,7 +280,7 @@ def results(request):
 
 def home(request):
 	if request.GET.get('w'):
-		week_number = request.GET['w']
+		week_number = int(request.GET['w'])
 	else:
 		week_number = implied_week()
 	player = request.user.username
@@ -323,7 +322,7 @@ def spreads(request):
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 	SpreadFormSet = modelformset_factory(Game,extra=0, form = SpreadForm, fields=('spread',))
 	if request.GET.get('w'):
-			week_number = request.GET['w']
+			week_number = int(request.GET['w'])
 	else:
 			week_number = implied_week(delta_hours=0)
 
@@ -380,7 +379,7 @@ def postpicks(request):
 	return redirect('pool-dopicks')
 
 def games(request):
-	week_number = request.GET['w']
+	week_number = int(request.GET['w'])
 	current_date = ''
 	games = {}
 	for game in Game.objects.filter(week_number=week_number).order_by('game_number'):
