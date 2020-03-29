@@ -4,7 +4,70 @@ from django.contrib.auth.models import User
 import requests, csv
 import datetime
 from pytz import timezone
+import pool.utils
+import random
 
+
+class UtilTestCase(TestCase):
+	def setUp(self):
+		random.seed(1)
+		pool.utils.load_teams()
+		pool.utils.load_games(2019)
+		pool.utils.add_player("Tammer","tammer@tammer.com",'123')
+		pool.utils.add_player("John","j@tammer.com",'123')
+		pool.utils.add_player("Adel","akamel@tammer.com",'123')
+		pool.utils.add_player("B1","b1@tammer.com",'123')
+		pool.utils.add_player("B2","b2@tammer.com",'123')
+		
+		for user in User.objects.all():
+			for g in Game.objects.filter(week_number__lte = 3):
+				pick = Pick.objects.get(player=user, week_number = g.week_number, game_number = g.game_number)
+				pick.picked_fav = random.choice([True,False])
+				pick.save(force=True)
+			for week_number in range(1,5):
+				total_points = random.choice(range(30,55))
+				monday = Monday.objects.get(player=user,week_number=week_number)
+				monday.total_points = total_points
+				monday.save(force=True)
+
+		random.seed(1)
+		for game in Game.objects.all():
+			if game.week_number < 5:
+				game.spread = random.choice([0,1,1,2,2,2,3,3,3,3,4,4,5,6,6,7,9,10])
+				game.fav_is_home = random.choice([True,True,False])
+				if game.week_number < 5 or game.game_number < 10:
+					game.fav_score = random.choice([24,22,24,30,28,35,18,22,35,33])
+					game.udog_score = random.choice([20,20,22,28,24,32,14,21,30,30])
+			game.save()
+
+		# B2 = User.objects.get(username='B2')
+		# for game in Game.objects.filter(week_number=1).order_by('game_number'):
+		# 	pick = Pick.objects.get(week_number=1,game_number=game.game_number,player=B2)
+		# 	print(f'{game.game_number}: {game.favWins()}, {pick.picked_fav}')
+
+
+		# x = pool.utils.standings(5)
+		# print(f'{x}')
+
+
+	def test(self):
+		x = User.objects.get(username='Tammer')
+		self.assertEqual(x.username, 'Tammer')
+		x = pool.utils.standings(1)
+		y = "[['John', 8, False], ['B1', 8, False], ['B2', 8, False], ['Tammer', 6, False], ['Adel', 4, False]]"
+		self.assertEqual(f'{x}',y)
+		x = pool.utils.standings(2)
+		y = "[['Adel', 11, True], ['Tammer', 9, False], ['B1', 9, False], ['B2', 9, False], ['John', 7, False]]"
+		self.assertEqual(f'{x}',y)
+		x = pool.utils.standings(3)
+		y = "[['Tammer', 12, False], ['John', 10, True], ['B2', 8, False], ['Adel', 8, True], ['B1', 6, False]]"
+		self.assertEqual(f'{x}',y)
+		x = pool.utils.standings(4)
+		y = "[['B1', 7, True], ['B2', 7, False], ['Tammer', 7, False], ['Adel', 7, True], ['John', 7, True]]"
+		self.assertEqual(f'{x}',y)
+		x = pool.utils.standings(5)
+		y = "[['Tammer', 0, True], ['John', 0, True], ['Adel', 0, True], ['B1', 0, True], ['B2', 0, True]]"
+		self.assertEqual(f'{x}',y)
 
 class GameTestCase(TestCase):
 	def setUp(self):

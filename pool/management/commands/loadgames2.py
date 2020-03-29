@@ -4,6 +4,9 @@ import requests
 import xml.etree.ElementTree as ET
 import datetime
 
+# !!! need to be refactored to use utils.
+
+
 class Command(BaseCommand):
 	help = 'Load the standard teams'
 

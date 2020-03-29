@@ -3,6 +3,8 @@ from pool.models import Team
 import requests
 import csv
 
+# !!! needs to be refectored to use utils
+
 class Command(BaseCommand):
 	help = 'Load the standard teams'
 
