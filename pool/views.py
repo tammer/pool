@@ -135,6 +135,23 @@ def scoreMatrix():
 			matrix[player][week_number] += 1
 	return matrix
 
+def dead_list(start=1, end=None):
+	week_number = end
+	if week_number is None:
+		week_number = implied_week()
+	score_matrix = scoreMatrix()
+	results = set()
+	while week_number > start-1:
+		min_score = 99;
+		for player, score in score_matrix.items():
+			if score[week_number] < min_score:
+				min_score = score[week_number]
+		for player, score in score_matrix.items():
+			if score[week_number] == min_score:
+				results.add(player)
+		week_number -= 1;
+	return results
+
 def overall(request):
 	week_number = implied_week()
 	sm = scoreMatrix()
@@ -162,6 +179,7 @@ def overall(request):
 
 
 def standings_(week_number):
+	week_number = int(week_number) # sloppy work elsewhere means this might be a string
 	matrix = {}
 	for user in User.objects.all():
 		count = 0;
@@ -170,7 +188,14 @@ def standings_(week_number):
 				count +=1
 		matrix[user.username] = count
 		standings = sorted(matrix.items(), key=lambda kv: kv[1], reverse=True)
-	return standings
+	standings2 = []
+	dl = dead_list(1,week_number-1)
+	for item in standings:
+		dead = False
+		if item[0] in dl:
+			dead = True
+		standings2.append([item[0],item[1],dead])
+	return standings2
 
 def standings(request):
 	if request.GET.get('p'):
