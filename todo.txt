@@ -1,0 +1,18 @@
+TODO
+
+addUser()
+	creates all. mntp =0 for for all.  all dogs on the picks
+	dopicks: if mntp=0, then null it to the dude puts something in
+deleteUser()
+
+standings_() to test bed then refactor with superfast Q
+then refactor overall standings to call above
+
+MNTP not accounted for on overall standings
+load scores.
+login screen
+forgot password
+do picks before spreads are inputted
+
+
+

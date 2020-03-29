@@ -1,11 +1,3 @@
-# TODO
-# load scores.
-# login screen
-# forgot password
-# do picks before spreads are inputted
-
-
-
 from django.db import models
 from django.contrib.auth.models import User
 import datetime
