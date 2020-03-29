@@ -1,9 +1,6 @@
 TODO
 
-addUser()
-	creates all. mntp =0 for for all.  all dogs on the picks
-	dopicks: if mntp=0, then null it to the dude puts something in
-deleteUser()
+determanistic db state
 
 standings_() to test bed then refactor with superfast Q
 then refactor overall standings to call above

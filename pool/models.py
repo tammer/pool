@@ -36,7 +36,7 @@ class Game(models.Model):
 			return self.fav_score+self.udog_score
 
 	def save(self, *args, **kwargs):
-		if self.spread < 0:
+		if not(self.spread is None) and self.spread < 0:
 			self.spread = -self.spread
 			temp = self.fav
 			self.fav = self.udog
