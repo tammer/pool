@@ -37,7 +37,7 @@ class GameTestCase(TestCase):
 		Game.objects.create(week_number=1, game_number=1, fav = Team.objects.get(short_name='NYG'),
 				udog = Team.objects.get(short_name='DAL'), spread = 11.5,
 				game_date = game_date, fav_is_home = True,
-				fav_score=33, udog_score=21, is_final = True)
+				fav_score=33, udog_score=21)
 
 		# Create a pick
 
