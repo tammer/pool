@@ -1,10 +1,19 @@
+# TODO
+# MNTP tie breaker formula
+# load scores.
+# login screen
+# forgot password
+# do picks before spreads are inputted
+
+
+
 from django.db import models
 from django.contrib.auth.models import User
 import datetime
 from pytz import timezone
 
 def now():
-	return datetime.datetime(2019,10,18,13,21,0)
+	return datetime.datetime(2019,10,23,13,21,0)
 	# return datetime.datetime.now(self.game_date.tzinfo)
 
 class Team(models.Model):
@@ -29,6 +38,12 @@ class Game(models.Model):
 			#spread >=0
 		]
 	
+	def totalPoints(self):
+		if self.fav_score is None or self.udog_score is None:
+			return None
+		else:
+			return self.fav_score+self.udog_score
+
 	def save(self, *args, **kwargs):
 		if self.spread < 0:
 			self.spread = -self.spread
@@ -126,9 +141,15 @@ class Pick(models.Model):
 	picked_fav = models.BooleanField()
 
 	def save(self, *args, **kwargs):
-		if Game.objects.get(game_number=self.game_number,week_number=self.week_number).isClosed():
-			# You can't change this pick!
+		force = False
+		try:
+			force = kwargs.pop('force')
+		except:
 			pass
+		if not(force) and Game.objects.get(game_number=self.game_number,week_number=self.week_number).isClosed():
+			# You can't change this pick!
+			err = f'You are trying to change a pick for a game that isClosed. week: {self.week_number} game:{self.game_number}. If you want to do this use force=True' 
+			raise(IndexError(err))
 		else:
 			super(Pick, self).save(*args, **kwargs)
 
@@ -153,10 +174,24 @@ class Monday(models.Model):
 	week_number = models.IntegerField()
 	total_points = models.IntegerField(null=True)
 
+	def bonus(self):
+		monday_game = Game.objects.filter(week_number=self.week_number).order_by('game_number').last()
+		tp = monday_game.totalPoints()
+		if tp is None:
+			return 0.0
+		else:
+			return 1 / ( 1 + abs( tp - self.total_points - 0.1 ) )
+
+
 	def save(self, *args, **kwargs):
-		if Game.objects.filter(week_number=self.week_number).order_by('game_number').last().isClosed():
-			# You can't change this pick!
+		force = False
+		try:
+			force = kwargs.pop('force')
+		except:
 			pass
+		if not(force) and Game.objects.filter(week_number=self.week_number).order_by('game_number').last().isClosed():
+			err = f'You are trying to change MNTP for a game that isClosed. week: {self.week_number}. If you want to do this use force=True' 
+			raise(IndexError(err))
 		else:
 			super(Monday, self).save(*args, **kwargs)
 

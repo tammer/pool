@@ -185,6 +185,10 @@ def standings_(week_number):
 		for pick in Pick.objects.filter(player=user,week_number=week_number):
 			if pick.isCorrect():
 				count +=1
+		try:
+			count += Monday.objects.get(week_number=week_number,player=user).bonus()
+		except:
+			None
 		matrix[user.username] = count
 		standings = sorted(matrix.items(), key=lambda kv: kv[1], reverse=True)
 	standings2 = []
