@@ -252,6 +252,7 @@ def results(request):
 	total = 0
 	completed = 0;
 	for game in Game.objects.filter(week_number=week_number).order_by('game_number'):
+		total+=1
 		if game.isOpen():
 			continue
 		g = {}
@@ -277,7 +278,6 @@ def results(request):
 			g['right'] = "No"
 		if pick.game().isOver():
 			completed += 1
-		total+=1
 		g['picked_fav'] = pick.picked_fav
 		g['isOver'] = game.isOver()
 		g['game_day'] = game.game_date.strftime('%A')
@@ -351,6 +351,8 @@ def dopicks(request):
 	queryset = Pick.objects.filter(week_number=week_number,player=user).order_by('game_number').all()
 	formset = PickFormSet(queryset=queryset)
 	(monday_instance, created) = Monday.objects.get_or_create(player=user, week_number=week_number)
+	if monday_instance.total_points == 0:
+		monday_instance.total_points = None # will cause the form to force the dude to put something in
 	monday_form = MondayForm(instance=monday_instance)
 	disabled = ''
 	if Game.objects.filter(week_number=week_number).order_by('game_number').last().isClosed():

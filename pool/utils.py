@@ -1,10 +1,10 @@
 from pool.models import Team,Game,Pick,Bank,Blog,Monday,now
 from django.contrib.auth.models import User
 
-def add_player(username):
+def add_player(username,email,pw):
 	if User.objects.filter(username=username).exists():
 		raise( NameError(f'{username} exists already'))
-	User.objects.create(username=username)
+	User.objects.create_user(username,email,pw)
 	init_player(username)
 
 # This function assumes games are loaded
