@@ -3,8 +3,9 @@ from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand, CommandError
 import requests
 import xml.etree.ElementTree as ET
-import datetime
 import csv
+from datetime import datetime, timedelta
+
 
 def load_teams():
 	Team.objects.all().delete()
@@ -43,7 +44,7 @@ def load_games(this_year):
 				if hour < 12:
 					hour += 12 # !!! Totally fails if the game is actually in the morning
 
-				gm_dt = datetime.datetime(int(root[0][i].attrib['eid'][0:4]),
+				gm_dt = datetime(int(root[0][i].attrib['eid'][0:4]),
 					int(root[0][i].attrib['eid'][4:6]),
 					int(root[0][i].attrib['eid'][6:8]),
 					hour,
@@ -84,6 +85,30 @@ def delete_player(username):
 	Pick.objects.filter(player=user).delete()
 	user.delete()
 
+def implied_week(now_ = None, delta_hours = 30):
+	if now_ is None:
+			now_ = now()
+	week_number = 1
+	last_week_of_season = Game.objects.filter(game_number=1).order_by('week_number').last().week_number
+	while week_number < last_week_of_season:
+		if now_ < Game.objects.filter(week_number=week_number).order_by('game_date').last().game_date + timedelta(hours=delta_hours):
+			return week_number
+		else:
+			week_number += 1
+	return last_week_of_season
+
+# def impliedWeek_by_filled_in_scores():
+# 	first_week_without_a_score = Game.objects.filter(fav_score__isnull = True).order_by('week_number').first().week_number
+# 	if Game.objects.filter(week_number = first_week_without_a_score, fav_score__isnull = False).order_by('week_number').first().week_number == first_week_without_a_score:
+# 		# first_week_without_a_score has nuls and scores.  This must be the week we're in
+# 		return first_week_without_a_score
+# 	else:
+# 		# all scores have been input
+# 		if now().weekday() == 6 or now().weekday() == 0:
+# 			return first_week_without_a_score - 1 # it's not Tuesday yet
+# 		else:
+# 			return first_week_without_a_score
+
 def score_matrix():
 	matrix = {}
 	query = 'SELECT *, \
@@ -106,21 +131,22 @@ def score_matrix():
 			matrix[player][week_number] += 1
 	return matrix
 
-def dead_list(start=1, end=None):
-	week_number = end
-	if week_number is None:
-		week_number = implied_week()
-	sm = score_matrix()
+def dead_list(end=None, sm=None):
+	if end is None:
+		end = implied_week()
+	if sm is None:
+		sm = score_matrix()
 	results = set()
-	while week_number > start-1:
+	week_number = 1
+	while week_number < end+1:
 		min_score = 99;
 		for player, score in sm.items():
-			if score[week_number] < min_score:
+			if score[week_number] < min_score and not(player in results):
 				min_score = score[week_number]
 		for player, score in sm.items():
 			if score[week_number] == min_score:
 				results.add(player)
-		week_number -= 1;
+		week_number += 1;
 	return results
 
 def standings(week_number):
@@ -137,7 +163,7 @@ def standings(week_number):
 		matrix[user.username] = count
 		standings = sorted(matrix.items(), key=lambda kv: kv[1], reverse=True)
 	standings2 = []
-	dl = dead_list(1,week_number-1)
+	dl = dead_list(week_number-1)
 	for item in standings:
 		dead = False
 		if item[0] in dl:

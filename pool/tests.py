@@ -69,6 +69,21 @@ class UtilTestCase(TestCase):
 		y = "[['Tammer', 0, True], ['John', 0, True], ['Adel', 0, True], ['B1', 0, True], ['B2', 0, True]]"
 		self.assertEqual(f'{x}',y)
 
+		sm = {'John': {1: 6, 2: 9, 3: 1, 4: 6, 5: 8, 6: 10, 7: 5}, 'Adel': {1: 13, 2: 9, 3: 4, 4: 11, 5: 6, 6: 5, 7: 5}, 'Andy': {1: 7, 2: 8, 3: 5, 4: 9, 5: 11, 6: 5, 7: 6}, 'Madelyn': {1: 9, 2: 9, 3: 7, 4: 7, 5: 9, 6: 7, 7: 8}}
+		
+		x = pool.utils.dead_list(end=1,sm=sm)
+		y = "{'John'}"
+		self.assertEqual(f'{x}',y)
+
+		x = pool.utils.dead_list(end=2,sm=sm)
+		y = {'John', 'Andy'}
+		self.assertEqual(x,y)
+
+		x = pool.utils.dead_list(end=3,sm=sm)
+		y = {'Andy', 'John', 'Adel'}
+		self.assertEqual(x,y)
+
+
 class GameTestCase(TestCase):
 	def setUp(self):
 

@@ -10,33 +10,7 @@ import random
 from datetime import datetime, timedelta
 from django.forms import modelformset_factory
 from django.http import HttpResponse, HttpResponseRedirect
-from pool.utils import score_matrix as scoreMatrix, standings as standings_
-
-
-
-def implied_week(now_ = None, delta_hours = 30):
-	if now_ is None:
-			now_ = now()
-	week_number = 1
-	last_week_of_season = Game.objects.filter(game_number=1).order_by('week_number').last().week_number
-	while week_number < last_week_of_season:
-		if now_ < Game.objects.filter(week_number=week_number).order_by('game_date').last().game_date + timedelta(hours=delta_hours):
-			return week_number
-		else:
-			week_number += 1
-	return last_week_of_season
-
-# def impliedWeek_by_filled_in_scores():
-# 	first_week_without_a_score = Game.objects.filter(fav_score__isnull = True).order_by('week_number').first().week_number
-# 	if Game.objects.filter(week_number = first_week_without_a_score, fav_score__isnull = False).order_by('week_number').first().week_number == first_week_without_a_score:
-# 		# first_week_without_a_score has nuls and scores.  This must be the week we're in
-# 		return first_week_without_a_score
-# 	else:
-# 		# all scores have been input
-# 		if now().weekday() == 6 or now().weekday() == 0:
-# 			return first_week_without_a_score - 1 # it's not Tuesday yet
-# 		else:
-# 			return first_week_without_a_score
+from pool.utils import score_matrix as scoreMatrix, standings as standings_,implied_week
 
 def deposit(request):
 	form = BankForm(request.POST)
