@@ -122,6 +122,12 @@ def results(request):
 	else:
 		week_number = implied_week()
 
+	latest_week = False
+	if week_number == implied_week():
+		latest_week = True
+	if now().date() < Game.objects.get(week_number=week_number,game_number=1).game_date.date() and week_number > 2:
+		week_number -= 1;
+
 	if request.GET.get('p'):
 		player = request.GET['p']
 	else:
@@ -163,7 +169,7 @@ def results(request):
 		g['isOver'] = game.isOver()
 		g['game_day'] = game.game_date.strftime('%A')
 		games.append(g)
-	return render(request, 'pool/results.html',{'completed':completed, 'right_array':right_array,  'week_number': week_number, 'standings':standings_(week_number=week_number), 'games': games, 'player': player, 'right': right, 'total': total} )
+	return render(request, 'pool/results.html',{ 'latest_week':latest_week, 'completed':completed, 'right_array':right_array,  'week_number': week_number, 'standings':standings_(week_number=week_number), 'games': games, 'player': player, 'right': right, 'total': total} )
 
 def home(request):
 	if request.GET.get('w'):

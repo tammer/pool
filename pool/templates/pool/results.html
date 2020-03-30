@@ -4,10 +4,15 @@
 		<div class="row">
 			<div class="col-sm">
       			<h4>
+      				{%if week_number > 1%}
       				<a href="{% url 'pool-results'%}?p={{player}}&w={{week_number|add:'-1'}}">&laquo;</a>
+      				{% endif %}
       				Week {{week_number}}
       				<small class="text-muted">({{completed}} of {{total}} games completed)</small>
+      				{%if latest_week%}
+      				{%else%}
       				<a href="{% url 'pool-results'%}?p={{player}}&w={{week_number|add:'1'}}">&raquo;</a>
+      				{%endif%}
       			</h4>
       			<h2>
       				{{player}}
