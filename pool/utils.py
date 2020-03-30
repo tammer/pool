@@ -138,6 +138,8 @@ def dead_list(end=None, sm=None):
 		sm = score_matrix()
 	results = set()
 	week_number = 1
+	if end > len(sm[list(sm.keys())[0]]):
+		end = len(sm[list(sm.keys())[0]])
 	while week_number < end+1:
 		min_score = 99;
 		for player, score in sm.items():

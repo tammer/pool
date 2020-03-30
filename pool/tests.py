@@ -89,6 +89,14 @@ class UtilTestCase(TestCase):
 		y = {'Andy', 'John', 'Adel'}
 		self.assertEqual(x,y)
 
+		x = pool.utils.dead_list(end=4,sm=sm)
+		y = {'Andy', 'John', 'Adel', 'Madelyn'}
+		self.assertEqual(x,y)		
+
+		y = pool.utils.dead_list(end=13,sm=sm) # beyond the end of the sm
+		y = {'Andy', 'John', 'Adel', 'Madelyn'}
+		self.assertEqual(x,y)
+
 		# testing overall()
 
 		user_b1 = User.objects.get(username='B1')
