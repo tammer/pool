@@ -1,10 +1,5 @@
 TODO
 
-determanistic db state
-
-standings_() to test bed then refactor with superfast Q
-then refactor overall standings to call above
-
 MNTP not accounted for on overall standings
 load scores.
 login screen

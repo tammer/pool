@@ -170,3 +170,39 @@ def standings(week_number):
 			dead = True
 		standings2.append([item[0],int(item[1]),dead])
 	return standings2
+
+def whoWon(week_number, score_matrix):
+	#!!! still have to add MNTP logic
+	leader = None
+	best_score = 0
+	for player, score in score_matrix.items():
+		if score[week_number] > best_score:
+			best_score = score[week_number]
+			leader = player
+	if best_score == 0:
+		return None
+	else:
+		return leader
+
+def overall(sm = None):
+	if sm is None:
+		sm = score_matrix()
+	total = {}
+	for player, scores in sm.items():
+		total[player] = sum(scores.values())
+	rank_order = sorted(total.items(), key=lambda kv: kv[1], reverse=True)
+	table = []
+	winner = []
+	for item in rank_order:
+		player = item[0]
+		this_row = [[player,0]]
+		weeks = list(sm[player].keys())
+		weeks.sort()
+		for week in weeks:
+			win = 0
+			if whoWon(week,sm) == player:
+				win=1
+			this_row.append([sm[player][week],win])
+		this_row.append([total[player],0])
+		table.append(this_row)
+	return table

@@ -10,6 +10,7 @@ import random
 from datetime import datetime, timedelta
 from django.forms import modelformset_factory
 from django.http import HttpResponse, HttpResponseRedirect
+import pool.utils
 from pool.utils import score_matrix as scoreMatrix, standings as standings_,implied_week
 
 def deposit(request):
@@ -74,41 +75,9 @@ def post(request):
 		messages.warning(request, f'You are not logged in as someone who is authorized to do this action.  Try logging in as Adel')
 		return redirect('pool-blog')
 
-
-def whoWon(week_number, score_matrix):
-	#!!! still have to add MNTP logic
-	leader = None
-	best_score = 0
-	for player, score in score_matrix.items():
-		if score[week_number] > best_score:
-			best_score = score[week_number]
-			leader = player
-	if best_score == 0:
-		return None
-	else:
-		return leader
-
 def overall(request):
 	week_number = implied_week()
-	sm = scoreMatrix()
-	total = {}
-	for player, scores in sm.items():
-		total[player] = sum(scores.values())
-	rank_order = sorted(total.items(), key=lambda kv: kv[1], reverse=True)
-	table = []
-	winner = []
-	for item in rank_order:
-		player = item[0]
-		this_row = [[player,0]]
-		weeks = list(sm[player].keys())
-		weeks.sort()
-		for week in weeks:
-			win = 0
-			if whoWon(week,sm) == player:
-				win=1
-			this_row.append([sm[player][week],win])
-		this_row.append([total[player],0])
-		table.append(this_row)
+	table = pool.utils.overall()
 	headers = range(1,len(table[0])-1)
 	return render(request, 'pool/overall.html',{'week_number':week_number, 'table':table, 'headers':headers})
 
