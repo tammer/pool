@@ -1,6 +1,5 @@
 TODO
 
-MNTP not accounted for on overall standings
 load scores.
 login screen
 forgot password
