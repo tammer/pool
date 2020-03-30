@@ -239,6 +239,9 @@ def dopicks(request):
 	if Game.objects.filter(week_number=week_number).order_by('game_number').last().isClosed():
 		messages.warning(request,f'Week {week_number} is closed.')
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+	if Game.objects.filter(week_number=week_number,spread__isnull=True).count() > 0:
+		messages.warning(request,f'Sorry, week {week_number} is not open for picks yet.')
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 	now_ = now().strftime('%A %B %-d %-I:%M %p')
 	return render(request, 'pool/dopicks.html', { 'now':now_, 'disabled':disabled, 'player':user.username, 'week_number':week_number, 'formset':formset, 'monday_form':monday_form} )
 

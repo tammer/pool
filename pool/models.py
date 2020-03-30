@@ -4,7 +4,7 @@ import datetime
 from pytz import timezone
 
 def now():
-	return datetime.datetime(2019,10,18,13,21,0)
+	return datetime.datetime(2019,11,14,13,21,0)
 	# return datetime.datetime.now(self.game_date.tzinfo)
 
 class Team(models.Model):

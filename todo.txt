@@ -1,6 +1,6 @@
 TODO
 
-load scores.
+load scores from nfl api
 login screen
 forgot password
 do picks before spreads are inputted
