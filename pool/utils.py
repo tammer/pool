@@ -173,16 +173,31 @@ def standings(week_number):
 
 def whoWon(week_number, score_matrix):
 	#!!! still have to add MNTP logic
-	leader = None
+	leaders = []
 	best_score = 0
 	for player, score in score_matrix.items():
 		if score[week_number] > best_score:
 			best_score = score[week_number]
-			leader = player
+			leaders = [player]
+		elif score[week_number] == best_score:
+			leaders.append(player)
 	if best_score == 0:
 		return None
 	else:
-		return leader
+		if len(leaders) == 1:
+			return leaders[0]
+		else:
+			best_bonus = 0
+			leader = None
+			for player in leaders:
+				user = User.objects.get(username=player)
+				bonus = Monday.objects.get(player=user, week_number=week_number).bonus()
+				if bonus > best_bonus:
+					leader = player
+					best_bonus = bonus
+			return leader
+
+
 
 def overall(sm = None):
 	if sm is None:

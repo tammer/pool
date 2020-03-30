@@ -53,6 +53,9 @@ class UtilTestCase(TestCase):
 	def test(self):
 		x = User.objects.get(username='Tammer')
 		self.assertEqual(x.username, 'Tammer')
+
+		# testing standings() function
+
 		x = pool.utils.standings(1)
 		y = "[['John', 8, False], ['B1', 8, False], ['B2', 8, False], ['Tammer', 6, False], ['Adel', 4, False]]"
 		self.assertEqual(f'{x}',y)
@@ -71,6 +74,9 @@ class UtilTestCase(TestCase):
 
 		sm = {'John': {1: 6, 2: 9, 3: 1, 4: 6, 5: 8, 6: 10, 7: 5}, 'Adel': {1: 13, 2: 9, 3: 4, 4: 11, 5: 6, 6: 5, 7: 5}, 'Andy': {1: 7, 2: 8, 3: 5, 4: 9, 5: 11, 6: 5, 7: 6}, 'Madelyn': {1: 9, 2: 9, 3: 7, 4: 7, 5: 9, 6: 7, 7: 8}}
 		
+
+		# Testing dead_list()
+
 		x = pool.utils.dead_list(end=1,sm=sm)
 		y = "{'John'}"
 		self.assertEqual(f'{x}',y)
@@ -81,6 +87,16 @@ class UtilTestCase(TestCase):
 
 		x = pool.utils.dead_list(end=3,sm=sm)
 		y = {'Andy', 'John', 'Adel'}
+		self.assertEqual(x,y)
+
+		# testing overall()
+
+		user_b1 = User.objects.get(username='B1')
+		user_adel = User.objects.get(username='Adel')
+		user_john = User.objects.get(username='John')
+		sm = {'John': {1: 6, 2: 9, 3: 1, 4: 6, 5: 8, 6: 10, 7: 5}, 'Adel': {1: 13, 2: 9, 3: 4, 4: 11, 5: 6, 6: 5, 7: 5}, 'Tammer': {1: 7, 2: 8, 3: 5, 4: 9, 5: 11, 6: 5, 7: 6}, 'B1': {1: 9, 2: 9, 3: 7, 4: 7, 5: 9, 6: 7, 7: 8}}
+		x = pool.utils.overall(sm)
+		y = [[['B1', 0], [9, 0], [9, 0], [7, 1], [7, 0], [9, 0], [7, 0], [8, 1], [56, 0]], [['Adel', 0], [13, 1], [9, 1], [4, 0], [11, 1], [6, 0], [5, 0], [5, 0], [53, 0]], [['Tammer', 0], [7, 0], [8, 0], [5, 0], [9, 0], [11, 1], [5, 0], [6, 0], [51, 0]], [['John', 0], [6, 0], [9, 0], [1, 0], [6, 0], [8, 0], [10, 1], [5, 0], [45, 0]]]
 		self.assertEqual(x,y)
 
 
