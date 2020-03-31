@@ -46,7 +46,13 @@ setTimeout(function(){
 <body>
 
 	<header class="site-header">
-	  <nav class="navbar navbar-expand-md navbar-light bg-steel fixed-top" style="background-color: #006699;">
+	  <nav class="navbar navbar-expand-md fixed-top"
+	  		{%if user.is_authenticated%}
+	  		style="background-color: #006699;"
+	  		{%else%}
+	  		style="background-color: gray;"
+	  		{%endif%}
+	  		>
 	    <div class="container">
 	      <img src="http://www.tammer.com/352929-200.png" width=50px>
 	      <!-- <a class="navbar-brand mr-4" href="{% url 'pool-home' %}">Monkey Pool</a> -->

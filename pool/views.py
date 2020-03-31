@@ -132,7 +132,7 @@ def results(request):
 	if request.GET.get('p'):
 		player = request.GET['p']
 	else:
-		if request.user.username:
+		if request.user.is_authenticated:
 			player = request.user.username
 		else:
 			show_results = False;
@@ -238,7 +238,10 @@ def spreads(request):
 
 PickFormSet = modelformset_factory(Pick,extra=0, form = PickForm, fields=('game_number','week_number','picked_fav' ))
 def dopicks(request):
-	user = request.user
+	if request.user.is_authenticated:
+		user = request.user
+	else:
+		return redirect('login')	
 	week_number = implied_week()
 	queryset = Pick.objects.filter(week_number=week_number,player=user).order_by('game_number').all()
 	formset = PickFormSet(queryset=queryset)
