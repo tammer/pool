@@ -1,9 +1,11 @@
 TODO
 
+non logged in view
+local bootstrap
+
+load spreads from pool locks.com
 load scores from nfl api
 login screen
 forgot password
-do picks before spreads are inputted
 
-
-
+use the week logic on the home page

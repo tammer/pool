@@ -117,7 +117,7 @@ def allpicks(request):
 	return render(request, 'pool/allpicks.html', {'week_number': week_number, 'header': header, 'matrix': matrix})
 
 def results(request):
-	if request.GET.get('p'):
+	if request.GET.get('w'):
 		week_number = int(request.GET['w'])
 	else:
 		week_number = implied_week()
