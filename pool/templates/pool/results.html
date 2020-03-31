@@ -23,9 +23,11 @@
 		    </div>
 		</div>	
 		<div class="row">
+			{% if show_results %}
 			<div class="col-md-auto">
 				{% include "./results_snippet.html" %}
 			</div>
+			{% endif %}
 			<div class="col-md-auto">
 				{% include "./standings_snippet.html" %}
 			</div>

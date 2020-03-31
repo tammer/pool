@@ -128,10 +128,15 @@ def results(request):
 	if now().date() < Game.objects.get(week_number=week_number,game_number=1).game_date.date() and week_number > 2:
 		week_number -= 1;
 
+	show_results = True
 	if request.GET.get('p'):
 		player = request.GET['p']
 	else:
-		player = request.user.username
+		if request.user.username:
+			player = request.user.username
+		else:
+			show_results = False;
+			player = User.objects.all().first() # just a place holder; we wont show anyones results
 	games = []
 	user = User.objects.get(username=player)
 	right = 0
@@ -169,7 +174,7 @@ def results(request):
 		g['isOver'] = game.isOver()
 		g['game_day'] = game.game_date.strftime('%A')
 		games.append(g)
-	return render(request, 'pool/results.html',{ 'latest_week':latest_week, 'completed':completed, 'right_array':right_array,  'week_number': week_number, 'standings':standings_(week_number=week_number), 'games': games, 'player': player, 'right': right, 'total': total} )
+	return render(request, 'pool/results.html',{ 'latest_week':latest_week, 'completed':completed, 'right_array':right_array,  'week_number': week_number, 'standings':standings_(week_number=week_number), 'games': games, 'player': player, 'right': right, 'total': total, 'show_results':show_results } )
 
 def home(request):
 	if request.GET.get('w'):

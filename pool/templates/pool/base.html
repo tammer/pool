@@ -60,7 +60,9 @@ setTimeout(function(){
 	          <a class="nav-item nav-link" href="{% url 'pool-results' %}">Results</a>
 	          <a class="nav-item nav-link" href="{% url 'pool-allpicks' %}">Everyone's Picks</a>
 	          <a class="nav-item nav-link" href="{% url 'pool-overall' %}">Overall Standings</a>
+	          {% if user.is_authenticated %}
 	          <a class="nav-item nav-link" href="{% url 'pool-money' %}">Money</a>
+	          {%endif%}
 	          {% if user.is_superuser %}
 					<a class="nav-item nav-link" href="{% url 'pool-spreads' %}">Spreads</a>
 	          {%endif%}
