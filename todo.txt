@@ -1,6 +1,7 @@
 TODO
 
 home page on week 17?
+why overall standings going to week 15 when it is week 7?
 
 local bootstrap
 
