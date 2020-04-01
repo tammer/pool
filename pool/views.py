@@ -78,7 +78,9 @@ def post(request):
 def overall(request):
 	week_number = implied_week()
 	table = pool.utils.overall()
-	headers = range(1,len(table[0])-1)
+	headers = []
+	if table != []:
+		headers = range(1,len(table[0])-1)
 	return render(request, 'pool/overall.html',{'week_number':week_number, 'table':table, 'headers':headers})
 
 def standings(request):
@@ -95,7 +97,11 @@ def allpicks(request):
 		week_number = implied_week()
 	header = []
 	for game in Game.objects.filter(week_number=week_number).order_by('game_number'):
-		header.append([game.favShortName(), str(game.spread)+"&frac12;", game.udogShortName(), game.game_date.strftime('%a')])
+		if game.spread == 0:
+			spread = ''
+		else:
+			spread = str(game.spread)
+		header.append([game.favShortName(), spread+"&frac12;", game.udogShortName(), game.game_date.strftime('%a')])
 	header.append('MNTP')
 	matrix = {}
 	for user in User.objects.all().order_by('username'):
@@ -161,6 +167,8 @@ def results(request):
 			g['spread'] = 'NA'
 		else:
 			g['spread'] = game.spread
+		if g['spread'] == 0:
+			g['spread'] = ''
 		pick = Pick.objects.get(player=user, week_number=week_number, game_number = game.game_number)
 		if pick.isCorrect():
 			g['right'] = "Yes"
