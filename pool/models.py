@@ -4,14 +4,12 @@ import datetime
 from pytz import timezone
 
 def now():
-	# return datetime.datetime(2019,8,18,13,21,0) # Preseason
-	# return datetime.datetime(2019,10,18,13,21,0) # Friday 13:21
-	# return datetime.datetime(2019,10,20,13,21,0) # Sunday 13:21
-	# return datetime.datetime(2019,10,21,13,21,0) # Monday 13:21
-	return datetime.datetime(2019,10,23,13,21,0) # Wednesday 13:21
-	# return datetime.datetime(2019,10,24,13,21,0) # Thursday 13:21
-	# return datetime.datetime(2019,10,24,20,21,0) # Thursday 20:21
-	# return datetime.datetime.now(self.game_date.tzinfo)
+	text_file = open("now.txt", "r")
+	string_list = text_file.read().split(',')
+	list = []
+	for string in string_list:
+		list.append(int(string))
+	return datetime.datetime(*list)
 
 class Team(models.Model):
 	full_name = models.CharField(max_length=50)
