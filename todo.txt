@@ -1,6 +1,7 @@
 TODO
 
-non logged in view
+home page on week 17?
+
 local bootstrap
 
 load spreads from pool locks.com
