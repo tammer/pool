@@ -54,6 +54,30 @@ class UtilTestCase(TestCase):
 		x = User.objects.get(username='Tammer')
 		self.assertEqual(x.username, 'Tammer')
 
+		# testing status() function
+
+		self.assertEqual(pool.utils.status(datetime.datetime(2019,8,8)), (1,'Open'))
+		self.assertEqual(pool.utils.status(datetime.datetime(2019,9,5)), (1,'Open'))
+		self.assertEqual(pool.utils.status(datetime.datetime(2019,9,6)), (1,'Open'))
+		self.assertEqual(pool.utils.status(datetime.datetime(2019,9,7)), (1,'Open'))
+		self.assertEqual(pool.utils.status(datetime.datetime(2019,9,8,12,59)), (1,'Open'))
+		self.assertEqual(pool.utils.status(datetime.datetime(2019,9,8,13,0)), (1,'Closed'))
+		self.assertEqual(pool.utils.status(datetime.datetime(2019,9,9,13,0)), (1,'Closed'))
+		self.assertEqual(pool.utils.status(datetime.datetime(2019,9,10,13,0)), (2,'Open'))
+		self.assertEqual(pool.utils.status(datetime.datetime(2019,9,11,13,0)), (2,'Open'))
+		self.assertEqual(pool.utils.status(datetime.datetime(2019,9,12,13,0)), (2,'Open'))
+		self.assertEqual(pool.utils.status(datetime.datetime(2019,9,12,13,0)), (2,'Open'))
+
+		self.assertEqual(pool.utils.status(datetime.datetime(2019,10,23,13,0)), (8,'Not Open'))
+		self.assertEqual(pool.utils.status(datetime.datetime(2019,10,28,13,0)), (8,'Closed'))
+		self.assertEqual(pool.utils.status(datetime.datetime(2019,10,29,13,0)), (9,'Not Open'))
+
+		self.assertEqual(pool.utils.status(datetime.datetime(2019,12,31,13,0)), (17,'Closed'))		
+		self.assertEqual(pool.utils.status(datetime.datetime(2020,2,2,13,0)), (17,'Closed'))		
+
+
+
+
 		# testing standings() function
 
 		x = pool.utils.standings(1)

@@ -98,6 +98,37 @@ def implied_week(now_ = None, delta_hours = 30):
 			week_number += 1
 	return last_week_of_season
 
+def status(now_ = None):
+	if now_ is None:
+		now_ = now()
+	# pre week 1
+	if now_ < Game.objects.get(week_number=1,game_number=1).game_date:
+		if Game.objects.filter(week_number=1,spread__isnull=True).count() == 0:
+			return (1,'Open')
+		else:
+			return (1, 'Not Open')
+	# post week 17
+	last_game_of_season = Game.objects.all().order_by('game_date').last()
+	if now_ > last_game_of_season.game_date:
+		return (last_game_of_season.week_number,'Closed')
+	# all other cases
+	iw = implied_week(now_,6)
+	if now_.weekday() in (3,4,5):
+		return (iw,'Open')
+	elif now_.weekday() == 6:
+		if now_.hour > 12:
+			return (iw,'Closed')
+		else:
+			return (iw,'Open')
+	elif now_.weekday() == 0:
+		return (iw,'Closed')
+	else: # Tues,Wed
+		if Game.objects.filter(week_number=iw,spread__isnull=True).count() == 0:
+			return (iw,'Open')
+		else:
+			return (iw, 'Not Open')
+
+
 # def impliedWeek_by_filled_in_scores():
 # 	first_week_without_a_score = Game.objects.filter(fav_score__isnull = True).order_by('week_number').first().week_number
 # 	if Game.objects.filter(week_number = first_week_without_a_score, fav_score__isnull = False).order_by('week_number').first().week_number == first_week_without_a_score:
