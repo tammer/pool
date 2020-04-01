@@ -1,17 +1,22 @@
 {% extends "pool/base.html" %}
 {% block content %}
 	<main role="main" class="container">
-		<div class="row">
-			<div class="col-md-auto">
-				<h4>Week {{week_number}}</h4>
-				<h5>Next Game: {{next_game}}</h5>
+		<div class="row ">
+			<div class="col-md-auto	">
+				<p class='text-muted'>{{time}}</p>
+				<h1>Week {{headline_week_number}}</h3>
+				<h5>
+					{{message1}}<br>
+					{{message2}}
+				</h5>
+				<br>
 			</div>
 		</div>
 		<div class='row'>
 			<div class="col-md">
 				<img class="img-fluid" src="{{src}}" alt="{{src}}">
 				<br><br>
-				{% if is_superuser == True %}
+				{% if user.is_superuser == True %}
 					<a class="btn btn-sm btn-primary" href="{% url 'pool-blog' %}" role="button">New Announcement</a>
 					<br><br><br>
 				{% endif %}
@@ -19,7 +24,7 @@
 					{{first_blog_date}}
 				</h5>
 				
-				<p style='white-space: pre-wrap'>{{first_blog}} {% if is_superuser == True %}<a href="{% url 'pool-blog' %}?id={{id}}">Edit&raquo;</a>{% endif %}</p>
+				<p style='white-space: pre-wrap'>{{first_blog}} {% if user.is_superuser == True %}<a href="{% url 'pool-blog' %}?id={{id}}">Edit&raquo;</a>{% endif %}</p>
 				
 				<small>
 				{% for k,v in rest_of_blog %}

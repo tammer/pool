@@ -177,10 +177,9 @@ def results(request):
 	return render(request, 'pool/results.html',{ 'latest_week':latest_week, 'completed':completed, 'right_array':right_array,  'week_number': week_number, 'standings':standings_(week_number=week_number), 'games': games, 'player': player, 'right': right, 'total': total, 'show_results':show_results } )
 
 def home(request):
-	if request.GET.get('w'):
-		week_number = int(request.GET['w'])
-	else:
-		week_number = implied_week()
+	week_number = implied_week(delta_hours=6)
+	if now().date() < Game.objects.get(week_number=week_number,game_number=1).game_date.date() and week_number > 2:
+		week_number -= 1;
 	player = request.user.username
 	standings = standings_(week_number)
 	sm = scoreMatrix()
@@ -188,8 +187,6 @@ def home(request):
 	for p, scores in sm.items():
 		total[p] = sum(scores.values())
 	rank_order = sorted(total.items(), key=lambda kv: kv[1], reverse=True)
-	ng = Game.objects.filter(fav_score__isnull = True).order_by('game_date').first()
-	next_game = f'{ng.awayNickName()} @ {ng.homeNickName()} {ng.game_date.strftime("%A")} at {ng.game_date.strftime("%-I:%M%p").lower().replace("pm","p")}'
 
 	blog_list = []
 	for blog in Blog.objects.all().order_by('-entry_date')[:4]:
@@ -208,7 +205,28 @@ def home(request):
 		'https://www.wakingtimes.com/wp-content/uploads/2017/10/thinking-monkey-1.jpg',
 		'https://i.ytimg.com/vi/6WRLFiujDFY/maxresdefault.jpg',
 		])
-	return render(request, 'pool/home.html',{'src':src, 'total':total, 'completed':completed, 'id':id, 'is_superuser':request.user.is_superuser, 'rest_of_blog':blog_list, 'first_blog_date':first_blog_date, 'first_blog':first_blog, 'next_game':next_game, 'player':player, 'standings':standings, 'overall': rank_order, 'week_number': week_number})
+	time = now().strftime('%A %B %-d %-I:%M %p')
+
+	week_closed = Game.objects.filter(week_number=week_number).order_by('game_number').last().isClosed()
+	headline_week_number = week_number
+	ng = Game.objects.filter(game_date__gt = now()).order_by('game_date').first()
+	game_day = ng.game_date.strftime("%A")
+	if game_day == now().strftime("%A"):
+		game_day = 'Today'
+	ng_text = f'Next Game: {game_day} at {ng.game_date.strftime("%-I:%M%p").lower().replace("pm","p")} ({ng.awayNickName()} @ {ng.homeNickName()})'
+	if week_closed: 
+		if now() > Game.objects.filter(week_number=week_number).order_by('game_number').last().game_date + timedelta(hours=22): # week is done, it's really next week.
+			headline_week_number = week_number+1
+			message1 = 'Not Open Yet.'
+			message2 = ng_text
+		else: # this week is in progress
+			message1 = 'Closed'
+			message2 = f'{completed} of {total} games completed'
+	else:
+		message1 = 'Open until Sunday 1:00 PM'
+		message2 = ng_text
+
+	return render(request, 'pool/home.html',{'headline_week_number':headline_week_number, 'time':time, 'message1':message1,'message2':message2, 'week_closed':week_closed, 'src':src, 'total':total, 'completed':completed, 'id':id, 'rest_of_blog':blog_list, 'first_blog_date':first_blog_date, 'first_blog':first_blog, 'player':player, 'standings':standings, 'overall': rank_order, 'week_number': week_number})
 
 def teams(request):
 	teams = Team.objects.all()
