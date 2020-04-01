@@ -4,15 +4,16 @@ import random
 from datetime import datetime, timedelta
 
 dates = [
-	# (2019,8,18,13,21,0), # Preseason
-	# (2019,10,18,13,21,0), # Friday 13:21
-	# (2019,10,20,13,21,0), # Sunday 13:21
-	# (2019,10,21,13,21,0), # Monday 13:21
-	# (2019,10,22,13,21,0), # Tuesday 13:21
-	# (2019,10,23,13,21,0), # Wednesday 13:21
-	# (2019,10,24,13,21,0), # Thursday 13:21
-	# (2019,10,24,20,21,0), # Thursday 20:21
-	(2019,12,21,20,21,0), # Thursday 20:21
+	(2019,8,18,13,21,0), # Preseason
+	(2019,10,18,13,21,0), # Friday 13:21
+	(2019,10,20,13,21,0), # Sunday 13:21
+	(2019,10,21,13,21,0), # Monday 13:21
+	(2019,10,22,13,21,0), # Tuesday 13:21
+	(2019,10,23,13,21,0), # Wednesday 13:21
+	(2019,10,24,13,21,0), # Thursday 13:21
+	(2019,10,24,20,21,0), 
+	(2019,12,28,20,21,0), 
+	(2020,1,12,10,21,0), 
 ]
 
 def give_picks(week_number):
@@ -25,7 +26,7 @@ def set_state(date):
 	random.seed(1)
 	spread_week = 1
 	give_picks(spread_week)
-	while date > (Game.objects.filter(week_number=spread_week).order_by('game_number').first().game_date - timedelta(hours=60)):
+	while spread_week <= 17 and date > (Game.objects.filter(week_number=spread_week).order_by('game_number').first().game_date - timedelta(hours=60)):
 		spread_week +=1
 		give_picks(spread_week)
 	for game in Game.objects.all().order_by('game_date'):
