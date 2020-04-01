@@ -205,7 +205,7 @@ def home(request):
 	blog_list.pop(0)
 	completed = Game.objects.filter(week_number=week_number,fav_score__isnull = False).count()
 	total = Game.objects.filter(week_number=week_number).count()
-	random.seed(week_number+now().day)
+	random.seed(now().hour)
 	src = random.choice([
 		'http://www.tammer.com/Chimp-352-570x270.jpg',
 		'https://technologytherapy.com/wp-content/uploads/2018/06/getmonkeys-2-768x384.jpg',
