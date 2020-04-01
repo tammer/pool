@@ -73,6 +73,7 @@ def init_player(username):
 	for game in Game.objects.all():
 		pick = Pick(week_number=game.week_number, game_number=game.game_number, player=user,picked_fav=True)
 		pick.save(force=True)
+	Monday.objects.filter(player=user).delete()
 	for game in Game.objects.filter(game_number=1):
 		monday = Monday(week_number=game.week_number,player=user,total_points=0)
 		monday.save(force=True)
@@ -136,6 +137,8 @@ def dead_list(end=None, sm=None):
 		end = implied_week()
 	if sm is None:
 		sm = score_matrix()
+	if end < 1:
+		return set()
 	results = set()
 	week_number = 1
 	if end > len(sm[list(sm.keys())[0]]):
@@ -174,7 +177,6 @@ def standings(week_number):
 	return standings2
 
 def whoWon(week_number, score_matrix):
-	#!!! still have to add MNTP logic
 	leaders = []
 	best_score = 0
 	for player, score in score_matrix.items():
