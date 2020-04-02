@@ -1,5 +1,7 @@
-login screen
 load scores from nfl api
+	set_scores() written and working
+	now just need to read scores from nfl api
+login screen
 forgot password
 email alerts
 local bootstrap
