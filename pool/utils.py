@@ -227,6 +227,8 @@ def whoWon(week_number, score_matrix):
 def overall(sm = None):
 	if sm is None:
 		sm = score_matrix()
+	if sm == {}:
+		return []
 	total = {}
 	for player, scores in sm.items():
 		total[player] = sum(scores.values())
