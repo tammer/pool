@@ -231,13 +231,13 @@ def home(request):
 		ng_text = f'Next Game: {game_day} at {ng.game_date.strftime("%-I:%M%p").lower().replace("pm","p")} ({ng.awayNickName()} @ {ng.homeNickName()})'
 
 	if status == "Open":
-		message1 = 'Open until Sunday 1:00 PM'
+		message1 = '<font color="#33A532">OPEN</font> until Sunday 1:00 PM'
 		message2 = ng_text
 	elif status == "Not Open":
-		message1 = 'Not Open Yet.'
+		message1 = '<font color="#FFBF00">Not Open Yet.</font>'
 		message2 = ng_text
 	else:
-		message1 = 'Closed'
+		message1 = '<font color="red">Closed</font>'
 		message2 = f'{completed} of {total} games completed'
 
 	return render(request, 'pool/home.html',{'headline_week_number':headline_week_number, 'time':time, 'message1':message1,'message2':message2, 'status':status, 'src':src, 'total':total, 'completed':completed, 'id':id, 'rest_of_blog':blog_list, 'first_blog_date':first_blog_date, 'first_blog':first_blog, 'player':request.user.username, 'standings':standings, 'overall': rank_order, 'week_number': week_number})
