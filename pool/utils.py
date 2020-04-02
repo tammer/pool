@@ -231,8 +231,12 @@ def overall(sm = None):
 	for player, scores in sm.items():
 		total[player] = sum(scores.values())
 	rank_order = sorted(total.items(), key=lambda kv: kv[1], reverse=True)
+
+	winner = {}
+	for week in list(sm[player].keys()):
+		winner[week] = whoWon(week,sm)
+
 	table = []
-	winner = []
 	for item in rank_order:
 		player = item[0]
 		this_row = [[player,0]]
@@ -240,7 +244,7 @@ def overall(sm = None):
 		weeks.sort()
 		for week in weeks:
 			win = 0
-			if whoWon(week,sm) == player:
+			if winner[week] == player:
 				win=1
 			this_row.append([sm[player][week],win])
 		this_row.append([total[player],0])
