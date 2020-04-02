@@ -54,6 +54,16 @@ class UtilTestCase(TestCase):
 		x = User.objects.get(username='Tammer')
 		self.assertEqual(x.username, 'Tammer')
 
+		# testing set_score() function
+		gm = Game.objects.get(week_number=2,game_number=2)
+		pool.utils.set_score(gm.week_number,{gm.favShortName():55,gm.udogShortName().lower():5})
+		gm = Game.objects.get(week_number=2,game_number=2)
+		self.assertEqual(gm.udog_score,5)
+		self.assertEqual(gm.fav_score,55)
+
+		self.assertRaises(NameError, pool.utils.set_score, 1,{'notateam':55,'SF':5})
+		self.assertRaises(NameError, pool.utils.set_score, 1,{'DAL':55,'ne':5})
+
 		# testing status() function
 
 		self.assertEqual(pool.utils.status(datetime.datetime(2019,8,8)), (1,'Open'))

@@ -6,6 +6,32 @@ import xml.etree.ElementTree as ET
 import csv
 from datetime import datetime, timedelta
 
+# score in the form {'dal':22, 'sf':14}
+def set_score(week_number, score_):
+	score = {}
+	for k in score_.keys():
+		score[k.upper()] = score_[k]
+	try:
+		udog = Team.objects.get(short_name = list(score.keys())[0])
+		fav = Team.objects.get(short_name = list(score.keys())[1])
+	except:
+		msg = f'Cannot find a team matching either {list(score.keys())[0]} or {list(score.keys())[1]}'
+		raise( NameError(msg) )
+	try:
+		game = Game.objects.get(week_number=week_number,fav=fav, udog=udog)
+	except:
+		temp = udog
+		udog = fav
+		fav = temp
+	try:
+		game = Game.objects.get(week_number=week_number,fav=fav, udog=udog)
+	except:
+		msg = f'{fav.short_name} is not playing {udog.short_name} in week {week_number}'
+		raise( NameError(msg) )
+	game.fav_score = score[fav.short_name]
+	game.udog_score = score[udog.short_name]
+	game.save()
+	return game
 
 def load_teams():
 	Team.objects.all().delete()
