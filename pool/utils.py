@@ -143,24 +143,14 @@ def status(now_ = None):
 
 def score_matrix():
 	matrix = {}
-	query = 'SELECT *, \
-	(fav_score-udog_score-spread > 0 and picked_fav OR fav_score-udog_score-spread <0 and not(picked_fav)) as correct, \
-	auth_user.username as player_name\
-	from pool_pick,pool_game,auth_user \
-	where pool_pick.game_number = pool_game.game_number and \
-	      pool_pick.week_number=pool_game.week_number and \
-	      pool_pick.player_id = auth_user.id and\
-	      not(pool_game.fav_score is NULL)'
+	query = 'SELECT *, auth_user.username as player_name, pool_game.week_number as wk, sum((fav_score-udog_score-spread > 0 and picked_fav OR fav_score-udog_score-spread <0 and not(picked_fav))) as correct FROM pool_pick,pool_game,auth_user WHERE pool_pick.game_number = pool_game.game_number and pool_pick.week_number=pool_game.week_number and pool_pick.player_id = auth_user.id and not(pool_game.fav_score is NULL) GROUP BY player_name, wk;'
 
 	for pick in Pick.objects.raw(query):
 		player = pick.player_name
 		week_number = pick.week_number
 		if not(player in matrix):
 			matrix[player] = {}
-		if not(week_number in matrix[player]):
-			matrix[player][week_number] = 0
-		if pick.correct:
-			matrix[player][week_number] += 1
+		matrix[player][week_number] = pick.correct
 	return matrix
 
 def dead_list(end=None, sm=None):
