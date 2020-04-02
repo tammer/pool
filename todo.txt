@@ -1,5 +1,7 @@
 TODO
 
+speed of everyones picks is slow
+
 check on week 17 once everything is close. does it work?
 
 local bootstrap
