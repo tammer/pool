@@ -3,7 +3,7 @@
 </font></small></td><td>
 
 <div class="switch-field">
-<input class='team{%if widget.attrs.fav_is_home == True%} home{%endif%}' {% if widget.attrs.checked_fav == True %}checked{%endif%} type="{{ widget.optgroups.0.1.0.type }}" name="{{ widget.optgroups.0.1.0.name }}{{widget.attrs.game_number}}"{% if widget.optgroups.0.1.0.value != None %} value="{{ widget.optgroups.0.1.0.value|stringformat:'s' }}"{% endif %} id="{{widget.attrs.id}}-1" {% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>
+<input onchange="document.getElementById('submit').disabled = false" class='team{%if widget.attrs.fav_is_home == True%} home{%endif%}' {% if widget.attrs.checked_fav == True %}checked{%endif%} type="{{ widget.optgroups.0.1.0.type }}" name="{{ widget.optgroups.0.1.0.name }}{{widget.attrs.game_number}}"{% if widget.optgroups.0.1.0.value != None %} value="{{ widget.optgroups.0.1.0.value|stringformat:'s' }}"{% endif %} id="{{widget.attrs.id}}-1" {% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>
 <label {% if widget.attrs.disabled == True%}style ='cursor: default'{%endif%} for="{{widget.attrs.id}}-1">{{ widget.optgroups.0.1.0.label }}</label>
 </div>
 
@@ -19,7 +19,7 @@
 <td class='text-right'>
 
 <div class="switch-field">
-<input class='team{%if widget.attrs.fav_is_home == False%} home{%endif%}' {% if widget.attrs.checked_fav != True %}checked{%endif%} type="{{ widget.optgroups.1.1.0.type }}" name="{{ widget.optgroups.1.1.0.name }}{{widget.attrs.game_number}}"{% if widget.optgroups.1.1.0.value != None %} value="{{ widget.optgroups.1.1.0.value|stringformat:'s' }}"{% endif %} id="{{widget.attrs.id}}-2" {% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>
+<input onchange="document.getElementById('submit').disabled = false" class='team{%if widget.attrs.fav_is_home == False%} home{%endif%}' {% if widget.attrs.checked_fav != True %}checked{%endif%} type="{{ widget.optgroups.1.1.0.type }}" name="{{ widget.optgroups.1.1.0.name }}{{widget.attrs.game_number}}"{% if widget.optgroups.1.1.0.value != None %} value="{{ widget.optgroups.1.1.0.value|stringformat:'s' }}"{% endif %} id="{{widget.attrs.id}}-2" {% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>
 <label {% if widget.attrs.disabled == True%}style ='cursor: default'{%endif%} for="{{widget.attrs.id}}-2">{{ widget.optgroups.1.1.0.label }}</label>
 </div>
 

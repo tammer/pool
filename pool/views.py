@@ -292,10 +292,9 @@ def dopicks(request):
 	if monday_instance.total_points == 0:
 		monday_instance.total_points = None # will cause the form to force the dude to put something in
 	monday_form = MondayForm(instance=monday_instance)
-	disabled = ''
 	
 	now_ = now().strftime('%A %B %-d %-I:%M %p')
-	return render(request, 'pool/dopicks.html', { 'now':now_, 'disabled':disabled, 'player':user.username, 'week_number':week_number, 'formset':formset, 'monday_form':monday_form} )
+	return render(request, 'pool/dopicks.html', { 'now':now_, 'player':user.username, 'week_number':week_number, 'formset':formset, 'monday_form':monday_form} )
 
 def postpicks(request):
 	user = request.user
@@ -313,7 +312,7 @@ def postpicks(request):
 			team = Game.objects.get(week_number=week_number,game_number=instances[game_number].game_number).fav.city_name
 		else:
 			team = Game.objects.get(week_number=week_number,game_number=instances[game_number].game_number).udog.city_name
-		message = random.choice(['Picks Updated. (You should probably reverse.)',f'Picks Updated. (You took {team}?? Not smart.)'])
+		message = random.choice(['Picks Updated. (These picks are excellent -- don\'t change again!)', 'Picks Updated (to something worse than what was there before.)', 'Picks Updated. (You should probably reverse.)',f'Picks Updated. (You took {team}?? Not smart.)'])
 		if random.random() < 0.63:
 			message = 'Picks Updated.'
 		messages.success(request, message)
