@@ -1,9 +1,11 @@
 load scores from nfl api
+	probably have to wait for preseason because API call currently showing superbowl
 	set_scores() written and working
-	now just need to read scores from nfl api
 login screen
 forgot password
 email alerts
 local bootstrap
 load spreads from pool locks.com
 speed of everyones picks is slow
+
+
