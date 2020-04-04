@@ -6,6 +6,30 @@ import xml.etree.ElementTree as ET
 import csv
 from datetime import datetime, timedelta
 
+def all_picks(week_number,show_all=False):
+	matrix = {}
+	closed = []
+	for game in Game.objects.filter(week_number=week_number):
+		if game.isClosed():
+			closed.append(game.game_number)
+	for user in User.objects.all().order_by('username'):
+		matrix[user.username] = [];
+		monday_ok_to_show = True
+		for pick in Pick.objects.filter(player=user,week_number=week_number).order_by('game_number'):
+			if show_all or pick.game_number in closed:
+				matrix[user.username].append(pick.whoShortName())
+			else:
+				monday_ok_to_show = False
+				matrix[user.username].append('')
+		try:
+			tp = Monday.objects.get(week_number=week_number,player=user).total_points
+			if tp is None or not(monday_ok_to_show):
+				tp = ''
+		except:
+			tp = ''
+		matrix[user.username].append( tp )
+	return matrix
+
 # score in the form {'dal':22, 'sf':14}
 def set_score(week_number, score_):
 	score = {}

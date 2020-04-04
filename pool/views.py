@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from django.forms import modelformset_factory
 from django.http import HttpResponse, HttpResponseRedirect
 import pool.utils
-from pool.utils import score_matrix as scoreMatrix, standings as standings_,implied_week,status as status_
+from pool.utils import score_matrix as scoreMatrix, standings as standings_,implied_week,status as status_, all_picks
 
 def deposit(request):
 	form = BankForm(request.POST)
@@ -103,23 +103,7 @@ def allpicks(request):
 			spread = str(game.spread)
 		header.append([game.favShortName(), spread+"&frac12;", game.udogShortName(), game.game_date.strftime('%a')])
 	header.append('MNTP')
-	matrix = {}
-	for user in User.objects.all().order_by('username'):
-		matrix[user.username] = [];
-		monday_ok_to_show = True
-		for pick in Pick.objects.filter(player=user,week_number=week_number).order_by('game_number'):
-			if Game.objects.get(week_number=week_number,game_number=pick.game_number).isClosed():
-				matrix[user.username].append(pick.whoShortName())
-			else:
-				monday_ok_to_show = False
-				matrix[user.username].append('')
-		try:
-			tp = Monday.objects.get(week_number=week_number,player=user).total_points
-			if tp is None or not(monday_ok_to_show):
-				tp = ''
-		except:
-			tp = ''
-		matrix[user.username].append( tp )
+	matrix = all_picks(week_number)
 	return render(request, 'pool/allpicks.html', {'week_number': week_number, 'header': header, 'matrix': matrix})
 
 def results(request):

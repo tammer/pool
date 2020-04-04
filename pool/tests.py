@@ -54,6 +54,10 @@ class UtilTestCase(TestCase):
 		x = User.objects.get(username='Tammer')
 		self.assertEqual(x.username, 'Tammer')
 
+		# testing all_picks() function
+		expected = {'Adel': ['ten', 'CIN', 'DAL', 'DEN', 'IND', 'BAL', 'MIN', 'nyj', 'PHI', 'ARI', 'tb', 'HOU', 'SEA', 'SF', 'CLE', 'CHI', 51], 'B1': ['ten', 'buf', 'mia', 'gb', 'atl', 'BAL', 'oak', 'NE', 'det', 'car', 'NYG', 'lac', 'SEA', 'SF', 'la', 'was', 36], 'B2': ['JAX', 'CIN', 'DAL', 'gb', 'IND', 'BAL', 'oak', 'nyj', 'PHI', 'car', 'NYG', 'lac', 'SEA', 'pit', 'CLE', 'was', 33], 'John': ['ten', 'buf', 'DAL', 'DEN', 'IND', 'BAL', 'oak', 'NE', 'det', 'car', 'NYG', 'HOU', 'no', 'SF', 'la', 'CHI', 37], 'Tammer': ['ten', 'buf', 'DAL', 'DEN', 'atl', 'kc', 'oak', 'NE', 'PHI', 'car', 'tb', 'HOU', 'no', 'SF', 'la', 'CHI', 46]}
+		self.assertEqual(pool.utils.all_picks(3,True), expected)
+
 		# testing set_score() function
 		gm = Game.objects.get(week_number=2,game_number=2)
 		pool.utils.set_score(gm.week_number,{gm.favShortName():55,gm.udogShortName().lower():5})
