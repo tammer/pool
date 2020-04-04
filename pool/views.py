@@ -107,17 +107,17 @@ def allpicks(request):
 	return render(request, 'pool/allpicks.html', {'week_number': week_number, 'header': header, 'matrix': matrix})
 
 def results(request):
+	(week_number,status) = status_()
+	if status == "Not Open" and week_number > 1:
+		week_number = week_number-1
+	latest_week = week_number
 	if request.GET.get('w'):
 		week_number = int(request.GET['w'])
-	else:
-		week_number = implied_week()
-
-	latest_week = False
-	if week_number == implied_week():
+	if week_number == latest_week:
 		latest_week = True
-	if now().date() < Game.objects.get(week_number=week_number,game_number=1).game_date.date() and week_number > 2:
-		week_number -= 1;
-
+	else:
+		latest_week = False
+		
 	show_results = True
 	if request.GET.get('p'):
 		player = request.GET['p']
@@ -127,46 +127,9 @@ def results(request):
 		else:
 			show_results = False;
 			player = User.objects.all().first() # just a place holder; we wont show anyones results
-	games = []
-	user = User.objects.get(username=player)
-	right = 0
-	right_array = []
-	total = 0
-	completed = 0;
-	for game in Game.objects.filter(week_number=week_number).order_by('game_number'):
-		total+=1
-		if game.isOpen():
-			continue
-		g = {}
-		# !!! change to function shortName()
-		if game.fav_is_home:
-			g['fav'] = game.fav.nick_name.upper()
-			g['udog'] = game.udog.nick_name.lower()
-		else:
-			g['fav'] = game.fav.nick_name.lower()
-			g['udog'] = game.udog.nick_name.upper()
-		g['fav_score'] = game.fav_score
-		g['udog_score'] = game.udog_score
-		if game.spread is None:
-			g['spread'] = 'NA'
-		else:
-			g['spread'] = game.spread
-		if g['spread'] == 0:
-			g['spread'] = ''
-		pick = Pick.objects.get(player=user, week_number=week_number, game_number = game.game_number)
-		if pick.isCorrect():
-			g['right'] = "Yes"
-			right += 1
-			right_array.append('a banana!')
-		else:
-			g['right'] = "No"
-		if pick.game().isOver():
-			completed += 1
-		g['picked_fav'] = pick.picked_fav
-		g['isOver'] = game.isOver()
-		g['game_day'] = game.game_date.strftime('%A')
-		games.append(g)
-	return render(request, 'pool/results.html',{ 'latest_week':latest_week, 'completed':completed, 'right_array':right_array,  'week_number': week_number, 'standings':standings_(week_number=week_number), 'games': games, 'player': player, 'right': right, 'total': total, 'show_results':show_results } )
+	(games,right,total,completed) = pool.utils.results(week_number,player)
+	
+	return render(request, 'pool/results.html',{ 'latest_week':latest_week, 'completed':completed, 'right_array':[1]*right,  'week_number': week_number, 'standings':standings_(week_number=week_number), 'games': games, 'player': player, 'right': right, 'total': total, 'show_results':show_results } )
 
 def home(request):
 

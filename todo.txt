@@ -1,3 +1,5 @@
+results is the next target for refactoring to utils and performance improvement
+and then maybe home
 load scores from nfl api
 	probably have to wait for preseason because API call currently showing superbowl
 	set_scores() written and working

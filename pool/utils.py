@@ -6,6 +6,48 @@ import xml.etree.ElementTree as ET
 import csv
 from datetime import datetime, timedelta
 
+def results(week_number,player):
+	games = []
+	right = 0
+	total = 0
+	completed = 0;
+	query = f'SELECT *, pool_pick.picked_fav as picked_fav, (fav_score-udog_score-spread > 0 and picked_fav OR fav_score-udog_score-spread <0 and not(picked_fav)) as is_correct, pool_team.nick_name as fav_nick_name, pt.nick_name as udog_nick_name FROM pool_game, pool_pick,pool_team, pool_team as pt, auth_user WHERE pool_pick.player_id = auth_user.id and pool_game.week_number = pool_pick.week_number and pool_game.game_number = pool_pick.game_number and pool_game.fav_id = pool_team.id and pool_game.udog_id = pt.id and pool_pick.week_number={week_number} and auth_user.username = "{player}" ORDER BY pool_game.game_number;'
+	for game in Game.objects.raw(query):
+		total+=1
+		if game.isOpen():
+			continue
+		g = {}
+		if game.fav_is_home:
+			g['fav'] = game.fav_nick_name.upper()
+			g['udog'] = game.udog_nick_name.lower()
+		else:
+			g['fav'] = game.fav_nick_name.lower()
+			g['udog'] = game.udog_nick_name.upper()
+		g['fav_score'] = game.fav_score
+		g['udog_score'] = game.udog_score
+		if game.spread is None:
+			g['spread'] = 'NA'
+		else:
+			g['spread'] = game.spread
+		if g['spread'] == 0:
+			g['spread'] = ''
+		if game.is_correct:
+			g['right'] = "Yes"
+			right += 1
+		else:
+			g['right'] = "No"
+		if game.isOver():
+			completed += 1
+		g['picked_fav'] = game.picked_fav
+		g['isOver'] = game.isOver()
+		g['game_day'] = game.game_date.strftime('%A')
+		games.append(g)
+	return (games,right,total,completed)
+
+
+
+
+
 def all_picks(week_number,show_all=False):
 	closed = []
 	for game in Game.objects.filter(week_number=week_number):
