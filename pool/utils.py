@@ -7,27 +7,36 @@ import csv
 from datetime import datetime, timedelta
 
 def all_picks(week_number,show_all=False):
-	matrix = {}
 	closed = []
 	for game in Game.objects.filter(week_number=week_number):
 		if game.isClosed():
 			closed.append(game.game_number)
-	for user in User.objects.all().order_by('username'):
-		matrix[user.username] = [];
-		monday_ok_to_show = True
-		for pick in Pick.objects.filter(player=user,week_number=week_number).order_by('game_number'):
-			if show_all or pick.game_number in closed:
-				matrix[user.username].append(pick.whoShortName())
+	
+	monday_ok_to_show = True
+	matrix = {}
+	query = f'SELECT *,auth_user.username as player_name, pool_team.short_name as fav_short_name, pt.short_name as udog_short_name, fav_is_home as fav_is_home FROM pool_team as pt, pool_team, pool_game, pool_pick,auth_user WHERE pt.id = pool_game.udog_id and pool_team.id = pool_game.fav_id and pool_game.game_number = pool_pick.game_number and pool_pick.week_number=pool_game.week_number and pool_pick.player_id = auth_user.id and pool_pick.week_number={week_number} order by player_name, pool_pick.game_number DESC;'
+	for pick in Pick.objects.raw(query):
+		if show_all or pick.game_number in closed:
+			if not(pick.player_name in matrix):
+				try:
+					tp = Monday.objects.get(week_number=week_number,player=pick.player).total_points
+					if tp is None or not(monday_ok_to_show):
+						tp = ''
+				except:
+					tp = ''
+				matrix[pick.player_name] =[tp]
+			if pick.picked_fav:
+				choice = pick.fav_short_name
+				if not(pick.fav_is_home):
+					choice = choice.lower()
 			else:
-				monday_ok_to_show = False
-				matrix[user.username].append('')
-		try:
-			tp = Monday.objects.get(week_number=week_number,player=user).total_points
-			if tp is None or not(monday_ok_to_show):
-				tp = ''
-		except:
-			tp = ''
-		matrix[user.username].append( tp )
+				choice = pick.udog_short_name
+				if pick.fav_is_home:
+					choice = choice.lower()
+			matrix[pick.player_name].insert(0,choice)
+		else:
+			monday_ok_to_show = False
+			matrix[pick.player_name].insert(0,'')
 	return matrix
 
 # score in the form {'dal':22, 'sf':14}
