@@ -11,7 +11,7 @@ def results(week_number,player):
 	right = 0
 	total = 0
 	completed = 0;
-	query = f'SELECT *, pool_pick.picked_fav as picked_fav, (fav_score-udog_score-spread > 0 and picked_fav OR fav_score-udog_score-spread <0 and not(picked_fav)) as is_correct, pool_team.nick_name as fav_nick_name, pt.nick_name as udog_nick_name FROM pool_game, pool_pick,pool_team, pool_team as pt, auth_user WHERE pool_pick.player_id = auth_user.id and pool_game.week_number = pool_pick.week_number and pool_game.game_number = pool_pick.game_number and pool_game.fav_id = pool_team.id and pool_game.udog_id = pt.id and pool_pick.week_number={week_number} and auth_user.username = "{player}" ORDER BY pool_game.game_number;'
+	query = f'SELECT *, pool_pick.picked_fav as picked_fav, (fav_score-udog_score-spread > 0 and picked_fav OR fav_score-udog_score-spread <=0 and not(picked_fav)) as is_correct, pool_team.nick_name as fav_nick_name, pt.nick_name as udog_nick_name FROM pool_game, pool_pick,pool_team, pool_team as pt, auth_user WHERE pool_pick.player_id = auth_user.id and pool_game.week_number = pool_pick.week_number and pool_game.game_number = pool_pick.game_number and pool_game.fav_id = pool_team.id and pool_game.udog_id = pt.id and pool_pick.week_number={week_number} and auth_user.username = "{player}" ORDER BY pool_game.game_number;'
 	for game in Game.objects.raw(query):
 		total+=1
 		if game.isOpen():
@@ -244,7 +244,7 @@ def status(now_ = None):
 
 def score_matrix():
 	matrix = {}
-	query = 'SELECT *, auth_user.username as player_name, pool_game.week_number as wk, sum((fav_score-udog_score-spread > 0 and picked_fav OR fav_score-udog_score-spread <0 and not(picked_fav))) as correct FROM pool_pick,pool_game,auth_user WHERE pool_pick.game_number = pool_game.game_number and pool_pick.week_number=pool_game.week_number and pool_pick.player_id = auth_user.id and not(pool_game.fav_score is NULL) GROUP BY player_name, wk;'
+	query = 'SELECT *, auth_user.username as player_name, pool_game.week_number as wk, sum((fav_score-udog_score-spread > 0 and picked_fav OR fav_score-udog_score-spread <=0 and not(picked_fav))) as correct FROM pool_pick,pool_game,auth_user WHERE pool_pick.game_number = pool_game.game_number and pool_pick.week_number=pool_game.week_number and pool_pick.player_id = auth_user.id and not(pool_game.fav_score is NULL) GROUP BY player_name, wk;'
 
 	for pick in Pick.objects.raw(query):
 		player = pick.player_name
@@ -277,18 +277,17 @@ def dead_list(end=None, sm=None):
 	return results
 
 def standings(week_number):
-	matrix = {}
-	for user in User.objects.all():
-		count = 0;
-		for pick in Pick.objects.filter(player=user,week_number=week_number):
-			if pick.isCorrect():
-				count +=1
-		try:
-			count += Monday.objects.get(week_number=week_number,player=user).bonus()
-		except:
-			None
-		matrix[user.username] = count
-		standings = sorted(matrix.items(), key=lambda kv: kv[1], reverse=True)
+	matrix = score_matrix()
+	best_score = 0
+	for k,v in matrix.items():
+		if week_number in matrix[k]:
+			matrix[k] = matrix[k][week_number]
+			if matrix[k] >= best_score:
+				best_score = matrix[k]
+				matrix[k] += Monday.objects.get(week_number=week_number,player=User.objects.get(username=k)).bonus()
+		else:
+			matrix[k] = 0
+	standings = sorted(matrix.items(), key=lambda kv: kv[1], reverse=True)
 	standings2 = []
 	dl = dead_list(week_number-1)
 	for item in standings:
