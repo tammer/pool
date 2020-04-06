@@ -51,23 +51,30 @@ def results(week_number,player):
 
 def all_picks(week_number,show_all=False):
 	closed = []
+	monday_ok_to_show = True
 	for game in Game.objects.filter(week_number=week_number):
 		if game.isClosed():
 			closed.append(game.game_number)
+		else:
+			monday_ok_to_show = False
 	
-	monday_ok_to_show = True
 	matrix = {}
 	query = f'SELECT *,auth_user.username as player_name, pool_team.short_name as fav_short_name, pt.short_name as udog_short_name, fav_is_home as fav_is_home FROM pool_team as pt, pool_team, pool_game, pool_pick,auth_user WHERE pt.id = pool_game.udog_id and pool_team.id = pool_game.fav_id and pool_game.game_number = pool_pick.game_number and pool_pick.week_number=pool_game.week_number and pool_pick.player_id = auth_user.id and pool_pick.week_number={week_number} order by player_name, pool_pick.game_number DESC;'
 	for pick in Pick.objects.raw(query):
-		if show_all or pick.game_number in closed:
-			if not(pick.player_name in matrix):
+
+		if not(pick.player_name in matrix):
+			if show_all or monday_ok_to_show:
 				try:
 					tp = Monday.objects.get(week_number=week_number,player=pick.player).total_points
-					if tp is None or not(monday_ok_to_show):
+					if tp is None:
 						tp = ''
 				except:
 					tp = ''
-				matrix[pick.player_name] =[tp]
+			else:
+				tp = ''
+			matrix[pick.player_name] =[tp]
+
+		if show_all or pick.game_number in closed:
 			if pick.picked_fav:
 				choice = pick.fav_short_name
 				if not(pick.fav_is_home):
@@ -78,7 +85,6 @@ def all_picks(week_number,show_all=False):
 					choice = choice.lower()
 			matrix[pick.player_name].insert(0,choice)
 		else:
-			monday_ok_to_show = False
 			matrix[pick.player_name].insert(0,'')
 	return matrix
 

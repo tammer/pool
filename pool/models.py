@@ -7,6 +7,11 @@ from pytz import timezone
 def now():
 	return Main.objects.all().first().now
 
+def set_now(d):
+	m = Main.objects.all().first()
+	m.now = d
+	m.save()
+
 class Team(models.Model):
 	full_name = models.CharField(max_length=50)
 	short_name = models.CharField(max_length=3)

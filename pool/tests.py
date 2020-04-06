@@ -1,6 +1,6 @@
 # -*- coding: future_fstrings -*-
 from django.test import TestCase
-from pool.models import Team, Game, Pick, Monday,Main
+from pool.models import Team, Game, Pick, Monday,Main,set_now
 from django.contrib.auth.models import User
 import requests, csv
 import datetime
@@ -121,10 +121,11 @@ class UtilTestCase(TestCase):
 		y = [['Adel', 0, True], ['B1', 0, True], ['B2', 0, True], ['John', 0, True],['Tammer', 0, True]]
 		self.assertEqual(x,y)
 
-		sm = {'John': {1: 6, 2: 9, 3: 1, 4: 6, 5: 8, 6: 10, 7: 5}, 'Adel': {1: 13, 2: 9, 3: 4, 4: 11, 5: 6, 6: 5, 7: 5}, 'Andy': {1: 7, 2: 8, 3: 5, 4: 9, 5: 11, 6: 5, 7: 6}, 'Madelyn': {1: 9, 2: 9, 3: 7, 4: 7, 5: 9, 6: 7, 7: 8}}
-		
 
 		# Testing dead_list()
+
+		sm = {'John': {1: 6, 2: 9, 3: 1, 4: 6, 5: 8, 6: 10, 7: 5}, 'Adel': {1: 13, 2: 9, 3: 4, 4: 11, 5: 6, 6: 5, 7: 5}, 'Andy': {1: 7, 2: 8, 3: 5, 4: 9, 5: 11, 6: 5, 7: 6}, 'Madelyn': {1: 9, 2: 9, 3: 7, 4: 7, 5: 9, 6: 7, 7: 8}}
+
 
 		x = pool.utils.dead_list(end=1,sm=sm)
 		y = "{'John'}"
@@ -155,6 +156,12 @@ class UtilTestCase(TestCase):
 		x = pool.utils.overall(sm)
 		y = [[['B1', 0], [9, 0], [9, 0], [7, 1], [7, 0], [9, 0], [7, 0], [8, 1], [56, 0]], [['Adel', 0], [13, 1], [9, 1], [4, 0], [11, 1], [6, 0], [5, 0], [5, 0], [53, 0]], [['Tammer', 0], [7, 0], [8, 0], [5, 0], [9, 0], [11, 1], [5, 0], [6, 0], [51, 0]], [['John', 0], [6, 0], [9, 0], [1, 0], [6, 0], [8, 0], [10, 1], [5, 0], [45, 0]]]
 		self.assertEqual(x,y)
+
+		set_now(datetime.datetime(2019,9,6,13,21))
+		x = pool.utils.all_picks(1)
+		expected = {'Adel': ['chi', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''], 'B1': ['chi', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''], 'B2': ['chi', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''], 'John': ['chi', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''], 'Tammer': ['chi', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']}
+		self.assertEqual(x,expected)
+
 
 
 class GameTestCase(TestCase):
