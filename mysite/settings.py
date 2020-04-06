@@ -88,8 +88,8 @@ if config.production:
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'tammer_db2',
-            'USER': db_user,
-            'PASSWORD': db_password,
+            'USER': config.db_user,
+            'PASSWORD': config.db_password,
             'HOST': 'localhost',
             'PORT': '3306',
             'OPTIONS': {
