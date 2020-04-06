@@ -1,4 +1,8 @@
-skull does not render in firefox
+bug:  allpicks() when one game is open will fail.
+1) fix the now() thing so db state can be set for testing
+2) reproduce in test.py
+3) fix bug
+
 add the monkey!!!
 
 was chasing bug on allpicks() when pre seaons, just dies becuase allpicks() funciton fails.
