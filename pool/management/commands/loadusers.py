@@ -1,3 +1,4 @@
+# -*- coding: future_fstrings -*-
 from django.core.management.base import BaseCommand, CommandError
 from pool.models import Pick,Game,Monday
 from django.contrib.auth.models import User

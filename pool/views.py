@@ -1,3 +1,4 @@
+# -*- coding: future_fstrings -*-
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from pool.models import Team,Game,Pick,Bank,Blog,Monday,now
