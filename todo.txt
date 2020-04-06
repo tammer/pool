@@ -1,3 +1,4 @@
+skull does not render in firefox
 add the monkey!!!
 
 was chasing bug on allpicks() when pre seaons, just dies becuase allpicks() funciton fails.

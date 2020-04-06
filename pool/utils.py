@@ -252,7 +252,7 @@ def score_matrix():
 		week_number = pick.week_number
 		if not(player in matrix):
 			matrix[player] = {}
-		matrix[player][week_number] = pick.correct
+		matrix[player][week_number] = int(pick.correct) # production issue, has to integerized
 	return matrix
 
 def dead_list(end=None, sm=None):
