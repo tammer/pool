@@ -1,6 +1,6 @@
 # -*- coding: future_fstrings -*-
 from django.core.management.base import BaseCommand, CommandError
-from pool.models import Team,Game,Pick
+from pool.models import Team,Game,Pick,Main
 import random
 from datetime import datetime, timedelta
 
@@ -49,12 +49,19 @@ class Command(BaseCommand):
 	help = 'Run through various chronological db states'
 
 	def handle(self, *args, **options):
+
 		for date in dates:
 			date = datetime(*date)
 			set_state(date)
-			text_file = open("now.txt", "w")
-			text_file.write(f'{date.year},{date.month},{date.day},{date.hour},{date.minute},{date.second}')
-			text_file.close()
+			# text_file = open("now.txt", "w")
+			# text_file.write(f'{date.year},{date.month},{date.day},{date.hour},{date.minute},{date.second}')
+			# text_file.close()
+			m = Main.objects.all().first()
+			if m == None:
+				m = Main()
+			m.now = date
+			m.save()
+
 			print(f'State set to: {date} Next?')
 			if input() == 'n':
 				exit()

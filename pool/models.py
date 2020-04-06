@@ -5,12 +5,7 @@ import datetime
 from pytz import timezone
 
 def now():
-	text_file = open("now.txt", "r")
-	string_list = text_file.read().split(',')
-	list = []
-	for string in string_list:
-		list.append(int(string))
-	return datetime.datetime(*list)
+	return Main.objects.all().first().now
 
 class Team(models.Model):
 	full_name = models.CharField(max_length=50)
@@ -201,12 +196,10 @@ class Blog(models.Model):
 	entry_date = models.DateTimeField( auto_now=True, blank=False)
 	entry = models.CharField(max_length=2048, default='')
 
+# only used in development
 class Main(models.Model):
-	week_number = models.IntegerField()
-	def isOpen(self,current_time = None):
-		return Game.objects.get(week_number=self.week_number, game_number = 10).isOpen()
-	def isClosed(self,current_time = None):
-		return Game.objects.get(week_number=self.week_number, game_number = 10).isClosed()
+	now = models.DateTimeField( auto_now=False, blank=False)
+	
 
 
 

@@ -3,7 +3,12 @@ bug:  allpicks() when one game is open will fail.
 2) reproduce in test.py
 3) fix bug
 
+Tuesday October 22 1:21 PM.  alreayd onto week 8, not showing week 7!
+  - get status() and this crap into tests!!!
+
 add the monkey!!!
+
+
 
 was chasing bug on allpicks() when pre seaons, just dies becuase allpicks() funciton fails.
 added to tests only to realize that tests has been talking to now() which talks to the now.txt file.

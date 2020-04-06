@@ -1,6 +1,6 @@
 # -*- coding: future_fstrings -*-
 from django.test import TestCase
-from pool.models import Team, Game, Pick, Monday
+from pool.models import Team, Game, Pick, Monday,Main
 from django.contrib.auth.models import User
 import requests, csv
 import datetime
@@ -41,6 +41,10 @@ class UtilTestCase(TestCase):
 					game.udog_score = random.choice([20,20,22,28,24,32,14,21,30,30])
 			game.save()
 
+		m = Main()
+		m.now = datetime.datetime(2019,10,18)
+		m.save()
+
 		# B2 = User.objects.get(username='B2')
 		# for game in Game.objects.filter(week_number=1).order_by('game_number'):
 		# 	pick = Pick.objects.get(week_number=1,game_number=game.game_number,player=B2)
@@ -57,8 +61,6 @@ class UtilTestCase(TestCase):
 
 		# testing results() function
 		expected = ([{'fav': 'PACKERS', 'udog': 'eagles', 'fav_score': 18, 'udog_score': 22, 'spread': 3, 'right': 'No', 'picked_fav': True, 'isOver': True, 'game_day': 'Thursday'}, {'fav': 'falcons', 'udog': 'TITANS', 'fav_score': 24, 'udog_score': 21, 'spread': 1, 'right': 'Yes', 'picked_fav': True, 'isOver': True, 'game_day': 'Sunday'}, {'fav': 'ravens', 'udog': 'BROWNS', 'fav_score': 18, 'udog_score': 30, 'spread': 9, 'right': 'No', 'picked_fav': True, 'isOver': True, 'game_day': 'Sunday'}, {'fav': 'bills', 'udog': 'PATRIOTS', 'fav_score': 35, 'udog_score': 21, 'spread': 3, 'right': 'Yes', 'picked_fav': True, 'isOver': True, 'game_day': 'Sunday'}, {'fav': 'lions', 'udog': 'CHIEFS', 'fav_score': 24, 'udog_score': 14, 'spread': 3, 'right': 'Yes', 'picked_fav': True, 'isOver': True, 'game_day': 'Sunday'}, {'fav': 'texans', 'udog': 'PANTHERS', 'fav_score': 18, 'udog_score': 20, 'spread': 4, 'right': 'No', 'picked_fav': True, 'isOver': True, 'game_day': 'Sunday'}, {'fav': 'COLTS', 'udog': 'raiders', 'fav_score': 30, 'udog_score': 20, 'spread': 3, 'right': 'Yes', 'picked_fav': True, 'isOver': True, 'game_day': 'Sunday'}, {'fav': 'DOLPHINS', 'udog': 'chargers', 'fav_score': 22, 'udog_score': 24, 'spread': 3, 'right': 'No', 'picked_fav': True, 'isOver': True, 'game_day': 'Sunday'}, {'fav': 'giants', 'udog': 'REDSKINS', 'fav_score': 24, 'udog_score': 14, 'spread': 3, 'right': 'Yes', 'picked_fav': True, 'isOver': True, 'game_day': 'Sunday'}, {'fav': 'CARDINALS', 'udog': 'seahawks', 'fav_score': 24, 'udog_score': 30, 'spread': 3, 'right': 'No', 'picked_fav': True, 'isOver': True, 'game_day': 'Sunday'}, {'fav': 'rams', 'udog': 'BUCCANEERS', 'fav_score': 30, 'udog_score': 30, 'spread': 1, 'right': 'No', 'picked_fav': True, 'isOver': True, 'game_day': 'Sunday'}, {'fav': 'BEARS', 'udog': 'vikings', 'fav_score': 33, 'udog_score': 30, 'spread': 6, 'right': 'No', 'picked_fav': True, 'isOver': True, 'game_day': 'Sunday'}, {'fav': 'BRONCOS', 'udog': 'jaguars', 'fav_score': 30, 'udog_score': 32, 'spread': 1, 'right': 'No', 'picked_fav': True, 'isOver': True, 'game_day': 'Sunday'}, {'fav': 'SAINTS', 'udog': 'cowboys', 'fav_score': 33, 'udog_score': 14, 'spread': 2, 'right': 'Yes', 'picked_fav': True, 'isOver': True, 'game_day': 'Sunday'}, {'fav': 'STEELERS', 'udog': 'bengals', 'fav_score': 22, 'udog_score': 14, 'spread': 3, 'right': 'Yes', 'picked_fav': True, 'isOver': True, 'game_day': 'Monday'}], 7, 15, 15)
-		print("here!!!!!!!!!!!!!!!")
-		print(pool.utils.results(4,'Tammer'))
 		self.assertEqual(pool.utils.results(4,'Tammer'),expected)
 
 		# testing all_picks() function
@@ -157,6 +159,10 @@ class UtilTestCase(TestCase):
 
 class GameTestCase(TestCase):
 	def setUp(self):
+
+		m = Main()
+		m.now = datetime.datetime(2019,10,18)
+		m.save()
 
 		# Create a user
 
