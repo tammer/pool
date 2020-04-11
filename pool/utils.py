@@ -322,6 +322,29 @@ def dead_list(end=None, sm=None):
 		week_number += 1;
 	return results
 
+def monkey():
+	completed_games = Game.objects.filter(fav_score__isnull = False).count()
+	num_weeks = implied_week()
+	completed_games_this_week = Game.objects.filter(week_number=num_weeks, fav_score__isnull = False).count()
+	if num_weeks == 1:
+		return {1:int(completed_games_this_week/2 + 0.5)}
+	scores = {}
+	v = []
+	ttl = 0
+	# random.seed(1)
+	while len(v) < num_weeks - 1:
+		s = 1+random.random()
+		v.append(s)
+		ttl += s
+	scores[num_weeks] = int(completed_games_this_week / 2)
+	total_score = scores[num_weeks]
+	while len(v) > 1:
+		score = int(completed_games/2 * v.pop() / ttl)
+		scores[1+len(v)] = score
+		total_score += score
+	scores[1] = int(completed_games/2 - total_score + 1)
+	return scores
+
 def standings(week_number):
 	matrix = score_matrix()
 	best_score = 0
@@ -363,6 +386,8 @@ def whoWon(week_number, score_matrix):
 			best_bonus = 0
 			leader = None
 			for player in leaders:
+				if player == 'Monkey':
+					continue
 				user = User.objects.get(username=player)
 				bonus = Monday.objects.get(player=user, week_number=week_number).bonus()
 				if bonus > best_bonus:
@@ -377,6 +402,7 @@ def overall(sm = None):
 		sm = score_matrix()
 	if sm == {}:
 		return []
+	sm['Monkey'] = monkey()
 	total = {}
 	for player, scores in sm.items():
 		total[player] = sum(scores.values())

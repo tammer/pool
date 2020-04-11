@@ -17,7 +17,7 @@
 					<th>Ttl</th>
 				</tr>
 				{% for row in table %}
-					<tr>
+					<tr {%if row.0.0 == 'Monkey'%}class='table-warning'{%endif%}>
 						{% for item in row %}
 							<td>
 								{% if item.1 == 0 %}

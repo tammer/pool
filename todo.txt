@@ -1,11 +1,14 @@
 overall standings look silly when early in the season
 
 add the monkey!!!
+deploying
+db backup
+forgot password
+email alerts
 
 load scores from nfl api
 	probably have to wait for preseason because API call currently showing superbowl
 	set_scores() written and working
-forgot password
-email alerts
+
 local bootstrap
 load spreads from pool locks.com
