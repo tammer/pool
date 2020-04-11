@@ -298,6 +298,8 @@ def score_matrix():
 		if not(player in matrix):
 			matrix[player] = {}
 		matrix[player][week_number] = int(pick.correct) # production issue, has to integerized
+	if matrix != {}:
+		matrix['Monkey'] = monkey()
 	return matrix
 
 def dead_list(end=None, sm=None):
@@ -402,7 +404,6 @@ def overall(sm = None):
 		sm = score_matrix()
 	if sm == {}:
 		return []
-	sm['Monkey'] = monkey()
 	total = {}
 	for player, scores in sm.items():
 		total[player] = sum(scores.values())
