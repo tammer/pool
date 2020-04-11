@@ -105,19 +105,19 @@ class UtilTestCase(TestCase):
 
 		# testing standings() function
 
-		x = pool.utils.standings(1)
+		x = pool.utils.standings(1,False)
 		y = "[['John', 8, False], ['B1', 8, False], ['B2', 8, False], ['Tammer', 6, False], ['Adel', 4, False]]"
 		self.assertEqual(f'{x}',y)
-		x = pool.utils.standings(2)
+		x = pool.utils.standings(2,False)
 		y = "[['Adel', 11, True], ['B1', 9, False], ['B2', 9, False], ['Tammer', 9, False], ['John', 7, False]]"
 		self.assertEqual(f'{x}',y)
-		x = pool.utils.standings(3)
+		x = pool.utils.standings(3,False)
 		y = "[['Tammer', 12, False], ['John', 10, True], ['B2', 8, False], ['Adel', 8, True], ['B1', 6, False]]"
-		self.assertEqual(f'{x}',y)
-		x = pool.utils.standings(4)
+		self.assertEqual(f'{x}',y,False)
+		x = pool.utils.standings(4,False)
 		y = "[['B1', 7, True], ['B2', 7, False], ['Tammer', 7, False], ['Adel', 7, True], ['John', 7, True]]"
 		self.assertEqual(f'{x}',y)
-		x = pool.utils.standings(5)
+		x = pool.utils.standings(5,False)
 		y = [['Adel', 0, True], ['B1', 0, True], ['B2', 0, True], ['John', 0, True],['Tammer', 0, True]]
 		self.assertEqual(x,y)
 

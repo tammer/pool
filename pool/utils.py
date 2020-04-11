@@ -288,7 +288,7 @@ def status(now_ = None):
 # 		else:
 # 			return first_week_without_a_score
 
-def score_matrix():
+def score_matrix(yes_monkey=True):
 	matrix = {}
 	query = 'SELECT *, auth_user.username as player_name, pool_game.week_number as wk, sum((fav_score-udog_score-spread > 0 and picked_fav OR fav_score-udog_score-spread <=0 and not(picked_fav))) as correct FROM pool_pick,pool_game,auth_user WHERE pool_pick.game_number = pool_game.game_number and pool_pick.week_number=pool_game.week_number and pool_pick.player_id = auth_user.id and not(pool_game.fav_score is NULL) GROUP BY player_name, wk;'
 
@@ -298,7 +298,7 @@ def score_matrix():
 		if not(player in matrix):
 			matrix[player] = {}
 		matrix[player][week_number] = int(pick.correct) # production issue, has to integerized
-	if matrix != {}:
+	if yes_monkey == True and matrix != {}:
 		matrix['Monkey'] = monkey()
 	return matrix
 
@@ -316,6 +316,8 @@ def dead_list(end=None, sm=None):
 	while week_number < end+1:
 		min_score = 99;
 		for player, score in sm.items():
+			if player == 'Monkey':
+				continue
 			if score[week_number] < min_score and not(player in results):
 				min_score = score[week_number]
 		for player, score in sm.items():
@@ -338,28 +340,30 @@ def monkey():
 		s = 1+random.random()
 		v.append(s)
 		ttl += s
-	scores[num_weeks] = int(completed_games_this_week / 2)
+	scores[num_weeks] = int(completed_games_this_week / 2 + 0.5)
 	total_score = scores[num_weeks]
 	while len(v) > 1:
 		score = int(completed_games/2 * v.pop() / ttl)
 		scores[1+len(v)] = score
 		total_score += score
-	scores[1] = int(completed_games/2 - total_score + 1)
+	scores[1] = int(completed_games/2 - total_score + 0.5)
 	return scores
 
-def standings(week_number):
-	matrix = score_matrix()
+def standings(week_number,yes_monkey=True):
+	matrix = score_matrix(yes_monkey)
 	best_score = 0
 	for k,v in matrix.items():
 		if week_number in matrix[k]:
 			matrix[k] = matrix[k][week_number]
 			if matrix[k] >= best_score:
 				best_score = matrix[k]
-				matrix[k] += Monday.objects.get(week_number=week_number,player=User.objects.get(username=k)).bonus()
+				if k != 'Monkey':
+					matrix[k] += Monday.objects.get(week_number=week_number,player=User.objects.get(username=k)).bonus()
 		else:
 			matrix[k] = 0
-	if best_score > 0:
-		matrix['Monkey'] = Game.objects.filter(week_number=week_number,fav_score__isnull=False).count() / 2 + 0.6
+
+	if yes_monkey == True:
+		matrix['Monkey'] += 0.01
 	standings = sorted(matrix.items(), key=lambda kv: kv[1], reverse=True)
 	standings2 = []
 	dl = dead_list(week_number-1)
@@ -397,20 +401,30 @@ def whoWon(week_number, score_matrix):
 					best_bonus = bonus
 			return leader
 
-
+def overall_total(sm = None):
+	if sm is None:
+		sm = score_matrix()
+	total = {}
+	for player, scores in sm.items():
+		total[player] = sum(scores.values())
+	if 'Monkey' in total.keys():
+		total['Monkey'] = total['Monkey'] + 0.01
+	rank_order = sorted(total.items(), key=lambda kv: kv[1], reverse=True)
+	if 'Monkey' in total.keys():
+		idx = rank_order.index(('Monkey',total['Monkey']))
+		total['Monkey'] = int(total['Monkey'])
+		rank_order[idx] = ('Monkey',int(total['Monkey']))
+	return (total, rank_order)
 
 def overall(sm = None):
 	if sm is None:
 		sm = score_matrix()
 	if sm == {}:
 		return []
-	total = {}
-	for player, scores in sm.items():
-		total[player] = sum(scores.values())
-	rank_order = sorted(total.items(), key=lambda kv: kv[1], reverse=True)
 
+	(total,rank_order) = overall_total(sm)
 	winner = {}
-	for week in list(sm[player].keys()):
+	for week in list(sm[rank_order[0][0]].keys()):
 		winner[week] = whoWon(week,sm)
 
 	table = []

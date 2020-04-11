@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 from django.forms import modelformset_factory
 from django.http import HttpResponse, HttpResponseRedirect
 import pool.utils
-from pool.utils import score_matrix as scoreMatrix, standings as standings_,implied_week,status as status_, all_picks
+from pool.utils import overall_total, score_matrix as scoreMatrix, standings as standings_,implied_week,status as status_, all_picks
 
 def deposit(request):
 	form = BankForm(request.POST)
@@ -136,16 +136,12 @@ def home(request):
 
 	(headline_week_number,status) = status_()
 	week_number = headline_week_number
-	if now().weekday() == 1 or now().weekday() == 2 and headline_week_number > 1:
+	if (now().weekday() == 1 or now().weekday() == 2) and headline_week_number > 1 and headline_week_number < 17:
 		week_number = headline_week_number-1
 	
 	# Standings
 	standings = standings_(week_number)
-	sm = scoreMatrix()
-	total = {}
-	for p, scores in sm.items():
-		total[p] = sum(scores.values())
-	rank_order = sorted(total.items(), key=lambda kv: kv[1], reverse=True)
+	(total,rank_order) = overall_total()
 
 	# Blog
 	blog_list = []
