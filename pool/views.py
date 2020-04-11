@@ -187,7 +187,7 @@ def home(request):
 		message1 = '<font color="#FFBF00">Not Open Yet.</font>'
 		message2 = ng_text
 	else:
-		message1 = '<font color="red">Closed</font>'
+		message1 = 'Closed'
 		message2 = f'{completed} of {total} games completed'
 
 	return render(request, 'pool/home.html',{'headline_week_number':headline_week_number, 'time':time, 'message1':message1,'message2':message2, 'status':status, 'src':src, 'total':total, 'completed':completed, 'id':id, 'rest_of_blog':blog_list, 'first_blog_date':first_blog_date, 'first_blog':first_blog, 'player':request.user.username, 'standings':standings, 'overall': rank_order, 'week_number': week_number})
