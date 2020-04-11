@@ -1,7 +1,5 @@
 overall standings look silly when early in the season
 
-add the monkey!!!
-deploying
 db backup
 forgot password
 email alerts

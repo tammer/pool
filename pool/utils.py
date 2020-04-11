@@ -347,6 +347,8 @@ def monkey():
 		scores[1+len(v)] = score
 		total_score += score
 	scores[1] = int(completed_games/2 - total_score + 0.5)
+	if completed_games_this_week == 0:
+		del(scores[num_weeks])
 	return scores
 
 def standings(week_number,yes_monkey=True):
