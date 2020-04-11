@@ -1,15 +1,9 @@
 Tuesday October 22 1:21 PM.  alreayd onto week 8, not showing week 7!
   - get status() and this crap into tests!!!
 
+put a form in to choose now() right off the website
+
 add the monkey!!!
-
-
-
-was chasing bug on allpicks() when pre seaons, just dies becuase allpicks() funciton fails.
-added to tests only to realize that tests has been talking to now() which talks to the now.txt file.
-will have to move now to database!
-
-
 
 load scores from nfl api
 	probably have to wait for preseason because API call currently showing superbowl

@@ -136,7 +136,7 @@ def home(request):
 
 	(headline_week_number,status) = status_()
 	week_number = headline_week_number
-	if status == "Not Open" and headline_week_number > 1:
+	if now().weekday() == 1 or now().weekday() == 2 and headline_week_number > 1:
 		week_number = headline_week_number-1
 	
 	# Standings

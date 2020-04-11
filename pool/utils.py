@@ -1,11 +1,49 @@
 # -*- coding: future_fstrings -*-
-from pool.models import Team,Game,Pick,Bank,Blog,Monday,now
+from pool.models import Team,Game,Pick,Bank,Blog,Monday,now,Main
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand, CommandError
 import requests
 import xml.etree.ElementTree as ET
 import csv
 from datetime import datetime, timedelta
+import random
+
+def give_picks(week_number):
+	for pick in Pick.objects.filter(week_number=week_number):
+		pick.picked_fav = random.choice([True,False])
+		pick.save(force=True)
+
+def set_state(date):
+	# fill in spreads and scores
+	random.seed(1)
+	spread_week = 1
+	give_picks(spread_week)
+	while spread_week <= 17 and date > (Game.objects.filter(week_number=spread_week).order_by('game_number').first().game_date - timedelta(hours=60)):
+		spread_week +=1
+		give_picks(spread_week)
+	for game in Game.objects.all().order_by('game_date'):
+		if( game.week_number <= spread_week ):
+			game.spread = random.choice([0,1,1,2,2,2,3,3,3,3,4,4,5,6,6,7,9,10])
+			if( game.game_date < date - timedelta(hours=3)):
+				game.fav_score = random.choice([24,22,24,30,28,35,18,22,35,33])
+				game.udog_score = random.choice([20,20,22,28,24,32,14,21,30,30])
+			else:
+				game.fav_score = None
+				game.udog_score = None
+		else:
+			game.fav_score = None
+			game.udog_score = None
+			game.spread = None
+		game.save()
+
+
+def set_now(y,m,d,h,s):
+	n = datetime(y,m,d,h,s)
+	m = Main.objects.first()
+	m.now = n
+	m.save()
+	set_state(m.now)
+
 
 def results(week_number,player):
 	games = []
@@ -220,7 +258,7 @@ def status(now_ = None):
 	if now_ > last_game_of_season.game_date:
 		return (last_game_of_season.week_number,'Closed')
 	# all other cases
-	iw = implied_week(now_,6)
+	iw = implied_week(now_,0)
 	if now_.weekday() in (3,4,5):
 		return (iw,'Open')
 	elif now_.weekday() == 6:
@@ -229,6 +267,7 @@ def status(now_ = None):
 		else:
 			return (iw,'Open')
 	elif now_.weekday() == 0:
+		iw = implied_week(now_,24)
 		return (iw,'Closed')
 	else: # Tues,Wed
 		if Game.objects.filter(week_number=iw,spread__isnull=True).count() == 0:
