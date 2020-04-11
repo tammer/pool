@@ -145,7 +145,7 @@ def home(request):
 
 	# Blog
 	blog_list = []
-	for blog in Blog.objects.all().order_by('-entry_date')[:4]:
+	for blog in Blog.objects.all().order_by('-entry_date')[:1]:
 		blog_list.append([blog.entry_date.strftime('%A %B %-d'), blog.entry])
 	first_blog_date = blog_list[0][0]
 	first_blog = blog_list[0][1]

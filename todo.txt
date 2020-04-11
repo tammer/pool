@@ -1,5 +1,6 @@
-overall standings look silly when early in the season
-
+lock gif not showing up on mobile
+careful the blog doesnt take up too much space on mobile
+port money from old db
 db backup
 forgot password
 email alerts
