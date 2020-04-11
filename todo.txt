@@ -1,3 +1,5 @@
+overall standings look silly when early in the season
+
 add the monkey!!!
 
 load scores from nfl api
