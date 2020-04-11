@@ -1,3 +1,6 @@
+change the 500 page to an error
+when do you have to regenerate the static files? maybe that's why the gif is not showing
+	would not explain why it only fails on mobile
 lock gif not showing up on mobile
 careful the blog doesnt take up too much space on mobile
 port money from old db
@@ -11,3 +14,4 @@ load scores from nfl api
 
 local bootstrap
 load spreads from pool locks.com
+new season script
