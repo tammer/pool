@@ -3,15 +3,26 @@
 		<th class='text-left'>Player</th><th class='text-right'>Score</th>
 	</tr>
 	{% for row in standings %}
-	{% if player == row.0%}
-	<tr style='background:#D5F5E3'>
-	{% else %}
-	<tr style=''>
-	{% endif %}
+		{% if player == row.0%}
+			<tr style='background:#D5F5E3'>
+		{% elif row.0 == 'Monkey' %}
+			<tr style='background:#FBFFB7' class='text-left'>
+		{% else %}
+			<tr style=''>
+		{% endif %}
 
-		<td><a href="{% url 'pool-results' %}?p={{row.0}}&w={{week_number}}">{{row.0}} {%if row.2 == True%}<img width=11px src="http://www.tammer.com/skull.png"> {%endif%}</a></td>
-		<td class='text-right'>{{row.1}}</td>
-	</tr>
+				<td>
+					{% if row.0 == 'Monkey' %}
+						Monkey
+					{%else%}
+						<a href="{% url 'pool-results' %}?p={{row.0}}&w={{week_number}}">
+							{{row.0}}
+							{%if row.2 == True%}<img width=11px src="http://www.tammer.com/skull.png"> {%endif%}
+						</a>
+					{%endif%}
+				</td>
+				<td class='text-right'>{{row.1}}</td>
+		</tr>
 	{% endfor %}
 </table>
 {% if week_number > 1%}

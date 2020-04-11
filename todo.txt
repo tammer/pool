@@ -1,8 +1,3 @@
-Tuesday October 22 1:21 PM.  alreayd onto week 8, not showing week 7!
-  - get status() and this crap into tests!!!
-
-put a form in to choose now() right off the website
-
 add the monkey!!!
 
 load scores from nfl api

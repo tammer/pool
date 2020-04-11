@@ -333,6 +333,7 @@ def standings(week_number):
 				matrix[k] += Monday.objects.get(week_number=week_number,player=User.objects.get(username=k)).bonus()
 		else:
 			matrix[k] = 0
+	matrix['Monkey'] = int(Game.objects.filter(week_number=week_number,fav_score__isnull=False).count() / 2 + 0.5)
 	standings = sorted(matrix.items(), key=lambda kv: kv[1], reverse=True)
 	standings2 = []
 	dl = dead_list(week_number-1)
