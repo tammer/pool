@@ -1,11 +1,15 @@
 change the 500 page to an error
-when do you have to regenerate the static files? maybe that's why the gif is not showing
-	would not explain why it only fails on mobile
-lock gif not showing up on mobile
+ - must be a function of the web server?
 careful the blog doesnt take up too much space on mobile
 port money from old db
-db backup
+	deposit(amount, who=None)
+		if who==None deposit to everyone
+	if amount = 0, then ask
+
+backup cron jobs
+
 forgot password
+
 email alerts
 
 load scores from nfl api

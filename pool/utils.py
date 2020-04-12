@@ -7,6 +7,29 @@ import xml.etree.ElementTree as ET
 import csv
 from datetime import datetime, timedelta
 import random
+from django.core import serializers
+from os import mkdir
+
+# assumes table is empty. if it is not, you need to delete() it first
+def restore(filename):
+	f = open(filename, "r")
+	data = f.read()
+	for obj in serializers.deserialize("json", data):
+		obj.save()
+
+def backup():
+		tables = ['Team','Game','Pick','Bank','Monday']
+		dir_name = datetime.now().strftime('%y-%m-%d-%H-%M')
+		path = 'backups/'+dir_name
+		mkdir(path)
+		for table in tables:
+			model = globals()[table]
+			data = serializers.serialize("json", model.objects.all())
+			fn = path + '/' + table + '.json'
+			f = open(fn, "w")
+			f.write(data)
+			f.close()
+
 
 def give_picks(week_number):
 	for pick in Pick.objects.filter(week_number=week_number):
