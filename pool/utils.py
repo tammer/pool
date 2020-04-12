@@ -10,6 +10,37 @@ import random
 from django.core import serializers
 from os import mkdir
 
+def deposit(who, amount, note):
+	if who == 'all':
+		if amount is None:
+			for user in User.objects.all():
+				amount = input(user.username+': ')
+				y = Bank()
+				y.player = user
+				y.deposit_amount = amount
+				y.note = note
+				y.save()
+		else:
+			for user in User.objects.all():
+				y = Bank()
+				y.player = user
+				y.deposit_amount = amount
+				y.note = note
+				y.save()
+			return "OK"
+	else:
+		if amount is None:
+			return 'NOT OK. Doing nothing because amount is None'
+		else:
+			user = User.objects.get(username=who)
+			y = Bank()
+			y.player = user
+			y.deposit_amount = amount
+			y.note = note
+			y.save()
+			return "OK"
+
+
 # assumes table is empty. if it is not, you need to delete() it first
 def restore(filename):
 	f = open(filename, "r")
