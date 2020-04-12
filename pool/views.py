@@ -1,6 +1,5 @@
 # -*- coding: future_fstrings -*-
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from pool.models import Team,Game,Pick,Bank,Blog,Monday,now
 from django.contrib.auth.models import User
 from django.db.models import Sum
@@ -13,6 +12,15 @@ from django.forms import modelformset_factory
 from django.http import HttpResponse, HttpResponseRedirect
 import pool.utils
 from pool.utils import overall_total, score_matrix as scoreMatrix, standings as standings_,implied_week,status as status_, all_picks
+
+def handler404(request,exception):
+	return render(request, 'pool/404.html', status=404)
+
+def handler400(request,exception):
+	return render(request, 'pool/400.html', status=400)
+
+def handler500(request):
+	return render(request, 'pool/500.html', status=500)
 
 def deposit(request):
 	form = BankForm(request.POST)

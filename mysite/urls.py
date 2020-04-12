@@ -17,6 +17,11 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from users import views as user_views
+import pool.views
+
+handler404 = pool.views.handler404
+handler400 = pool.views.handler400
+handler500 = pool.views.handler500
 
 urlpatterns = [
     path('admin/', admin.site.urls),

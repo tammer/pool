@@ -1,13 +1,9 @@
-change the 500 page to an error
- - must be a function of the web server?
-
-careful the blog doesnt take up too much space on mobile
-
-backup cron jobs
-
-forgot password
-
-email alerts
+1. do the error pages
+2. fix that MIME issue - actually, i probably dont care because local run will always be DEBUG=true
+3. backup cron jobs
+4. careful the blog doesnt take up too much space on mobile
+5. forgot password
+6. email alerts
 
 load scores from nfl api
 	probably have to wait for preseason because API call currently showing superbowl
