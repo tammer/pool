@@ -8,7 +8,7 @@ import csv
 from datetime import datetime, timedelta
 import random
 from django.core import serializers
-from os import mkdir
+from os import mkdir,path as path_
 
 def deposit(who, amount, note):
 	if who == 'all':
@@ -50,9 +50,10 @@ def restore(filename):
 
 def backup():
 		tables = ['Team','Game','Pick','Bank','Monday']
-		dir_name = datetime.now().strftime('%y-%m-%d-%H-%M')
+		dir_name = datetime.now().strftime('%d')
 		path = 'backups/'+dir_name
-		mkdir(path)
+		if not(path_.exists(path)):
+			mkdir(path)
 		for table in tables:
 			model = globals()[table]
 			data = serializers.serialize("json", model.objects.all())
