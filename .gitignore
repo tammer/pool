@@ -1,4 +1,7 @@
 # Tammer added
+deploy.sh
+backups/
+notes
 config.py
 .DS_Store
 now.txt
