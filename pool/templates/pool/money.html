@@ -5,6 +5,9 @@
 		<div class="row">
 			<div class="col-sm">
 				<h2>Accounting</h2>
+				{% if is_superuser %}
+					<br><br><br>
+				{% endif %}	
 			</div>
 		</div>
 
@@ -58,9 +61,12 @@
 					</tr>
 					{% endfor %}
 				</table>
+			</div>
+
+			<div class="col">
 				{% if is_superuser %}
 					<table class="table table-sm" style="background-color: white">
-						<tr class="thead-light text-center">
+						<tr class="thead-dark text-center">
 							<th>Account Management</th>
 						</tr>
 						<tr>
@@ -74,11 +80,9 @@
 						</form>
 					</td></tr>
 					</table>
+				{% else %}
+					<img class="img-fluid" src="http://www.tammer.com/pool/images/koko.jpg">
 				{% endif %}
-			</div>
-
-			<div class="col">
-				<img class="img-fluid" src="http://www.tammer.com/pool/images/koko.jpg">
 			</div>
 
 
