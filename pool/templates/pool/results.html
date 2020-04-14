@@ -8,23 +8,27 @@
       				<a href="{% url 'pool-results'%}?p={{player}}&w={{week_number|add:'-1'}}">&laquo;</a>
       				{% endif %}
       				Week {{week_number}}
-      				<small class="text-muted">({{completed}}/{{total}})</small>
+      				<small class="text-muted">({{completed}} of {{total}} completed)</small>
       				{%if latest_week%}
       				{%else%}
       				<a href="{% url 'pool-results'%}?p={{player}}&w={{week_number|add:'1'}}">&raquo;</a>
       				{%endif%}
       			</h4>
       			<h2>
-      				{{player}}
-					{% for b in right_array %}
+      				{{player}}<small class="text-muted"> ({{right}}/{{completed}}, {{position}} place)</small><br>
+					<!-- {% for b in right_array %}
 						<img src='http://www.tammer.com/banana.svg' width='30'>
-					{%  endfor %}
+					{%  endfor %} -->
       			</h2>
 		    </div>
 		</div>	
 		<div class="row">
 			{% if show_results %}
 			<div class="col-md-auto">
+
+
+
+
 				{% include "./results_snippet.html" %}
 			</div>
 			{% endif %}
@@ -33,6 +37,20 @@
 			</div>
 			<div class="col">
 				<img class="img-fluid" src="http://onebreathglobal.com/wp-content/uploads/2018/06/Taming-The-Monkey-Mind-768x680.jpg">
+				<!-- <table class='table table-sm text-center'>
+					<tr>
+						<th>Position</th>
+						<th>Score</th>
+						<th>GB</th>
+						<th>p(win)</th>
+					</tr>
+					<tr>
+						<td>3rd place</td>
+						<td>7/9</td>
+						<td>2</td>
+						<td>8.5%</td>
+					</tr>
+				</table> -->
 			</div>
 		</div>
 	</main>

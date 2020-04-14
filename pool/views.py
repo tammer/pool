@@ -137,8 +137,26 @@ def results(request):
 			show_results = False;
 			player = User.objects.all().first() # just a place holder; we wont show anyones results
 	(games,right,total,completed) = pool.utils.results(week_number,player)
-	
-	return render(request, 'pool/results.html',{ 'latest_week':latest_week, 'completed':completed, 'right_array':[1]*right,  'week_number': week_number, 'standings':standings_(week_number=week_number), 'games': games, 'player': player, 'right': right, 'total': total, 'show_results':show_results } )
+
+	standings = standings_(week_number=week_number)
+	pval = 1
+	if completed > 10:
+		last_place = True
+	else:
+		last_place = False
+
+	for row in standings:
+		if row[1] > right:
+			pval += 1
+		elif row[1] < right:
+			last_place = False
+
+	position = "%d%s"%(pval,{1:"st",2:"nd",3:"rd"}.get(pval if pval<20 else pval%10,"th"))
+	if last_place:
+		position = 'last'
+
+
+	return render(request, 'pool/results.html',{ 'position':position, 'latest_week':latest_week, 'completed':completed, 'right_array':[1]*right,  'week_number': week_number, 'standings':standings, 'games': games, 'player': player, 'right': right, 'total': total, 'show_results':show_results } )
 
 def home(request):
 
