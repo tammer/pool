@@ -283,7 +283,7 @@ def postpicks(request):
 		else:
 			team = Game.objects.get(week_number=week_number,game_number=instances[game_number].game_number).udog.city_name
 		message = random.choice(['Picks Updated. (These picks are excellent -- don\'t change again!)', 'Picks Updated (to something worse than what was there before.)', 'Picks Updated. (You should probably reverse.)',f'Picks Updated. (You took {team}?? Not smart.)'])
-		if random.random() < 0.63:
+		if week_number > 5 and random.random() < 0.73:
 			message = 'Picks Updated.'
 		messages.success(request, message)
 	else:

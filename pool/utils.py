@@ -390,7 +390,7 @@ def monkey():
 	scores = {}
 	v = []
 	ttl = 0
-	# random.seed(1)
+	random.seed(1)
 	while len(v) < num_weeks - 1:
 		s = 1+random.random()
 		v.append(s)
