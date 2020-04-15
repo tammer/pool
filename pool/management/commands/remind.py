@@ -17,3 +17,4 @@ class Command(BaseCommand):
 			user = m.player
 			if user.email is not '':
 				send_mail('Reminder: Do your picks','http://pool.tammer.com/dopicks/','pool@tammer.com',[user.email],fail_silently=False)
+				print(user.email)
