@@ -137,6 +137,8 @@ def results(request):
 			show_results = False;
 			player = User.objects.all().first() # just a place holder; we wont show anyones results
 	(games,right,total,completed) = pool.utils.results(week_number,player)
+	if show_results == False:
+		player='' # because placeholder player must be set back to '' else history link tagged with player
 
 	standings = standings_(week_number=week_number)
 	pval = 1
