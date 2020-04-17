@@ -14,12 +14,14 @@
       				<a href="{% url 'pool-results'%}?p={{player}}&w={{week_number|add:'1'}}">&raquo;</a>
       				{%endif%}
       			</h4>
+				{%if user.is_authenticated%}
       			<h2>
       				{{player}}<small class="text-muted"> ({{right}}/{{completed}}, {{position}} place)</small><br>
 					<!-- {% for b in right_array %}
 						<img src='http://www.tammer.com/banana.svg' width='30'>
 					{%  endfor %} -->
       			</h2>
+				{%endif%}
 		    </div>
 		</div>	
 		<div class="row">
