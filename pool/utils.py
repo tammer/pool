@@ -498,3 +498,14 @@ def overall(sm = None):
 		this_row.append([total[player],0])
 		table.append(this_row)
 	return table
+
+def team_from_string(string):
+	string = string.replace("New York","NY")
+	string = string.replace("Los Angeles","LA")
+	for team in Team.objects.all():
+		if string.lower() in team.short_name.lower():
+			return team
+	for team in Team.objects.all():
+		if string.lower() in team.full_name.lower():
+			return team
+	return None
