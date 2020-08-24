@@ -3,7 +3,7 @@ from pool.models import Team,Game,Pick,Bank,Blog,Monday,now,Main
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand, CommandError
 import requests
-import xml.etree.ElementTree as ET
+import json
 import csv
 from datetime import datetime, timedelta
 import random
@@ -210,7 +210,7 @@ def set_score(week_number, score_):
 
 def load_teams():
 	Team.objects.all().delete()
-	url = 'https://gist.githubusercontent.com/tammer/b5cfda38c1ea1062d2197675bcf8b220/raw/2d77403b87c21caff2bc48f3cddf1f2270c2c041/nfl_teams.csv'
+	url = 'https://gist.githubusercontent.com/tammer/b5cfda38c1ea1062d2197675bcf8b220/raw/a781e7e74e467483d4978e2b86a2f498b78bdc1a/nfl_teams.csv'
 	response = requests.get(url)
 	if response.status_code != 200:
 		print('Failed to get data:', response.status_code)
@@ -231,31 +231,26 @@ def load_games(this_year):
 	Game.objects.all().delete()
 	for x in range(17):
 		week_number = x+1
-		url = 'http://www.nfl.com/ajax/scorestrip?season='+str(this_year)+'&seasonType=REG&week='+str(week_number)
+		url = 'https://api-secure.sports.yahoo.com/v1/editorial/s/scoreboard?leagues=nfl&week='+str(week_number)+'&season='+str(this_year)
 		response = requests.get(url)
 		if response.status_code != 200:
 			print('Failed to get data:', response.status_code)
 		else:
-			root = ET.fromstring(response.text)
 			i=0
-			for gm in root[0]:
+			root = json.loads(response.text)
+			# !!! assumes games are in chronological order !!!
+			for k,v in root['service']['scoreboard']['games'].items():
+				h = root['service']['scoreboard']['teams'][v['home_team_id']]['last_name']
+				a = root['service']['scoreboard']['teams'][v['away_team_id']]['last_name']
+				gm_dt = datetime.strptime(v['start_time'],'%a, %d %b %Y %H:%M:%S %z') - timedelta(hours=4)
+				gm_dt = gm_dt.replace(tzinfo=None)
+				print(a +" at "+h+"\t\t"+gm_dt.strftime('%A %d-%b-%Y %H:%M:%S'))
 				
-				# print(gm.attrib)
-				hour = int(root[0][i].attrib['t'].split(':')[0])
-				if hour < 12:
-					hour += 12 # !!! Totally fails if the game is actually in the morning
-
-				gm_dt = datetime(int(root[0][i].attrib['eid'][0:4]),
-					int(root[0][i].attrib['eid'][4:6]),
-					int(root[0][i].attrib['eid'][6:8]),
-					hour,
-					int(root[0][i].attrib['t'].split(':')[1])
-					)
 				
 				Game.objects.create(
 					week_number = week_number, game_number=i+1,
-					fav = Team.objects.get(short_name=gm.attrib['h']),
-					udog = Team.objects.get(short_name=gm.attrib['v']),
+					fav = team_from_string(h),
+					udog = team_from_string(a),
 					game_date = gm_dt,
 					fav_is_home = True)
 				i=i+1
@@ -270,6 +265,9 @@ def add_player(username,email,pw):
 # This function assumes games are loaded
 def init_player(username):
 	user = User.objects.get(username=username)
+	init_user(user)
+
+def init_user(user):
 	Pick.objects.filter(player=user).delete()
 	for game in Game.objects.all():
 		pick = Pick(week_number=game.week_number, game_number=game.game_number, player=user,picked_fav=True)
@@ -278,6 +276,10 @@ def init_player(username):
 	for game in Game.objects.filter(game_number=1):
 		monday = Monday(week_number=game.week_number,player=user,total_points=0)
 		monday.save(force=True)
+
+def init_all_users():
+	for user in User.objects.all():
+		init_user(user)
 
 def delete_player(username):
 	if not(User.objects.filter(username=username).exists()):
@@ -419,7 +421,7 @@ def standings(week_number,yes_monkey=True):
 		else:
 			matrix[k] = 0
 
-	if yes_monkey == True:
+	if yes_monkey == True and matrix != {}:
 		matrix['Monkey'] += 0.01
 	standings = sorted(matrix.items(), key=lambda kv: kv[1], reverse=True)
 	standings2 = []
@@ -502,6 +504,7 @@ def overall(sm = None):
 def team_from_string(string):
 	string = string.replace("New York","NY")
 	string = string.replace("Los Angeles","LA")
+	string = string.replace("Football Team","Football-Team")
 	for team in Team.objects.all():
 		if string.lower() in team.short_name.lower():
 			return team
