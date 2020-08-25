@@ -5,7 +5,8 @@ import datetime
 from pytz import timezone
 
 def now():
-	return Main.objects.all().first().now
+	# return Main.objects.all().first().now
+	return datetime.datetime.now()
 
 def set_now(d):
 	m = Main.objects.all().first()
