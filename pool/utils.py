@@ -210,7 +210,7 @@ def set_score(week_number, score_):
 
 def load_teams():
 	Team.objects.all().delete()
-	url = 'https://gist.githubusercontent.com/tammer/b5cfda38c1ea1062d2197675bcf8b220/raw/a781e7e74e467483d4978e2b86a2f498b78bdc1a/nfl_teams.csv'
+	url = 'http://www.tammer.com/teams.csv'
 	response = requests.get(url)
 	if response.status_code != 200:
 		print('Failed to get data:', response.status_code)
@@ -244,7 +244,7 @@ def load_games(this_year):
 				a = root['service']['scoreboard']['teams'][v['away_team_id']]['last_name']
 				gm_dt = datetime.strptime(v['start_time'],'%a, %d %b %Y %H:%M:%S %z') - timedelta(hours=4)
 				gm_dt = gm_dt.replace(tzinfo=None)
-				print(a +" at "+h+"\t\t"+gm_dt.strftime('%A %d-%b-%Y %H:%M:%S'))
+				# print(a +" at "+h+"\t\t"+gm_dt.strftime('%A %d-%b-%Y %H:%M:%S'))
 				
 				
 				Game.objects.create(
