@@ -48,8 +48,16 @@ def restore(filename):
 	for obj in serializers.deserialize("json", data):
 		obj.save()
 
+def rebuild(path):
+	tables = ['User','Team','Game','Pick','Bank','Monday']
+	for table in tables:
+		print(table)
+		globals()[table].objects.all().delete()
+		restore(path+'/'+table+".json")
+
+
 def backup():
-		tables = ['Team','Game','Pick','Bank','Monday']
+		tables = ['Team','Game','Pick','Bank','Monday','User']
 		dir_name = datetime.now().strftime('%d')
 		path = 'backups/'+dir_name
 		if not(path_.exists(path)):
