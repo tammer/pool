@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand, CommandError
 import requests
 import json
 import csv
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import random
 from django.core import serializers
 from os import mkdir,path as path_
@@ -259,7 +259,8 @@ def load_games(this_year):
 			for k,v in sorted(new_dict.items()):
 				h = root['service']['scoreboard']['teams'][v['home_team_id']]['last_name']
 				a = root['service']['scoreboard']['teams'][v['away_team_id']]['last_name']
-				gm_dt = datetime.strptime(v['start_time'],'%a, %d %b %Y %H:%M:%S %z') - timedelta(hours=4)
+				gm_dt = datetime.strptime(v['start_time'],'%a, %d %b %Y %H:%M:%S %z')
+				gm_dt = gm_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
 				gm_dt = gm_dt.replace(tzinfo=None)
 				print(a +" at "+h+"\t\t"+gm_dt.strftime('%A %d-%b-%Y %H:%M:%S'))
 				
