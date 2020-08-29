@@ -247,7 +247,7 @@ def load_games(this_year):
 			i=0
 			root = json.loads(response.text)
 			# !!! assumes games are in chronological order !!!
-			for k,v in root['service']['scoreboard']['games'].items():
+			for k,v in sorted(root['service']['scoreboard']['games'].items()):
 				h = root['service']['scoreboard']['teams'][v['home_team_id']]['last_name']
 				a = root['service']['scoreboard']['teams'][v['away_team_id']]['last_name']
 				gm_dt = datetime.strptime(v['start_time'],'%a, %d %b %Y %H:%M:%S %z') - timedelta(hours=4)
