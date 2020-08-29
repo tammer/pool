@@ -246,13 +246,22 @@ def load_games(this_year):
 		else:
 			i=0
 			root = json.loads(response.text)
-			# !!! assumes games are in chronological order !!!
-			for k,v in sorted(root['service']['scoreboard']['games'].items()):
+			# create dictionary that is sortable by game date
+			# the j thing makes sures games with exact same start time have different keys	
+			new_dict = {}
+			j=0.001
+			for k,v in root['service']['scoreboard']['games'].items():
+				new_key	= datetime.strptime(v['start_time'],'%a, %d %b %Y %H:%M:%S %z').timestamp()
+				new_key = new_key + j
+				j = j + 0.001
+				new_dict[new_key] = v
+
+			for k,v in sorted(new_dict.items()):
 				h = root['service']['scoreboard']['teams'][v['home_team_id']]['last_name']
 				a = root['service']['scoreboard']['teams'][v['away_team_id']]['last_name']
 				gm_dt = datetime.strptime(v['start_time'],'%a, %d %b %Y %H:%M:%S %z') - timedelta(hours=4)
 				gm_dt = gm_dt.replace(tzinfo=None)
-				# print(a +" at "+h+"\t\t"+gm_dt.strftime('%A %d-%b-%Y %H:%M:%S'))
+				print(a +" at "+h+"\t\t"+gm_dt.strftime('%A %d-%b-%Y %H:%M:%S'))
 				
 				
 				Game.objects.create(
