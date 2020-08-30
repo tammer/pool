@@ -193,6 +193,7 @@ def home(request):
 		'https://www.wakingtimes.com/wp-content/uploads/2017/10/thinking-monkey-1.jpg',
 		'https://i.ytimg.com/vi/6WRLFiujDFY/maxresdefault.jpg',
 	]
+	pics = ['http://www.tammer.com/corona1.jpg','http://www.tammer.com/c3.jpg']
 	index = now().hour % len(pics)
 	src = pics[index]
 
