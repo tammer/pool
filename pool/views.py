@@ -106,6 +106,9 @@ def allpicks(request):
 		week_number = int(request.GET['w'])
 	else:
 		week_number = implied_week()
+	show_all = False
+	if request.GET.get('all') and request.user.is_superuser:
+		show_all = True
 	header = []
 	for game in Game.objects.filter(week_number=week_number).order_by('game_number'):
 		if game.spread == 0:
@@ -114,7 +117,7 @@ def allpicks(request):
 			spread = str(game.spread)
 		header.append([game.favShortName(), spread+"&frac12;", game.udogShortName(), game.game_date.strftime('%a')])
 	header.append('MNTP')
-	matrix = all_picks(week_number)
+	matrix = all_picks(week_number,show_all)
 	return render(request, 'pool/allpicks.html', {'week_number': week_number, 'header': header, 'matrix': matrix})
 
 def results(request):
