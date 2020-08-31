@@ -235,6 +235,32 @@ def load_teams():
 				cn = 'Los Angeles'
 			Team(full_name = record[1], short_name = record[2], nick_name=nn, city_name=cn).save()
 
+def load_scores():
+	week_number = implied_week()
+	url = 'https://api-secure.sports.yahoo.com/v1/editorial/s/scoreboard?leagues=nfl&week='+str(week_number)
+	response = requests.get(url)
+	if response.status_code != 200:
+		print('Failed to get data:', response.status_code)
+	else:
+		root = json.loads(response.text)
+		for k,v in root['service']['scoreboard']['games'].items():
+			if 'final' in v['status_type']:
+				h = root['service']['scoreboard']['teams'][v['home_team_id']]['last_name']
+				a = root['service']['scoreboard']['teams'][v['away_team_id']]['last_name']
+				asc = int(v['total_away_points'])
+				hsc = int(v['total_home_points'])
+				ht = team_from_string(h)
+				at = team_from_string(a)
+				print(ht.nick_name)
+				print(hsc)
+				print(at.nick_name)
+				print(asc)
+				# score in the form {'dal':22, 'sf':14}
+				# set_score(week_number,{})
+
+
+
+
 def load_games(this_year):
 	Game.objects.all().delete()
 	for x in range(17):
