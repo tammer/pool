@@ -556,3 +556,10 @@ def team_from_string(string):
 		if string.lower() in team.full_name.lower():
 			return team
 	return None
+
+def grab_game(week_number,team_string):
+	team = team_from_string(team_string)
+	try:
+		return Game.objects.get(week_number=week_number,udog=team)
+	except:
+		return Game.objects.get(week_number=week_number,fav=team)

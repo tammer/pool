@@ -123,13 +123,15 @@ class Game(models.Model):
 	def isOpen(self, current_time = None):
 		return not(self.isClosed(current_time = current_time))
 
-
 	def favWins(self):
 		# throw exception if scores are not filled in
 		if self.fav_score - self.udog_score > self.spread:
 			return True
 		else:
 			return False
+
+	def as_string(self):
+		return f'{self.week_number}/{self.game_number}\n{self.game_date.strftime("%m/%d/%Y, %H:%M:%S")}\n{self.fav.nick_name} {self.fav_score}\t{self.spread}.5\t{self.udog.nick_name} {self.udog_score}'
 
 class Pick(models.Model):
 	player = models.ForeignKey(User,on_delete=models.CASCADE)
