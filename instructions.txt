@@ -8,3 +8,92 @@
 	
 
 there still is a register path in urls.  it creates an account. kind of useful. maybe i keep
+
+--
+
+Some Tech Notes (copy of note from local in case notes local gets lost)
+
+On the server:
+
+sureapp project shell Django
+virtualenv -p /usr/bin/python3 /home/tammer/private/django/django1
+source /home/tammer/private/django/django1/bin/activate
+cd django1/pool/
+
+
+
+run the backup:
+HOME=/home/tammer/apps/Django/home /home/tammer/apps/Django/home/.local/bin/virtualenv -p /usr/bin/python3 /home/tammer/private/django/django1 && source /home/tammer/private/django/django1/bin/activate && cd /home/tammer/private/django/django1/pool/ && ./manage.py backup
+
+mailserver:
+
+EMAIL_HOST = 'mail.s501.sureserver.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'pool@tammer.com'
+
+
+---
+
+1) create directory in private area called django
+2) create web app
+3) ssh tammer@tammer.com
+4) sureapp project shell Django
+5) echo "" >> /home/$USER/.bashrc ; echo "# Additional executables path" >> /home/$USER/.bashrc ; echo "export PATH=$HOME/.local/bin:\$PATH" >> /home/$USER/.bashrc ; . /home/$USER/.bashrc
+6) pip3 install virtualenv
+7) virtualenv -p /usr/bin/python3 /home/$USER/private/django/django1
+8) source django1/bin/activate
+9) cd django1
+10) pip3 install Django
+11) pip3 install mysqlclient
+11) pip3 install requests
+11) pip3 install future-fstrings
+
+12) git clone
+13)
+DATABASES = {
+'default': {
+'ENGINE': 'django.db.backends.mysql',
+'NAME': '<dbname>',
+'USER': 'django',
+'PASSWORD': '<password>',
+'HOST': 'localhost',
+'PORT': '3306',
+'OPTIONS': {
+'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+},
+}
+}
+14 pip3 install django-crispy-forms
+14 makemigrations
+15 migrate
+16 pip3 install whitenoise
+17
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+18
+MIDDLEWARE = [
+'django.middleware.security.SecurityMiddleware',
+'whitenoise.middleware.WhiteNoiseMiddleware',
+19
+ALLOWED_HOSTS = ['localhost','tammer.com','pool.tammer.com']
+20
+./manage.py collectstatic
+21
+set start cmd:
+source /home/tammer/private/django/django1/bin/activate && cd /home/tammer/private/django/django1/pool && gunicorn mysite.wsgi --reload
+22
+start web app (red button)
+
+
+
+
+sureapp project shell Django
+source django1/bin/activate
+python3 manage.py runserver 0:13673
+
+
+source /home/tammer/private/django/django1/bin/activate && cd /home/tammer/private/django/django1/pool && gunicorn pool.wsgi
+
+2020 Aug 22
+
+
