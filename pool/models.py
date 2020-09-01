@@ -41,6 +41,22 @@ class Game(models.Model):
 		else:
 			return self.fav_score+self.udog_score
 
+	# if HOU is 3.5 points over ARI, then setFav(HOU,3)
+	# where HOU is_a Team object
+	def setFav(self,fav,spread):
+		if spread < 0:
+			raise(NameError('spread must be positive'))
+		if type(fav) is str:
+			raise(NameError('you sent a string as fav to setFav. Send a Team object'))
+		if fav != self.fav and fav != self.udog:
+			raise(NameError(f'{fav.nick_name} not playing in this game! (I am game {self.game_number}, {self.fav.nick_name} v {self.udog.nick_name})'))
+		self.spread = spread
+		if self.fav != fav:
+			temp = self.fav
+			self.fav = self.udog
+			self.udog = temp
+			self.fav_is_home = not(self.fav_is_home)
+
 	def save(self, *args, **kwargs):
 		if not(self.spread is None) and self.spread < 0:
 			self.spread = -self.spread
