@@ -36,7 +36,7 @@ def deposit(request):
 
 def money(request):
 	if not(request.user.is_authenticated):
-		return redirect('pool-home')
+		return redirect('login')
 	table = {}
 	for user in User.objects.all():
 		value = Bank.objects.filter(player=user).aggregate(Sum('deposit_amount'))['deposit_amount__sum']
