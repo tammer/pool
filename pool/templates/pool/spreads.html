@@ -5,9 +5,10 @@
 
 		<div class="row">
 			<div class="col-6">
-      			<h2>
+				<h2>Point Spread Administration</h2>
+      			<h4>
       				Enter Spreads for Week {{week_number}}
-      			</h2>
+      			</h4>
       			<p class='text-muted'>HOME TEAM in caps. Enter the spread as an integer. Use negative to flip the favorite and underdog.  0.5 will be added to the spread automatically</p>
       			<br>
 		    </div>
@@ -32,12 +33,19 @@
 						{%endfor%}
 					</table>
 
-					<div class='text-right'><input class='btn btn-primary' type="submit" value="Submit"></div>
+					<div class='text-right'>
+						<a class="btn btn-secondary" href="{%url 'pool-home'%}" role="button">Cancel</a>
+						<input class='btn btn-primary' type="submit" value="Submit">
+					</div>
+
 				</form>
 			</div>
 			<div class="col-4">
 				<a class="btn btn-warning" href="{%url 'pool-spreads'%}?load_spreads=yes" role="button">Autofill</a>
-				Automatically load <a target='blank' href="https://fantasydata.com/nfl/point-spreads-and-odds">spreads.</a>
+				<br>
+				This button will set the point spreads to the current <a target='blank' href="https://fantasydata.com/nfl/point-spreads-and-odds">Vegas line.</a>
+				Any spreads that are there now will be replaced.
+				After you press the button, you can subsequently modify the spreads manually.
 				<br><br>
 		    </div>
 		</div>
