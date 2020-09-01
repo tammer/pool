@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from django.forms import modelformset_factory
 from django.http import HttpResponse, HttpResponseRedirect
 import pool.utils
-from pool.utils import overall_total, score_matrix as scoreMatrix, standings as standings_,implied_week,status as status_, all_picks
+from pool.utils import overall_total, score_matrix as scoreMatrix, standings as standings_,implied_week,status as status_, all_picks, load_spreads
 
 def handler404(request,exception):
 	return render(request, 'pool/404.html', status=404)
@@ -235,7 +235,6 @@ def spreads(request):
 			week_number = int(request.GET['w'])
 	else:
 			week_number = implied_week(delta_hours=0)
-
 	if request.method == "POST":
 		formset = SpreadFormSet(request.POST)
 		if formset.is_valid():
@@ -244,6 +243,9 @@ def spreads(request):
 		else:
 			print("Trouble at the Mill")
 			messages.warning(request, formset.errors)
+	elif request.GET.get('load_spreads'):
+		load_spreads(week_number)
+		messages.success(request,"Spreads have been set automatically. (You can still change them.)")
 	queryset = Game.objects.filter(week_number=week_number).order_by('game_number').all()
 	formset = SpreadFormSet(queryset=queryset)
 	return render(request, 'pool/spreads.html', { 'week_number':week_number, 'formset':formset})

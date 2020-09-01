@@ -584,4 +584,5 @@ def load_spreads(week_number):
 			else:
 				g.setFav(team_from_string(node['AwayTeam']),int(spread))
 			print(g.as_string())
+			g.save()
 			print('')
