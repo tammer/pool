@@ -1,0 +1,10 @@
+# New Season
+	1. Get the player table right.  should be the same as last year. (we have add_player function and init function per player for start of season)
+	now run: python3 manage.py initseason whichloads the teams and games.
+	the teams are read from tammer.com/teams.csv
+	then it initializes all users giving them defaults picks and 0 MNTP for each week.
+
+	At this point you just need to set the spreads for week 1 and you should be good to go.
+	
+
+there still is a register path in urls.  it creates an account. kind of useful. maybe i keep
