@@ -555,7 +555,7 @@ def team_from_string(string):
 	for team in Team.objects.all():
 		if string.lower() in team.full_name.lower():
 			return team
-	return None
+	raise(NameError(f'{string} could not be recognized as any team'))
 
 def grab_game(week_number,team_string):
 	team = team_from_string(team_string)
@@ -563,3 +563,25 @@ def grab_game(week_number,team_string):
 		return Game.objects.get(week_number=week_number,udog=team)
 	except:
 		return Game.objects.get(week_number=week_number,fav=team)
+
+def load_spreads(week_number):
+	url = f'https://fantasydata.com/NFL_Odds/Odds_Read?season=2020&week={week_number}&seasontype=1&oddstate=NJ&teamkey=ARI&subscope=1&scope=1'
+	response = requests.get(url)
+	if response.status_code != 200:
+		print('Failed to get data:', response.status_code)
+	else:
+		i=0
+		root = json.loads(response.text)
+		raw = root['Raw']
+		root2 = json.loads(raw)
+		for node in root2:
+			for k in ['HomeTeam','AwayTeam','PointSpread']:
+				print(node[k])
+			g = grab_game(week_number,node['HomeTeam'])
+			spread = float(node['PointSpread'])
+			if spread < 0:
+				g.setFav(team_from_string(node['HomeTeam']),-int(spread))
+			else:
+				g.setFav(team_from_string(node['AwayTeam']),int(spread))
+			print(g.as_string())
+			print('')
