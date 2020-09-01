@@ -147,7 +147,7 @@ class Game(models.Model):
 			return False
 
 	def as_string(self):
-		return f'{self.week_number}/{self.game_number}\n{self.game_date.strftime("%m/%d/%Y, %H:%M:%S")}\n{self.fav.nick_name} {self.fav_score}\t{self.spread}.5\t{self.udog.nick_name} {self.udog_score}'
+		return f'{self.week_number}/{self.game_number}\n{self.game_date.strftime("%m/%d/%Y, %H:%M:%S")}\n{self.favNickName()} {self.fav_score}\t{self.spread}.5\t{self.udogNickName()} {self.udog_score}'
 
 class Pick(models.Model):
 	player = models.ForeignKey(User,on_delete=models.CASCADE)
