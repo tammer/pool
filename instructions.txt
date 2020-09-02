@@ -10,6 +10,14 @@
 there still is a register path in urls.  it creates an account. kind of useful. maybe i keep
 
 --
+Design notes
+
+Pick object should have refernce Game object.  Duh!  game_number, week_number?? seriously?
+game 1:1 pick should have been joined on game.id, not (game number, week number)
+
+game_number is a necessary reference.  if a game gets deleted (covid), watch out for zombie picks.
+
+--
 
 Some Tech Notes (copy of note from local in case notes local gets lost)
 
