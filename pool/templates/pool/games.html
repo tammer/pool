@@ -1,20 +1,28 @@
 {% extends "pool/base.html" %}
 {% block content %}
-	<h1>Games</h1>
-	<table border=1>
-		<tr><th>Favorite</th><th>Spread</th><th>Underdog</th><th>Time</th></tr>
-		{% for dt, gms in games.items %}
-		<tr>
-			<td colspan="4">{{dt}}</td>
-		</tr>
-			{% for game in gms %}
-			<tr>
-				<td>{{ game.fav }}</td>
-				<td>{{ game.spread }}</td>
-				<td>{{ game.udog }}</td>
-				<td>{{ game.time }}</td>
-			</tr>
-			{% endfor %}
-		{% endfor %}
-	</table>
+<main role="main" class="container">
+	<div class="row">
+		<div class="col-7">
+			<h1>Week {{week_number}}</h1>
+			<table class='table table-sm' style="background-color: white">
+				<!-- <tr>  <th>Game #</th> <th>Favorite</th><th>Spread</th><th>Underdog</th><th>Time</th><th>Link</th></tr> -->
+				{% for dt, gms in games.items %}
+				<tr>
+					<td colspan="5" class=text-center><h4>{{dt}}</h4></td>
+				</tr>
+					{% for game in gms %}
+					<tr>
+						<td class=text-right>{{ game.fav }}</td>
+						<td>{{ game.spread }}&frac12;</td>
+						<td>{{ game.udog }}</td>
+						<!-- <td>{{ game.time }}</td> -->
+						<td>({{game.game_number}}) <a href="{%url 'pool-game'%}?w={{week_number}}&g={{game.game_number}}">{{ game.time }}</a></td>
+					</tr>
+					{% endfor %}
+				{% endfor %}
+			</table>
+		</div>
+		</div>
+	</main>
+
 {% endblock content %}

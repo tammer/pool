@@ -21,6 +21,17 @@ class BankForm(ModelForm):
 		model = Bank
 		fields = ['player','deposit_amount','note']
 
+class GameForm(ModelForm):
+
+	game_date = forms.DateTimeField()
+	game_number = forms.IntegerField(widget=forms.HiddenInput())
+	week_number = forms.IntegerField(widget=forms.HiddenInput())
+
+	class Meta:
+		model = Game
+		fields = ['week_number', 'game_number', 'game_date']
+
+
 class BlogForm(ModelForm):
 	entry = forms.CharField(label='Message', max_length=2048, widget=forms.Textarea)
 	# entry_date = forms.DateField()

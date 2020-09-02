@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from pool.models import Team,Game,Pick,Bank,Blog,Monday,now
 from django.contrib.auth.models import User
 from django.db.models import Sum
-from .forms import BankForm,BlogForm,PickForm,MondayForm,SpreadForm
+from .forms import BankForm,BlogForm,PickForm,MondayForm,SpreadForm,GameForm
 from django.contrib import messages
 from django.urls import reverse
 import random
@@ -228,6 +228,29 @@ def teams(request):
 	teams = Team.objects.all()
 	return render(request, 'pool/teams.html', {'teams': teams} )
 
+def game(request):
+	if not(request.user.is_superuser):
+		messages.warning(request, "Unauthorized")
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))	
+	if request.GET.get('w'):
+		week_number = int(request.GET['w'])
+	else:
+		week_number = implied_week()
+	game_number = int(request.GET['g'])
+	game = Game.objects.get(week_number=week_number,game_number=game_number)
+	if request.method == "POST":
+		form = GameForm(request.POST, instance=game)
+		if form.is_valid():
+			form.save()
+			messages.success(request,"Game Updated")
+		else:
+			print("Trouble at the Mill")
+			messages.warning(request, form.errors)
+	else:
+		form = GameForm(instance=game)
+	game_text = game.as_string()
+	return render(request, 'pool/game.html', { 'game_text':game_text, 'game_number':game.game_number, 'week_number':game.week_number, 'form':form})
+
 def spreads(request):
 	if not(request.user.is_superuser):
 		messages.warning(request, "Unauthorized")
@@ -304,10 +327,13 @@ def postpicks(request):
 	return redirect('pool-dopicks')
 
 def games(request):
-	week_number = int(request.GET['w'])
+	if request.GET.get('w'):
+		week_number = int(request.GET['w'])
+	else:
+		week_number = implied_week()
 	current_date = ''
 	games = {}
-	for game in Game.objects.filter(week_number=week_number).order_by('game_number'):
+	for game in Game.objects.filter(week_number=week_number).order_by('game_date'):
 		dt = game.game_date.strftime('%A, %B %-d')
 		if dt != current_date:
 			games[dt] = []
@@ -320,12 +346,13 @@ def games(request):
 			g['fav'] = game.fav.full_name.lower()
 			g['udog'] = game.udog.full_name.upper()
 		g['time'] = game.game_date.strftime('%-I:%M%p').lower().replace('pm','p')
+		g['game_number'] = game.game_number
 		if game.spread is None:
 			g['spread'] = 'NA'
 		else:
 			g['spread'] = game.spread
 		games[dt].append(g)
-	return render(request, 'pool/games.html', {'games': games} )
+	return render(request, 'pool/games.html', {'games': games, 'week_number':week_number} )
 
 
 
