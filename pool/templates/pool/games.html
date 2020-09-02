@@ -6,9 +6,9 @@
 			<h1>Week {{week_number}}</h1>
 			<table class='table table-sm' style="background-color: white">
 				<!-- <tr>  <th>Game #</th> <th>Favorite</th><th>Spread</th><th>Underdog</th><th>Time</th><th>Link</th></tr> -->
-				{% for dt, gms in games.items %}
+				{% for gms in games %}
 				<tr>
-					<td colspan="5" class=text-center><h4>{{dt}}</h4></td>
+					<td colspan="5" class=text-center><h4>{{gms.0.dt}}</h4></td>
 				</tr>
 					{% for game in gms %}
 					<tr>

@@ -332,11 +332,11 @@ def games(request):
 	else:
 		week_number = implied_week()
 	current_date = ''
-	games = {}
+	games = []
 	for game in Game.objects.filter(week_number=week_number).order_by('game_date'):
 		dt = game.game_date.strftime('%A, %B %-d')
 		if dt != current_date:
-			games[dt] = []
+			games.append([])
 			current_date = dt
 		g={}
 		if game.fav_is_home:
@@ -351,7 +351,8 @@ def games(request):
 			g['spread'] = 'NA'
 		else:
 			g['spread'] = game.spread
-		games[dt].append(g)
+		g['dt'] = dt
+		games[-1].append(g)
 	return render(request, 'pool/games.html', {'games': games, 'week_number':week_number} )
 
 
