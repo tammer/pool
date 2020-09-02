@@ -112,7 +112,7 @@ def allpicks(request):
 	if request.GET.get('all') and request.user.is_superuser:
 		show_all = True
 	header = []
-	for game in Game.objects.filter(week_number=week_number).order_by('game_number'):
+	for game in Game.objects.filter(week_number=week_number).order_by('game_date'):
 		if game.spread == 0:
 			spread = ''
 		else:
@@ -271,7 +271,7 @@ def spreads(request):
 	elif request.GET.get('load_spreads'):
 		load_spreads(week_number)
 		messages.success(request,"Spreads have been set automatically. (You can still change them.)")
-	queryset = Game.objects.filter(week_number=week_number).order_by('game_number').all()
+	queryset = Game.objects.filter(week_number=week_number).order_by('game_date').all()
 	formset = SpreadFormSet(queryset=queryset)
 	return render(request, 'pool/spreads.html', { 'week_number':week_number, 'formset':formset})
 
