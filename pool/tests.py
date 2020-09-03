@@ -8,12 +8,24 @@ from pytz import timezone
 import pool.utils
 import random
 
+def load_teams():
+	pool.utils.restore('testdata/test_team.json')
+
+def load_games():
+	pool.utils.restore('testdata/test_game.json')
+	for g in Game.objects.all():
+		g.spread = None
+		g.fav_score = None
+		g.udog_score = None
+		g.fav_is_home = True
+		g.save()
 
 class UtilTestCase(TestCase):
 	def setUp(self):
+		print("For this to work, you need now() to return the fake date. modify models.now()")
 		random.seed(1)
-		pool.utils.load_teams()
-		pool.utils.load_games(2019)
+		load_teams()
+		load_games()
 		pool.utils.add_player("Tammer","tammer@tammer.com",'123')
 		pool.utils.add_player("John","j@tammer.com",'123')
 		pool.utils.add_player("Adel","akamel@tammer.com",'123')
