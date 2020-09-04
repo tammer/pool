@@ -26,7 +26,7 @@ def players(request):
 	string = ''
 	for player in User.objects.all():
 		if string == '':
-			string = player
+			string = player.email
 		else:
 			string = f'{string},{player.email}'
 	return HttpResponse(string)
