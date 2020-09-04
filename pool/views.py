@@ -22,6 +22,17 @@ def handler400(request,exception):
 def handler500(request):
 	return render(request, 'pool/500.html', status=500)
 
+def players(request):
+	string = ''
+	for player in User.objects.all():
+		if string == '':
+			string = player
+		else:
+			string = f'{string},{player.email}'
+	return HttpResponse(string)
+
+
+
 def deposit(request):
 	form = BankForm(request.POST)
 	if request.user.is_superuser and form.is_valid():
