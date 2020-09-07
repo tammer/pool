@@ -35,7 +35,7 @@ def players(request):
 
 def deposit(request):
 	form = BankForm(request.POST)
-	if request.user.is_superuser and form.is_valid():
+	if request.user.is_staff and form.is_valid():
 		player = form.cleaned_data.get('player')
 		form.save()
 		messages.success(request, f'Account balance has been updated for {player}')
@@ -54,7 +54,6 @@ def money(request):
 		if value is None:
 			value = 0.0
 		table[user.username] = value
-		# table[user.username] = "{:.2f}".format(value)
 	table = sorted(table.items(), key=lambda kv: kv[1], reverse=True)
 	table2 = []
 	for row in table:
@@ -62,7 +61,7 @@ def money(request):
 
 	table3 = []
 	player = request.user
-	if request.user.is_superuser:
+	if request.user.is_staff:
 		if request.GET.get('p'):
 			player = User.objects.get(username=request.GET['p'])
 
@@ -72,7 +71,7 @@ def money(request):
 			"{:.0f}".format(row.deposit_amount),
 			row.note])
 
-	return render(request, 'pool/money.html',{'is_superuser':request.user.is_superuser, 'form':BankForm(),  'player':player.username, 'table':table2, 'table2':table3})
+	return render(request, 'pool/money.html',{'is_staff':request.user.is_staff, 'form':BankForm(),  'player':player.username, 'table':table2, 'table2':table3})
 
 def blog(request):
 	if request.GET.get('id'):
