@@ -11,7 +11,7 @@ class Command(BaseCommand):
 		for g in Game.objects.filter(week_number=this_week):
 			expected_end_time = g.game_date + timedelta(hours=2,minutes=45)
 			if not(g.isOver()) and now() > expected_end_time:
-				print(now().strftime("%m/%d/%Y, %H:%M:%S") + ": CHECKING FOR NEW FINAL SCORES")
+				print(now().strftime("%Y-%m-%d, %H:%M:%S") + ": CHECKING FOR NEW FINAL SCORES")
 				load_scores()
 				return
-		print(now().strftime("%m/%d/%Y, %H:%M:%S") + ": No games need to be updated at this time")
+		print(now().strftime("%Y-%m-%d, %H:%M:%S") + ": No games need to be updated at this time")
