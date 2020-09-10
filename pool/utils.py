@@ -190,15 +190,15 @@ def all_picks(week_number,show_all=False):
 	return matrix
 
 # score in the form {'dal':22, 'sf':14}
-def set_score(week_number, score_):
-	score = {}
-	for k in score_.keys():
-		score[k.upper()] = score_[k]
+# use any text for the team name as long as team_from_string can parse it
+def set_score(week_number, score):
 	try:
-		udog = Team.objects.get(short_name = list(score.keys())[0])
-		fav = Team.objects.get(short_name = list(score.keys())[1])
+		udog = team_from_string( list(score.keys())[0] )
+		udog_score = score[list(score.keys())[0]]
+		fav = team_from_string( list(score.keys())[1] )
+		fav_score = score[list(score.keys())[1]]
 	except:
-		msg = f'Cannot find a team matching either {list(score.keys())[0]} or {list(score.keys())[1]}'
+		msg = f'Cannot find a team matching on of (or both) {list(score.keys())[0]} or {list(score.keys())[1]}'
 		raise( NameError(msg) )
 	try:
 		game = Game.objects.get(week_number=week_number,fav=fav, udog=udog)
@@ -206,14 +206,20 @@ def set_score(week_number, score_):
 		temp = udog
 		udog = fav
 		fav = temp
+		temp = udog_score
+		udog_score = fav_score
+		fav_score = temp
 	try:
 		game = Game.objects.get(week_number=week_number,fav=fav, udog=udog)
 	except:
 		msg = f'{fav.short_name} is not playing {udog.short_name} in week {week_number}'
 		raise( NameError(msg) )
-	game.fav_score = score[fav.short_name]
-	game.udog_score = score[udog.short_name]
+	game.fav_score = fav_score
+	game.udog_score = udog_score
 	game.save()
+	print('---')
+	print(game.as_string())
+	print('---')
 	return game
 
 def load_teams():
@@ -238,6 +244,7 @@ def load_teams():
 def load_scores():
 	week_number = implied_week()
 	url = 'https://api-secure.sports.yahoo.com/v1/editorial/s/scoreboard?leagues=nfl&week='+str(week_number)
+	# url = 'http://www.tammer.com/test_data.json'
 	response = requests.get(url)
 	if response.status_code != 200:
 		print('Failed to get data:', response.status_code)
@@ -251,12 +258,7 @@ def load_scores():
 				hsc = int(v['total_home_points'])
 				ht = team_from_string(h)
 				at = team_from_string(a)
-				print(ht.nick_name)
-				print(hsc)
-				print(at.nick_name)
-				print(asc)
-				# score in the form {'dal':22, 'sf':14}
-				# set_score(week_number,{})
+				set_score(week_number,{ht.nick_name:hsc, at.nick_name:asc})
 
 
 
