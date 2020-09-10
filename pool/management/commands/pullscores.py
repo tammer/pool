@@ -1,25 +1,17 @@
 from django.core.management.base import BaseCommand, CommandError
-from pool.utils import implied_week,set_score
-import json, requests
+from pool.models import Game,now
+from pool.utils import load_scores,implied_week
+from datetime import datetime, timedelta
 
 class Command(BaseCommand):
 	help = 'Pull the latest scores'
 
 	def handle(self, *args, **options):
-		week_number = implied_week()
-		url = 'http://www.nfl.com/liveupdate/scores/scores.json'
-		response = requests.get(url)
-		if response.status_code != 200:
-			print('Failed to get data:', response.status_code)
-		else:
-			scores = json.loads(response.text)
-			for game in scores.values():
-				if game['qtr'] != 'Final':
-					continue
-				t1 = game['home']['abbr']
-				s1 = game['home']['score']['T']
-				t2 = game['away']['abbr']
-				s2 = game['away']['score']['T']
-				result = {t1:s1, t2:s2}
-				print(result)
-				set_score(week_number,result)
+		this_week = implied_week()
+		for g in Game.objects.filter(week_number=this_week):
+			expected_end_time = g.game_date + timedelta(hours=2,minutes=45)
+			if not(g.isOver()) and now() > expected_end_time:
+				print(now().strftime("%m/%d/%Y, %H:%M:%S") + ": CHECKING FOR NEW FINAL SCORES")
+				load_scores()
+				return
+		print(now().strftime("%m/%d/%Y, %H:%M:%S") + ": No games need to be updated at this time")
