@@ -111,7 +111,7 @@ def standings(request):
 		player = request.GET['p']
 	else:
 		player = ''
-	return render(request,'pool/standings.html',{'player':player,'week_number':int(request.GET['w']),'standings':standings_(int(request.GET['w']))})
+	return render(request,'pool/standings.html',{'player':player,'week_number':int(request.GET['w']),'standings':standings_(int(request.GET['w']),False)})
 
 def allpicks(request):
 	if request.GET.get('w'):
@@ -157,7 +157,7 @@ def results(request):
 	if show_results == False:
 		player='' # because placeholder player must be set back to '' else history link tagged with player
 
-	standings = standings_(week_number=week_number)
+	standings = standings_(week_number=week_number,yes_monkey=False)
 	pval = 1
 	if completed > 10:
 		last_place = True
@@ -185,7 +185,7 @@ def home(request):
 		week_number = headline_week_number-1
 	
 	# Standings
-	standings = standings_(week_number)
+	standings = standings_(week_number,False)
 	(total,rank_order) = overall_total()
 
 	# Blog
