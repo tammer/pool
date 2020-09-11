@@ -274,6 +274,10 @@ def spreads(request):
 			week_number = int(request.GET['w'])
 	else:
 			week_number = implied_week(delta_hours=0)
+	if Monday.objects.filter(week_number=week_number).aggregate(Sum('total_points'))['total_points__sum'] > 0:
+		if not(request.GET.get('force')) and request.method != "POST":
+			messages.warning(request, "You can no longer change the point spreads")
+			return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 	if request.method == "POST":
 		formset = SpreadFormSet(request.POST)
 		if formset.is_valid():
