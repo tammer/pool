@@ -12,11 +12,11 @@
 				</th>
 			{% endfor %}
 		</tr>
-		{% for k,v in matrix.items %}
+		{% for row in picks %}
 		<tr>
-			<th class='text-right'><a href="{% url 'pool-results' %}?p={{k}}&w={{week_number}}">{{k}}</a></tdh>
-				         
-			{% for td in v %}
+			<th class='text-right'><a href="{% url 'pool-results' %}?p={{row.0}}&w={{week_number}}">{{row.0}}</a></tdh>
+
+			{% for td in row.1 %}
 				<td>{{td}}</td>
 			{% endfor %}
 		</tr>

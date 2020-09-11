@@ -130,7 +130,11 @@ def allpicks(request):
 		header.append([game.favShortName(), spread+"&frac12;", game.udogShortName(), game.game_date.strftime('%a')])
 	header.append('MNTP')
 	matrix = all_picks(week_number,show_all)
-	return render(request, 'pool/allpicks.html', {'week_number': week_number, 'header': header, 'matrix': matrix})
+	keys = sorted(matrix.keys())
+	picks = []
+	for k in keys:
+		picks.append([k,matrix[k]])
+	return render(request, 'pool/allpicks.html', {'week_number': week_number, 'header': header, 'picks':picks})
 
 def results(request):
 	(week_number,status) = status_()
