@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from django.forms import modelformset_factory
 from django.http import HttpResponse, HttpResponseRedirect
 import pool.utils
-from pool.utils import overall_total, score_matrix as scoreMatrix, standings as standings_,implied_week,status as status_, all_picks, load_spreads
+from pool.utils import overall_total, score_matrix as scoreMatrix, standings as standings_,implied_week,status as status_, all_picks, load_spreads, choose_art
 
 def handler404(request,exception):
 	return render(request, 'pool/404.html', status=404)
@@ -204,17 +204,7 @@ def home(request):
 	completed = Game.objects.filter(week_number=week_number,fav_score__isnull = False).count()
 	total = Game.objects.filter(week_number=week_number).count()
 
-	pics = [
-		'https://i.ytimg.com/vi/0-K9kUQ1_PE/maxresdefault.jpg',
-		'http://www.tammer.com/Chimp-352-570x270.jpg',
-		'https://technologytherapy.com/wp-content/uploads/2018/06/getmonkeys-2-768x384.jpg',
-		'https://i.pinimg.com/originals/4d/79/c8/4d79c81a255ac387c4cdaea7c1e5ac4d.jpg',
-		'https://www.wakingtimes.com/wp-content/uploads/2017/10/thinking-monkey-1.jpg',
-		'https://i.ytimg.com/vi/6WRLFiujDFY/maxresdefault.jpg',
-	]
-	pics = ['http://www.tammer.com/corona1.jpg','http://www.tammer.com/c3.jpg']
-	index = now().hour % len(pics)
-	src = pics[index]
+	src = choose_art()
 
 	time = now().strftime('%A %B %-d %-I:%M %p')
 

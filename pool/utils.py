@@ -10,6 +10,24 @@ import random
 from django.core import serializers
 from os import mkdir,path as path_
 
+def choose_art():
+	default_image = 'http://www.tammer.com/home_page_chimp.jpeg'
+	response = requests.get('http://www.tammer.com/poolart/art.csv')
+	if response.status_code != 200:
+		return default_image
+	else:
+		eligible = []
+		wrapper = list(csv.reader(response.text.strip().split('\n')))
+		for this_row in wrapper:
+			if len(this_row) != 2:
+				continue
+			if int(this_row[1] ) == 1:
+				eligible.append(this_row[0])
+		if not(eligible):
+			return default_image
+		else:
+			return random.choice(eligible)
+
 def deposit(who, amount, note):
 	if who == 'all':
 		if amount is None:
