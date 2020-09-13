@@ -26,7 +26,8 @@ def choose_art():
 		if not(eligible):
 			return default_image
 		else:
-			return random.choice(eligible)
+			idx = int(now().minute / 60 * len(eligible))
+			return eligible[idx]
 
 def deposit(who, amount, note):
 	if who == 'all':
