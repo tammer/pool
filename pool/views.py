@@ -178,8 +178,10 @@ def results(request):
 	if last_place:
 		position = 'last'
 
+	user = User.objects.get(username=player)
+	mntp = Monday.objects.get(player=user,week_number=week_number).total_points
 
-	return render(request, 'pool/results.html',{ 'position':position, 'latest_week':latest_week, 'completed':completed, 'right_array':[1]*right,  'week_number': week_number, 'standings':standings, 'games': games, 'player': player, 'right': right, 'total': total, 'show_results':show_results } )
+	return render(request, 'pool/results.html',{ 'position':position, 'latest_week':latest_week, 'completed':completed, 'right_array':[1]*right,  'week_number': week_number, 'standings':standings, 'games': games, 'player': player, 'right': right, 'total': total, 'show_results':show_results, 'mntp':mntp } )
 
 def home(request):
 

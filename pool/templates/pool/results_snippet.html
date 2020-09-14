@@ -1,6 +1,6 @@
 <table class='table table-sm' style="background-color: white">
 	<tr class="thead-light text-center">
-		<th class='text-left'>Favorite</th><th colspan=3>Score<sub>spread<sub></th><th class='text-right'>Underdog</th><th></th>
+		<th class='text-left'>Favorite</th><th colspan=3>Score<sub>spread</sub></th><th class='text-right'>Underdog</th><th></th>
 	</tr>	
 	{% for game in games %}
 		{% if game.isOver %}
@@ -54,5 +54,11 @@
 		<th class='text-right table-default' colspan=5>Total:</th>
 		<th class='text-center'>{{right}}</th>
 	</tr>
+	{%if mntp != 0%}
+	<tr>
+		<td class='text-right table-default' colspan=5><sup>mntp:</sup></td>
+		<td class='text-center'><sup>{{mntp}}</sup></td>
+	</tr>
+	{%endif%}
 </table>
 
