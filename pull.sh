@@ -15,3 +15,11 @@ cd $path
 mget *
 quit
 END_SCRIPT
+
+python3 manage.py mirror
+rm User.json
+rm Team.json
+rm Game.json
+rm Pick.json
+rm Bank.json
+rm Monday.json
