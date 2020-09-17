@@ -130,7 +130,16 @@ function favs(){
 		</div>
 
 
-
+		{%if balance >= 50.0%}
+			<div class="media border bg-danger text-white">
+			  <img height=120px src="http://www.tammer.com/gang.jpg" class="mr-3">
+			  <div class="media-body">
+			    <h5 class="mt-0 text-white">Pool Dues</h5>
+			    John Bearcroft (front row, middle) is becoming concerned about your pool dues.  You owe ${{balance}}.  Probably a good idea that you pay up. jbearcroft7@gmail.com
+			  </div>
+			</div>
+			<br>
+		{%endif%}
 
 
 				<form action="{%url 'pool-postpicks'%}" method="post">
