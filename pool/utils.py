@@ -607,3 +607,32 @@ def load_spreads(week_number):
 			print(g.as_string())
 			g.save()
 			print('')
+
+def stats():
+	result = {}
+	result['fav_wins'] = 0
+	result['udog_wins'] = 0
+	result['home_wins'] = 0
+	result['away_wins'] = 0
+	result['homedog_wins'] = 0
+	result['awaydog_wins'] = 0
+	result['homefav_wins'] = 0
+	result['awayfav_wins'] = 0
+	for g in Game.objects.exclude(fav_score__isnull=True):
+		if g.favWins():
+			result['fav_wins'] += 1
+			if g.fav_is_home:
+				result['home_wins'] += 1
+				result['homefav_wins'] += 1
+			else:
+				result['away_wins'] += 1
+				result['awayfav_wins'] += 1
+		else:
+			result['udog_wins'] += 1
+			if g.fav_is_home:
+				result['away_wins'] += 1
+				result['awaydog_wins'] += 1
+			else:
+				result['home_wins'] += 1
+				result['homedog_wins'] += 1
+	return result
