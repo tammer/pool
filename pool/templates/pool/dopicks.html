@@ -131,14 +131,17 @@ function favs(){
 
 
 		{%if balance >= 50.0%}
-			<div class="media border bg-danger text-white">
-			  <img height=120px src="http://www.tammer.com/gang.jpg" class="mr-3">
-			  <div class="media-body">
-			    <h5 class="mt-0 text-white">Pool Dues</h5>
-			    John Bearcroft (front row, middle) is becoming concerned about your pool dues.  You owe ${{balance}}.  Probably a good idea that you pay up. jbearcroft7@gmail.com
-			  </div>
+		<div class="row bg-ranger">
+			<div class="col-sm text-right bg-danger">
+				<img height=180px src="http://www.tammer.com/gang.jpg" class="mr-3">
 			</div>
-			<br>
+			<div class="col-7 bg-danger text-left text-white">
+				<h3 class="text-white">Pool Dues</h3>
+			    <h5 class="text-white">John Bearcroft (front row, left) is becoming concerned about your pool dues.  You owe ${{balance}}.  Probably a good idea that you pay up. jbearcroft7@gmail.com</h5>
+			</div>
+		</div>
+		<br>
+
 		{%endif%}
 
 
