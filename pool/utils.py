@@ -161,7 +161,13 @@ def results(week_number,player):
 			completed += 1
 		g['picked_fav'] = game.picked_fav
 		g['isOver'] = game.isOver()
-		g['game_day'] = game.game_date.strftime('%A')
+		if game.game_date.timetuple().tm_yday == now().timetuple().tm_yday:
+			if game.game_date < now():
+				g['game_day'] = 'now'
+			else:
+				g['game_day'] = game.game_date.strftime('%-I:%M')
+		else:
+			g['game_day'] = game.game_date.strftime('%A')
 		games.append(g)
 	return (games,right,total,completed)
 
