@@ -314,8 +314,6 @@ def dopicks(request):
 	balance = Bank.objects.filter(player=user).aggregate(Sum('deposit_amount'))['deposit_amount__sum']
 	if balance is None or week_number < 3:
 		balance = 0.0
-	if request.user.username == 'Tammer':
-		balance = -800
 	now_ = now().strftime('%A %B %-d %-I:%M %p')
 	return render(request, 'pool/dopicks.html', { 'now':now_, 'player':user.username, 'week_number':week_number, 'formset':formset, 'monday_form':monday_form, 'balance':int(-balance)} )
 
