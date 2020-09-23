@@ -592,7 +592,7 @@ def grab_game(week_number,team_string):
 		return Game.objects.get(week_number=week_number,fav=team)
 
 def load_spreads(week_number):
-	url = f'https://fantasydata.com/NFL_Odds/Odds_Read?season=2020&week={week_number}&seasontype=1&oddstate=NJ&teamkey=ARI&subscope=1&scope=1'
+	url = f'https://fantasydata.com/NFL_Odds/Odds_Read?season=2020&week={week_number}&seasontype=1&oddstate=NJ&teamkey=ARI&subscope=2&scope=1'
 	response = requests.get(url)
 	if response.status_code != 200:
 		print('Failed to get data:', response.status_code)
