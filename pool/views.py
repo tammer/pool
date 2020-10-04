@@ -308,7 +308,10 @@ def dopicks(request):
 	formset = PickFormSet(queryset=queryset)
 	(monday_instance, created) = Monday.objects.get_or_create(player=user, week_number=week_number)
 	if monday_instance.total_points == 0:
-		monday_instance.total_points = None # will cause the form to force the dude to put something in
+		if week_number > 1:
+			monday_instance.total_points = Monday.objects.get(player=user,week_number=week_number-1).total_points
+		else:
+			monday_instance.total_points = random.choice([30,35,40,45,50,55])
 	monday_form = MondayForm(instance=monday_instance)
 
 	balance = Bank.objects.filter(player=user).aggregate(Sum('deposit_amount'))['deposit_amount__sum']
