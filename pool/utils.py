@@ -614,6 +614,11 @@ def load_spreads(week_number):
 			g.save()
 			print('')
 
+def delete_game(week_number, game_number):
+	Game.objects.get(week_number=week_number,game_number=game_number).delete()
+	Pick.objects.filter(week_number=week_number,game_number=game_number).delete()
+
+
 def stats():
 	result = {}
 	result['fav_wins'] = 0
