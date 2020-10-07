@@ -605,7 +605,10 @@ def load_spreads(week_number):
 			for k in ['HomeTeam','AwayTeam','PointSpread']:
 				print(node[k])
 			g = grab_game(week_number,node['HomeTeam'])
-			spread = float(node['PointSpread'])
+			if node['PointSpread'] is None:
+				spread = 99
+			else:
+				spread = float(node['PointSpread'])
 			if spread < 0:
 				g.setFav(team_from_string(node['HomeTeam']),-int(spread))
 			else:
