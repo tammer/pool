@@ -199,8 +199,9 @@ def home(request):
 
 	# Blog
 	blog_list = []
-	for blog in Blog.objects.all().order_by('-entry_date')[:1]:
-		blog_list.append([blog.entry_date.strftime('%A %B %-d'), blog.entry])
+	for blog in Blog.objects.all().order_by('-entry_date'):
+		if blog.entry_date > now() - timedelta(hours=160) or blog_list == []:
+			blog_list.append([blog.entry_date.strftime('%A %B %-d'), blog.entry])
 	first_blog_date = blog_list[0][0]
 	first_blog = blog_list[0][1]
 	id = Blog.objects.all().order_by('-entry_date').first().id
