@@ -122,7 +122,7 @@ def allpicks(request):
 	if request.GET.get('all') and request.user.is_superuser:
 		show_all = True
 	header = []
-	for game in Game.objects.filter(week_number=week_number).order_by('game_date'):
+	for game in Game.objects.filter(week_number=week_number).order_by('game_number'):
 		if game.spread == 0:
 			spread = ''
 		else:
