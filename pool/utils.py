@@ -286,8 +286,60 @@ def load_scores():
 				set_score(week_number,{ht.nick_name:hsc, at.nick_name:asc})
 
 
+def reinit_weeks(this_year,start_week,end_week):
+	week_number = start_week
+	while week_number <= end_week:
+		reinit_week(this_year,week_number)
+		week_number += 1
 
+def reinit_week(this_year, week_number):
+	# delete all games and picks for the week
+	Game.objects.filter(week_number=week_number).delete()
+	Pick.objects.filter(week_number=week_number).delete()
+	#load in latest schedule for that week
+	load_week(this_year,week_number)
+	# init picks for all games, players
+	for game in Game.objects.filter(week_number=week_number):
+		for user in User.objects.all():
+			pick = Pick(week_number=game.week_number, game_number=game.game_number, player=user,picked_fav=True)
+			pick.save(force=True)
 
+def load_week(this_year, week_number,for_real=True):
+	url = 'https://api-secure.sports.yahoo.com/v1/editorial/s/scoreboard?leagues=nfl&week='+str(week_number)+'&season='+str(this_year)
+	response = requests.get(url)
+	if response.status_code != 200:
+		print('Failed to get data:', response.status_code)
+	else:
+		i=0
+		root = json.loads(response.text)
+		# create dictionary that is sortable by game date
+		# the j thing makes sures games with exact same start time have different keys
+		new_dict = {}
+		j=0.001
+		for k,v in root['service']['scoreboard']['games'].items():
+			new_key	= datetime.strptime(v['start_time'],'%a, %d %b %Y %H:%M:%S %z').timestamp()
+			new_key = new_key + j
+			j = j + 0.001
+			new_dict[new_key] = v
+
+		for k,v in sorted(new_dict.items()):
+			h = root['service']['scoreboard']['teams'][v['home_team_id']]['last_name']
+			a = root['service']['scoreboard']['teams'][v['away_team_id']]['last_name']
+			gm_dt = datetime.strptime(v['start_time'],'%a, %d %b %Y %H:%M:%S %z')
+			gm_dt = gm_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
+			gm_dt = gm_dt.replace(tzinfo=None)
+			print(a +" at "+h+"\t\t"+gm_dt.strftime('%A %d-%b-%Y %H:%M:%S'))
+
+			if for_real:
+				Game.objects.create(
+					week_number = week_number, game_number=i+1,
+					fav = team_from_string(h),
+					udog = team_from_string(a),
+					game_date = gm_dt,
+					fav_is_home = True)
+			i=i+1
+
+# refactor load_games to use load_week
 def load_games(this_year):
 	Game.objects.all().delete()
 	for x in range(17):
