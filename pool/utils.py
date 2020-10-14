@@ -654,20 +654,25 @@ def load_spreads(week_number):
 		raw = root['Raw']
 		root2 = json.loads(raw)
 		for node in root2:
-			for k in ['HomeTeam','AwayTeam','PointSpread']:
-				print(node[k])
-			g = grab_game(week_number,node['HomeTeam'])
-			if node['PointSpread'] is None:
-				spread = 99
-			else:
-				spread = float(node['PointSpread'])
-			if spread < 0:
-				g.setFav(team_from_string(node['HomeTeam']),-int(spread))
-			else:
-				g.setFav(team_from_string(node['AwayTeam']),int(spread))
-			print(g.as_string())
-			g.save()
-			print('')
+			# fucking COVID
+			try:
+				for k in ['HomeTeam','AwayTeam','PointSpread']:
+					print(node[k])
+				g = grab_game(week_number,node['HomeTeam'])
+				if node['PointSpread'] is None:
+					spread = None
+				else:
+					spread = float(node['PointSpread'])
+				if not(spread is None):
+					if spread < 0:
+						g.setFav(team_from_string(node['HomeTeam']),-int(spread))
+					else:
+						g.setFav(team_from_string(node['AwayTeam']),int(spread))
+					print(g.as_string())
+					g.save()
+				print('')
+			except:
+				None
 
 def delete_game(week_number, game_number):
 	Game.objects.get(week_number=week_number,game_number=game_number).delete()
