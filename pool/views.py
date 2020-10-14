@@ -323,7 +323,7 @@ def dopicks(request):
 
 def postpicks(request):
 	user = request.user
-	week_number = implied_week()
+	(week_number,status) = status_()
 	formset = PickFormSet(request.POST)
 	monday_instance = Monday.objects.get(player=user, week_number=week_number)
 	monday_form = MondayForm(request.POST, instance = monday_instance)
