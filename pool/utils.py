@@ -569,18 +569,20 @@ def whoWon(week_number, score_matrix):
 		return None
 	else:
 		if len(leaders) == 1:
-			return leaders[0]
+			return [leaders[0]]
 		else:
 			best_bonus = 0
-			leader = None
+			leader = []
 			for player in leaders:
 				if player == 'Monkey':
 					continue
 				user = User.objects.get(username=player)
 				bonus = Monday.objects.get(player=user, week_number=week_number).bonus()
 				if bonus > best_bonus:
-					leader = player
+					leader = [player]
 					best_bonus = bonus
+				elif bonus == best_bonus:
+					leader.append(player) 
 			return leader
 
 def overall_total(sm = None):
@@ -617,7 +619,7 @@ def overall(sm = None):
 		weeks.sort()
 		for week in weeks:
 			win = 0
-			if winner[week] == player:
+			if player in winner[week]:
 				win=1
 			this_row.append([sm[player][week],win])
 		this_row.append([total[player],0])
