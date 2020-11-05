@@ -71,7 +71,20 @@ def money(request):
 			"{:.0f}".format(row.deposit_amount),
 			row.note])
 
-	return render(request, 'pool/money.html',{'is_staff':request.user.is_staff, 'form':BankForm(),  'player':player.username, 'table':table2, 'table2':table3})
+	# payout info
+	payouts = {}
+	player_count = User.objects.count()
+	payouts['player_count'] = player_count
+	payouts['total'] = 75 * player_count
+	payouts['weekly'] = 2 * player_count
+	payouts['survivor'] = 5 * player_count
+	pot = payouts['total'] - payouts['weekly'] * 17 - payouts['survivor']
+	payouts['first'] = int(round(0.50 * pot,0))
+	payouts['second'] = int(round(0.25 * pot,0))
+	payouts['third'] = int(round(0.15 * pot,0))
+	payouts['last'] = int(round(0.10 * pot,0))
+
+	return render(request, 'pool/money.html',{'is_staff':request.user.is_staff, 'form':BankForm(),  'player':player.username, 'table':table2, 'table2':table3, 'payouts':payouts})
 
 def blog(request):
 	if request.GET.get('id'):

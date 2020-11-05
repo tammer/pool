@@ -80,9 +80,39 @@
 						</form>
 					</td></tr>
 					</table>
-				{% else %}
-					<img class="img-fluid" src="http://www.tammer.com/koko.jpg">
 				{% endif %}
+				<div class="col-md-auto">
+					<table class="table table-sm table-bordered" style="background-color: white">
+						<tr class="thead-light text-center">
+							<th colspan=3>Payout Table</th>
+						</tr>
+						<tr>
+							<td class='text-right'>Weekly Prize ($2 x {{payouts.player_count}} players)</td>
+							<td class='text-right'>${{payouts.weekly}}</td>
+						</tr>
+						<tr>
+							<td class='text-right'>Survivor Prize ($5 x {{payouts.player_count}} players)</td>
+							<td class='text-right'>${{payouts.survivor}}</td>
+						</tr>
+						<tr>
+							<td class='text-right'>First Overall Prize (50% of remaining pot)</td>
+							<td class='text-right'>${{payouts.first}}</td>
+						</tr>
+						<tr>
+							<td class='text-right'>Second Overall Prize (25% of remaining pot)</td>
+							<td class='text-right'>${{payouts.second}}</td>
+						</tr>
+						<tr>
+							<td class='text-right'>Third Overall Prize (15% of remaining pot)</td>
+							<td class='text-right'>${{payouts.third}}</td>
+						</tr>
+						<tr>
+							<td class='text-right'>Last Overall Prize (10% of remaining pot)</td>
+							<td class='text-right'>${{payouts.last}}</td>
+						</tr>
+
+					</table>
+				</div>
 			</div>
 
 
