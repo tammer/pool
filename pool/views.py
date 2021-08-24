@@ -75,10 +75,10 @@ def money(request):
 	payouts = {}
 	player_count = User.objects.count()
 	payouts['player_count'] = player_count
-	payouts['total'] = 75 * player_count
+	payouts['total'] = 80 * player_count
 	payouts['weekly'] = 2 * player_count
 	payouts['survivor'] = 5 * player_count
-	pot = payouts['total'] - payouts['weekly'] * 17 - payouts['survivor']
+	pot = payouts['total'] - payouts['weekly'] * 18 - payouts['survivor']
 	payouts['first'] = int(round(0.50 * pot,0))
 	payouts['second'] = int(round(0.25 * pot,0))
 	payouts['third'] = int(round(0.15 * pot,0))
@@ -203,7 +203,7 @@ def home(request):
 
 	(headline_week_number,status) = status_()
 	week_number = headline_week_number
-	if (now().weekday() == 1 or now().weekday() == 2) and headline_week_number > 1 and headline_week_number < 17:
+	if (now().weekday() == 1 or now().weekday() == 2) and headline_week_number > 1 and headline_week_number < 18:
 		week_number = headline_week_number-1
 	
 	# Standings

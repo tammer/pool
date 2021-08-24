@@ -100,7 +100,7 @@ def set_state(date):
 	random.seed(1)
 	spread_week = 1
 	give_picks(spread_week)
-	while spread_week <= 17 and date > (Game.objects.filter(week_number=spread_week).order_by('game_number').first().game_date - timedelta(hours=60)):
+	while spread_week <= 18 and date > (Game.objects.filter(week_number=spread_week).order_by('game_number').first().game_date - timedelta(hours=60)):
 		spread_week +=1
 		give_picks(spread_week)
 	for game in Game.objects.all().order_by('game_date'):
@@ -342,7 +342,7 @@ def load_week(this_year, week_number,for_real=True):
 # refactor load_games to use load_week
 def load_games(this_year):
 	Game.objects.all().delete()
-	for x in range(17):
+	for x in range(18):
 		week_number = x+1
 		url = 'https://api-secure.sports.yahoo.com/v1/editorial/s/scoreboard?leagues=nfl&week='+str(week_number)+'&season='+str(this_year)
 		response = requests.get(url)
@@ -433,7 +433,7 @@ def status(now_ = None):
 			return (1,'Open')
 		else:
 			return (1, 'Not Open')
-	# post week 17
+	# post last week of season
 	last_game_of_season = Game.objects.all().order_by('game_date').last()
 	if now_ > last_game_of_season.game_date:
 		return (last_game_of_season.week_number,'Closed')

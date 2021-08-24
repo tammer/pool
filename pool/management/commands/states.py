@@ -27,7 +27,7 @@ def set_state(date):
 	random.seed(1)
 	spread_week = 1
 	give_picks(spread_week)
-	while spread_week <= 17 and date > (Game.objects.filter(week_number=spread_week).order_by('game_number').first().game_date - timedelta(hours=60)):
+	while spread_week <= 18 and date > (Game.objects.filter(week_number=spread_week).order_by('game_number').first().game_date - timedelta(hours=60)):
 		spread_week +=1
 		give_picks(spread_week)
 	for game in Game.objects.all().order_by('game_date'):
