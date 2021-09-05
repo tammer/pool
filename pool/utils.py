@@ -276,6 +276,8 @@ def load_scores():
 	else:
 		root = json.loads(response.text)
 		for k,v in root['service']['scoreboard']['games'].items():
+			if v['season_phase_id'] != "season.phase.season":
+				continue
 			if 'final' in v['status_type']:
 				h = root['service']['scoreboard']['teams'][v['home_team_id']]['last_name']
 				a = root['service']['scoreboard']['teams'][v['away_team_id']]['last_name']
