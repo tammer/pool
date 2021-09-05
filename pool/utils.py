@@ -356,6 +356,8 @@ def load_games(this_year):
 			new_dict = {}
 			j=0.001
 			for k,v in root['service']['scoreboard']['games'].items():
+				if v['season_phase_id'] != "season.phase.season":
+					continue
 				new_key	= datetime.strptime(v['start_time'],'%a, %d %b %Y %H:%M:%S %z').timestamp()
 				new_key = new_key + j
 				j = j + 0.001
@@ -646,7 +648,8 @@ def grab_game(week_number,team_string):
 		return Game.objects.get(week_number=week_number,fav=team)
 
 def load_spreads(week_number):
-	url = f'https://fantasydata.com/NFL_Odds/Odds_Read?season=2020&week={week_number}&seasontype=1&oddstate=NJ&teamkey=ARI&subscope=2&scope=1'
+	this_year = str(now().year)
+	url = f'https://bettingdata.com/NFL_Odds/Odds_Read?season={this_year}&week={week_number}&seasontype=1&state=WORLD&teamkey=ARI&subscope=2&scope=1'
 	response = requests.get(url)
 	if response.status_code != 200:
 		print('Failed to get data:', response.status_code)
