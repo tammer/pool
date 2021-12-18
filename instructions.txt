@@ -1,3 +1,8 @@
+2021 Season
+
+- init season THEN add new players
+
+--------
 # New Season
 	1. Get the player table right.  should be the same as last year. (we have add_player function and init function per player for start of season)
 	now run: python3 manage.py initseason whichloads the teams and games.
