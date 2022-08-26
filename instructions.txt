@@ -1,3 +1,11 @@
+2022 notes
+
+ssh tammer@tammer.com
+sureapp project shell Django
+source django1/bin/activate
+cd .....
+python3 manage initseason
+
 2021 Season
 
 - init season THEN add new players
