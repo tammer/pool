@@ -211,14 +211,20 @@ def home(request):
 	(total,rank_order) = overall_total()
 
 	# Blog
-	blog_list = []
-	for blog in Blog.objects.all().order_by('-entry_date'):
-		if blog.entry_date > now() - timedelta(hours=160) or blog_list == []:
-			blog_list.append([blog.entry_date.strftime('%A %B %-d'), blog.entry])
-	first_blog_date = blog_list[0][0]
-	first_blog = blog_list[0][1]
-	id = Blog.objects.all().order_by('-entry_date').first().id
-	blog_list.pop(0)
+	if Blog.objects.all().first() is None:
+		first_blog_date = "no date"
+		first_blog = "no blog"
+		id = -1
+		blog_list = []
+	else:
+		blog_list = []
+		for blog in Blog.objects.all().order_by('-entry_date'):
+			if blog.entry_date > now() - timedelta(hours=160) or blog_list == []:
+				blog_list.append([blog.entry_date.strftime('%A %B %-d'), blog.entry])
+		first_blog_date = blog_list[0][0]
+		first_blog = blog_list[0][1]
+		id = Blog.objects.all().order_by('-entry_date').first().id
+		blog_list.pop(0)
 
 	completed = Game.objects.filter(week_number=week_number,fav_score__isnull = False).count()
 	total = Game.objects.filter(week_number=week_number).count()
