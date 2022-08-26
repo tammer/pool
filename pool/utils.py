@@ -650,9 +650,26 @@ def grab_game(week_number,team_string):
 		return Game.objects.get(week_number=week_number,fav=team)
 
 def load_spreads(week_number):
-	this_year = str(now().year)
-	url = f'https://bettingdata.com/NFL_Odds/Odds_Read?season={this_year}&week={week_number}&seasontype=1&state=WORLD&teamkey=ARI&subscope=2&scope=1'
-	response = requests.get(url)
+	url = 'https://bettingdata.com/NFL_Odds/Odds_Read'
+	obj = {
+		"scope": 1,
+		"subscope": 2,
+		"week": week_number,
+		"season": datetime.now().year,
+		"seasontype": 1,
+		"team": None,
+		"conference": None,
+		"exportType": None,
+		"date": None,
+		"teamkey": "ARI",
+		"show_no_odds": False,
+		"client": 1,
+		"state": "WORLD",
+		"geo_state": None,
+		"league": "nfl",
+		"widget_scope": 1
+	}
+	response = requests.post(url,json=obj)
 	if response.status_code != 200:
 		print('Failed to get data:', response.status_code)
 	else:
