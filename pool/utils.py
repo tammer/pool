@@ -655,7 +655,7 @@ def load_spreads(week_number):
 		"scope": 1,
 		"subscope": 2,
 		"week": week_number,
-		"season": datetime.now().year,
+		"season": datetime.now().year if datetime.now().month > 3 else datetime.now().year-1,
 		"seasontype": 1,
 		"team": None,
 		"conference": None,
