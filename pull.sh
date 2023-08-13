@@ -5,13 +5,13 @@ echo "Password please: "
 read PASSWD
 echo "BK day please: (number from 01 to 31)"
 read day
-path="/private/django/django1/pool/backups/$day"
-echo "$path"
+path1="/private/django/django1/pool/backups/$day"
+echo "$path1"
 
 ftp -i -n $HOST <<END_SCRIPT
 quote USER $USER
 quote PASS $PASSWD
-cd $path
+cd $path1
 mget *
 quit
 END_SCRIPT
